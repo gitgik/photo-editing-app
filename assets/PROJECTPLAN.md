@@ -1,7 +1,9 @@
 ## Project plan for Pictor Photo Editor
 
-__Project Title:__ &nbsp;&nbsp;Simulations Checkpoint 4 - Pictor Photo Editor.
+__Project Title:__ &nbsp;&nbsp;Pictor Photo Editor.
+
 __Start Date:__ &nbsp;&nbsp;Tuesday, 18th February, 2016.
+
 __End Date:__ &nbsp;&nbsp;Tuesday, 28th February, 2016.
 
 #### Application Overview
