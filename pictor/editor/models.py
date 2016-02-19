@@ -31,8 +31,26 @@ def generate_uid():
     return unique_id
 
 
+class UserProfile(models.Model):
+    """This model represents the current authenticated user from facebook."""
+
+    FACEBOOK = '1'
+    PROVIDERS = (
+        (FACEBOOK, 'Facebook'),
+    )
+    user = models.OneToOneField(User, related_name='social_profile')
+    provider = models.SmallIntegerField(choices=PROVIDERS)
+    social_id = models.CharField(unique=True, max_length=255)
+    photo = models.TextField(blank=True)
+    extras = models.TextField(blank=True)
+
+    def __unicode__(self):
+        """Unicode magic method."""
+        return "{}-{}".format(self.provider, self.social_id)
+
+
 class Photo(models.Model):
-    """This model represents a photo record uploaded by the current user."""
+    """This model represents photo records uploaded by the current user."""
 
     image = models.ImageField(upload_to=get_photo_path, max_length=255)
     public_id = models.CharField(default=generate_uid, max_length=50)
