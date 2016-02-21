@@ -8,6 +8,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from decorators import json_response
+from forms import FacebookAuthForm
 
 
 class LoginRequiredMixin(object):
@@ -15,8 +17,42 @@ class LoginRequiredMixin(object):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        """Accept a request and return a response."""
         return super(LoginRequiredMixin, self).dispatch(
             request, *args, **kwargs)
+
+
+class JsonResponseMixin(object):
+    """A mixin that returns a response in JSON format."""
+
+    @method_decorator(json_response)
+    def dispatch(self, request, *args, **kwargs):
+        """Accept a request and return a response."""
+        return super(JsonResponseMixin, self).dispatch(
+            request, *args, **kwargs)
+
+
+class FacebookAuthView(JsonResponseMixin, View):
+    """Implement the facebook login Oauth."""
+
+    def post(self, request, *args, **kwargs):
+        """Log the user in and redirect them to the home page."""
+        auth_form = FacebookAuthForm(request.POST)
+        if auth_form.is_valid():
+            user = auth_form.save()
+            if user:
+                profile = user.social_profile
+                profile.extras = json.dumps(request.POST)
+                profile.save()
+                login(request, user)
+
+                return {
+                    'status': 'success',
+                    'status_code': 200,
+                    'loginRedirectURL': reverse('pictor:dashboard'),
+                }
+        # return forbidden
+        return {'status': 'Forbidden user', 'status_code': 403, }
 
 
 class LoginView(View):
