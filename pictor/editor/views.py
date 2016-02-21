@@ -1,4 +1,4 @@
-"""Define the pictor views."""
+"""Define the editor views."""
 import os
 import json
 from django.shortcuts import render, redirect
@@ -49,7 +49,7 @@ class FacebookAuthView(JsonResponseMixin, View):
                 return {
                     'status': 'success',
                     'status_code': 200,
-                    'loginRedirectURL': reverse('pictor:dashboard'),
+                    'loginRedirectURL': reverse('editor:dashboard'),
                 }
         # return forbidden
         return {'status': 'Forbidden user', 'status_code': 403, }
@@ -61,11 +61,11 @@ class LoginView(View):
     def get(self, request, *args, **kwargs):
         """Render the index/login view."""
         if request.user.is_authenticated():
-            return redirect(reverse('pictor:dashboard'))
+            return redirect(reverse('editor:dashboard'))
 
         context = {}
         context.update(csrf(self.request))
-        return render(self.request, 'pictor/index.html', context)
+        return render(self.request, 'editor/index.html', context)
 
 
 class LogoutView(LoginRequiredMixin, View):
@@ -74,4 +74,4 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         """Flash user session and redirect them to login page."""
         logout(request)
-        return redirect(reverse('pictor:index'))
+        return redirect(reverse('editor:index'))
