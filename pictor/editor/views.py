@@ -27,7 +27,7 @@ class JsonResponseMixin(object):
 
     @method_decorator(json_response)
     def dispatch(self, request, *args, **kwargs):
-        """Accept a request and return a response."""
+        """Accept a request and return an override of dispatch."""
         return super(JsonResponseMixin, self).dispatch(
             request, *args, **kwargs)
 
