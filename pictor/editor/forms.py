@@ -50,7 +50,7 @@ class FacebookAuthForm(forms.Form):
             return user
 
 
-class PhotoForm(forms.Form):
+class PhotoForm(forms.ModelForm):
     """Form which handles photo uploads."""
 
     class Meta:
