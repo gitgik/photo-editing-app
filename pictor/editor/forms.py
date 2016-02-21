@@ -50,3 +50,10 @@ class FacebookAuthForm(forms.Form):
             return user
 
 
+class PhotoForm(forms.Form):
+    """Form which handles photo uploads."""
+
+    class Meta:
+        models = Photo
+        fields = ('image', 'caption', 'effects')
+
