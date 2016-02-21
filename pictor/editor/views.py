@@ -1,7 +1,9 @@
 """Define the pictor views."""
 import os
 import json
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
+from django.core.context_processors import csrf
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -15,6 +17,19 @@ class LoginRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(
             request, *args, **kwargs)
+
+
+class LoginView(View):
+    """This view defines the login view."""
+
+    def get(self, request, *args, **kwargs):
+        """Render the index/login view."""
+        if request.user.is_authenticated():
+            return redirect(reverse('pictor:dashboard'))
+
+        context = {}
+        context.update(csrf(self.request))
+        return render(self.request, 'pictor/index.html', context)
 
 
 class LogoutView(LoginRequiredMixin, View):
