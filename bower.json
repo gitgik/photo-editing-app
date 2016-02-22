@@ -1,0 +1,30 @@
+{
+  "name": "pictor",
+  "version": "0.0.1",
+  "homepage": "https://github.com/andela-ggikera/photo-editing-app",
+  "authors": [
+    "andela-ggikera <githinji.gikera@andela.com>"
+  ],
+  "description": "A Django-powered photo editing application for anyone with a photo.",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.9",
+    "font-awesome": "^4.5.0",
+    "angular-route": "^1.4.9",
+    "angular-material": "^1.0.4",
+    "angular-animate": "^1.4.9",
+    "angular-aria": "^1.4.9",
+    "angular-messages": "^1.4.9",
+    "angular-moment": "^0.10.3",
+    "moment": "^2.11.1",
+    "angular-toastr": "^1.7.0",
+    "ngstorage": "^0.3.10",
+    "angular-ui-router": "^0.2.17"
+  },
+  "resolutions": {
+    "angular": "~1.4.9",
+    "moment": "^2.11.1"
+  }
+}

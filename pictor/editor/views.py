@@ -68,7 +68,7 @@ class LoginView(View):
         return render(self.request, 'editor/index.html', context)
 
 
-class DashboardView(JsonResponseMixin, View):
+class DashboardView(View):
     """Represents the authenticated user dashboard."""
 
     def get(self, request, *args, **kwargs):
