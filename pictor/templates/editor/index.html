@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html ng-app="bucketlist">
+
+<head>
+    <title>Djangular Bucketlist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link type="text/css" rel="stylesheet" href="{% static 'lib/angular-material/angular-material.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{% static 'lib/angular-toastr/dist/angular-toastr.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}"/>
+</head>
+<body>
+    <script type="text/javascript" src="{% static 'lib/angular/angular.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-ui-router/release/angular-ui-router.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-aria/angular-aria.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-resource/angular-resource.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-material/angular-material.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/ngstorage/ngStorage.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/moment/min/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-moment/angular-moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-toastr/dist/angular-toastr.tpls.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-animate/angular-animate.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/services/rest-service.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/controllers/controllers.js' %}"></script>
+    <div ui-view style="height: inherit;">
+
+    </div>
+</body>

@@ -3,7 +3,7 @@ import os
 import json
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -64,6 +64,18 @@ class LoginView(View):
             return redirect(reverse('editor:dashboard'))
 
         context = {}
+        context.update(csrf(self.request))
+        return render(self.request, 'editor/index.html', context)
+
+
+class DashboardView(JsonResponseMixin, View):
+    """Represents the authenticated user dashboard."""
+
+    def get(self, request, *args, **kwargs):
+        """Render the dashboard view."""
+        context = {
+            'photo_effects': "Hey",
+        }
         context.update(csrf(self.request))
         return render(self.request, 'editor/index.html', context)
 
