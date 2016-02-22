@@ -82,9 +82,7 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/'
 
-LOGOUT_URL = 'pictor:logout'
-
-LOGIN_REDIRECT_URL = 'pictor:dashboard'
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
