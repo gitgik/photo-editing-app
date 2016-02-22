@@ -19,6 +19,7 @@
     "angular-messages": "^1.4.9",
     "angular-moment": "^0.10.3",
     "moment": "^2.11.1",
+    "angular-resource": "^1.4.9",
     "angular-toastr": "^1.7.0",
     "ngstorage": "^0.3.10",
     "angular-ui-router": "^0.2.17"
