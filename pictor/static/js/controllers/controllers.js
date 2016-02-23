@@ -4,6 +4,10 @@ angular.module('pictor.controllers', ['ngMaterial'])
     function AuthController($rootScope, $scope, $state, $localStorage) {
         $scope.login = function () {
             $localStorage.authenticated = true;
-            $state.go('dashboard');
+            window.location.href = "http://localhost:8000/account/facebook/login";
         };
     }])
+
+.controller('MainController', function($scope, $rootScope, $state, $localStorage) {
+
+})

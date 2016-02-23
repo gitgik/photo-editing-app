@@ -22,6 +22,17 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
             module: 'public'
         })
 
+        .state('facebook_auth', {
+            url: '/account/facebook/login',
+        })
+
+        .state('dashboard', {
+            url: '/dashboard',
+            controller: 'MainController',
+            templateUrl: '/static/views/dashboard.html',
+            module: 'private'
+        })
+
         .state('logout', {
             url: '/logout',
             controller: function($rootScope, $state, $localStorage) {

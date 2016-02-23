@@ -24,7 +24,7 @@
 
 .blist-image::after{
     content: "";
-    background-image: url('../images/touch.jpg');
+    background-image: url('../images/main.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
     top: 0; right: 0; left: 0; bottom: 0;
