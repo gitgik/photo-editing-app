@@ -11,8 +11,21 @@ var app = angular.module('pictor',
         'pictor.controllers',
     ]);
 
-app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider',
-    function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider',
+    function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $mdThemingProvider) {
+
+    $mdThemingProvider.definePalette('pictorTheme', {
+        '50': '01579b', '100': '01579b', '200': '01579b',
+        '300': '01579b', '400': '01579b', '500': '01579b',
+        '600': '01579b', '700': '01579b', '800': '01579b',
+        '900': '01579b', 'A100': '01579b', 'A200': '01579b',
+        'A400': '01579b', 'A700': '01579b',
+        'contrastDefaultColor': 'light',
+        'contrastDarkColors': ['50', '100', // hues for dark color
+         '200', '300', '400', 'A100'],
+        'contrastLightColors': undefined
+    });
+    $mdThemingProvider.theme('default').primaryPalette('pictorTheme');
 
     $stateProvider
         .state('login', {

@@ -1,3 +1,14 @@
+.fb-button {
+    width: 18em;
+    height: 4em;
+    font-size: 1em;
+    position: relative;
+}
+
+.fb-button:hover {
+    background-color: #01579b !important;
+    color: #fff;
+}
 
 .content {
     z-index: 1000 !important;
