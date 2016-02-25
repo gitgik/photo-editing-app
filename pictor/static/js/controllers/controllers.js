@@ -8,6 +8,12 @@ angular.module('pictor.controllers', ['ngMaterial'])
         };
     }])
 
-.controller('MainController', function($scope, $rootScope, $state, $localStorage) {
+.controller('MainController', function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu) {
+
+    $scope.toggleLeft = Menu.toggle('left');
+    $scope.close = function () {
+        $mdSidenav('left').close()
+            .then(function () {});
+    }
 
 })
