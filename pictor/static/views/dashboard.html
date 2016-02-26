@@ -27,7 +27,11 @@
             </md-list>
         </md-sidenav>
         <md-content layout-margin layout-padding flex>
-            <md-button class=" md-raised md-primary">Begin</md-button>
+            {% for effect in photo_effects %}
+                <md-list>
+                    <md-list-item>effect</md-list-item>
+                </md-list>
+            {% endfor %}
         </md-content>
     </div>
 </div>

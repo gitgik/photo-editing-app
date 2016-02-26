@@ -1,5 +1,4 @@
 """Define the editor views."""
-import os
 import json
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
@@ -9,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from decorators import json_response
-from forms import FacebookAuthForm, PhotoForm
+from .enhancers import photo_effects
 from pictor.settings import MAX_UPLOAD_SIZE
 
 
@@ -33,29 +32,6 @@ class JsonResponseMixin(object):
             request, *args, **kwargs)
 
 
-class FacebookAuthView(JsonResponseMixin, View):
-    """Implement the facebook login Oauth."""
-
-    def post(self, request, *args, **kwargs):
-        """Log the user in and redirect them to the home page."""
-        auth_form = FacebookAuthForm(request.POST)
-        if auth_form.is_valid():
-            user = auth_form.save()
-            if user:
-                profile = user.social_profile
-                profile.extras = json.dumps(request.POST)
-                profile.save()
-                login(request, user)
-
-                return {
-                    'status': 'success',
-                    'status_code': 200,
-                    'loginRedirectURL': reverse('editor:dashboard'),
-                }
-        # return forbidden
-        return {'status': 'Forbidden user', 'status_code': 403, }
-
-
 class LoginView(View):
     """This view defines the login view."""
 
@@ -75,7 +51,7 @@ class DashboardView(View):
     def get(self, request, *args, **kwargs):
         """Render the dashboard view."""
         context = {
-            'photo_effects': "Hey",
+            'photo_effects': photo_effects,
         }
         context.update(csrf(self.request))
         return render(self.request, 'editor/index.html', context)
@@ -94,39 +70,5 @@ class PhotoUploadView(LoginRequiredMixin, View):
     """View to handle image uploads from the authenticated user."""
 
     def post(self, request, *args, **kwargs):
-        """Handle photo uploads.
-
-        Return: a JSON serialization of the photo details.
-        """
-        photo_form = PhotoForm(request.POST, request.FILES)
-
-        if photo_form.is_valid():
-            photo_size = photo_form.files['image'].size
-            if photo_size <= MAX_UPLOAD_SIZE:
-                photo = photo_form.save(commit=False)
-                photo.caption = photo.image.name
-                photo.user = request.user
-                photo.save()
-
-                return {
-                    'status': 'success',
-                    'status_code': 200,
-                    'photoData': photo.serialize(),
-                }
-        # Error response
-        return {'status': 'invalid', 'status_code': 403, }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        """Handle photo uploads."""
+        pass

@@ -26,37 +26,27 @@ def generate_uid():
     salt = settings.SECRET_KEY
     min_length = settings.UID_LENGTH,
     alphabet = settings.UID_ALPHABET
-    hashids = Hashids(salt=salt, min_length=min_length, alphabet=alphabet)
+    hashids = Hashids(salt=salt, min_length=int(min_length), alphabet=alphabet)
     unique_id = hashids.encode(int(time() * 1000))
     return unique_id
-
-
-class SocialProfile(models.Model):
-    """This model represents the current authenticated user from facebook."""
-
-    FACEBOOK = '1'
-    PROVIDERS = (
-        (FACEBOOK, 'Facebook'),
-    )
-    user = models.OneToOneField(User, related_name='social_profile')
-    provider = models.SmallIntegerField(choices=PROVIDERS)
-    social_id = models.CharField(unique=True, max_length=255)
-    photo = models.TextField(blank=True)
-    extras = models.TextField(blank=True)
-
-    def __unicode__(self):
-        """Unicode magic method."""
-        return "{}-{}".format(self.provider, self.social_id)
 
 
 class Photo(models.Model):
     """This model represents photo records uploaded by the current user."""
 
     image = models.ImageField(upload_to=get_photo_path, max_length=255)
-    public_id = models.CharField(default=generate_uid, max_length=50)
+    name = models.CharField(default=generate_uid, max_length=50)
     caption = models.CharField(blank=True, max_length=255)
-    effects = models.CharField(blank=True, max_length=255)
     date_created = models.DateTimeField(editable=False, auto_now_add=True)
     date_edited = models.DateTimeField(editable=False, auto_now=True)
 
     user = models.ForeignKey(User, related_name='photos')
+
+
+class Effect(models.Model):
+    """This model represents the effects applied to a given image."""
+
+    effect = models.FileField(upload_to=get_photo_path)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_edited = models.DateTimeField(editable=False, auto_now=True)
+    photo = models.ForeignKey(Photo)

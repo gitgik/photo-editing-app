@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^dashboard/$',
         DashboardView.as_view(), name='dashboard'),
 
+
 ]
