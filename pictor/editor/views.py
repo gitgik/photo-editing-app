@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from decorators import json_response
-from forms import FacebookAuthForm
+from forms import FacebookAuthForm, PhotoForm
+from pictor.settings import MAX_UPLOAD_SIZE
 
 
 class LoginRequiredMixin(object):
@@ -87,3 +88,45 @@ class LogoutView(LoginRequiredMixin, View):
         """Flash user session and redirect them to login page."""
         logout(request)
         return redirect(reverse('editor:index'))
+
+
+class PhotoUploadView(LoginRequiredMixin, View):
+    """View to handle image uploads from the authenticated user."""
+
+    def post(self, request, *args, **kwargs):
+        """Handle photo uploads.
+
+        Return: a JSON serialization of the photo details.
+        """
+        photo_form = PhotoForm(request.POST, request.FILES)
+
+        if photo_form.is_valid():
+            photo_size = photo_form.files['image'].size
+            if photo_size <= MAX_UPLOAD_SIZE:
+                photo = photo_form.save(commit=False)
+                photo.caption = photo.image.name
+                photo.user = request.user
+                photo.save()
+
+                return {
+                    'status': 'success',
+                    'status_code': 200,
+                    'photoData': photo.serialize(),
+                }
+        # Error response
+        return {'status': 'invalid', 'status_code': 403, }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
