@@ -1,35 +1,20 @@
 """Define the editor views."""
-import json
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.template.context_processors import csrf
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.views.generic import View
-from decorators import json_response
 from .enhancers import photo_effects
-from pictor.settings import MAX_UPLOAD_SIZE
+from PIL import Image, ImageEnhance, ImageDraw, ImageFont
 
 
-class LoginRequiredMixin(object):
-    """This mixin ensures that the user is authenticated before proceeding."""
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        """Accept a request and return a response."""
-        return super(LoginRequiredMixin, self).dispatch(
-            request, *args, **kwargs)
-
-
-class JsonResponseMixin(object):
-    """A mixin that returns a response in JSON format."""
-
-    @method_decorator(json_response)
-    def dispatch(self, request, *args, **kwargs):
-        """Accept a request and return an override of dispatch."""
-        return super(JsonResponseMixin, self).dispatch(
-            request, *args, **kwargs)
+from editor.serializers import PhotoSerializer
+from editor.permissions import IsAuthenticated
+from editor.models import Photo
 
 
 class LoginView(View):
@@ -45,19 +30,41 @@ class LoginView(View):
         return render(self.request, 'editor/index.html', context)
 
 
-class DashboardView(View):
-    """Represents the authenticated user dashboard."""
+class PhotoListView(generics.ListCreateAPIView):
+    """This view creates a photo uploaded from the client."""
 
-    def get(self, request, *args, **kwargs):
-        """Render the dashboard view."""
+    permission_classes = (IsAuthenticated, permissions.IsAuthenticated,)
+    query_set = Photo.objects.all()
+    serializer_class = PhotoSerializer
+
+    def perform_create(self, serializer):
+        """Method that handles image upload and creation."""
+        serializer = PhotoSerializer(
+            data=self.request.data, context={'request': self.request})
+        if serializer.is_valid():
+            serializer.save(created_by=self.request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class PhotoDisplayView(APIView):
+    """This view handles photo display for an authenticated user."""
+
+    def get(self, request):
+        """Return a photo specific data."""
+        photo = Photo.objects.get(id=request.query_params['id'])
+
         context = {
-            'photo_effects': photo_effects,
+            'request': request
         }
-        context.update(csrf(self.request))
-        return render(self.request, 'editor/index.html', context)
+        serializer = PhotoSerializer(photo, context=context)
+        return Response(serializer.data)
+
+    def delete(self, request):
+        """Delete an image."""
+        pass
 
 
-class LogoutView(LoginRequiredMixin, View):
+class LogoutView(View):
     """This View logs the authenticated user out."""
 
     def get(self, request, *args, **kwargs):
@@ -66,7 +73,7 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect(reverse('editor:index'))
 
 
-class PhotoUploadView(LoginRequiredMixin, View):
+class PhotoUploadView(View):
     """View to handle image uploads from the authenticated user."""
 
     def post(self, request, *args, **kwargs):

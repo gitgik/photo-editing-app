@@ -1,9 +1,8 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from api.models import Photo, Effect
+from .models import Photo, Effect
 
 
-class PhotoSerializers(serializers.ModelSerializer):
+class PhotoSerializer(serializers.ModelSerializer):
     """Serializer class for the Photo model."""
 
     class Meta:
@@ -33,7 +32,4 @@ class EffectSerializer(serializers.ModelSerializer):
         """This class defines meta data for the serializer."""
 
         model = Effect
-
-
-
-
+        fields = ('id', 'effect', 'photo')
