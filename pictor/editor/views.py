@@ -1,4 +1,5 @@
 """Define the editor views."""
+import os
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.template.context_processors import csrf
@@ -9,8 +10,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import View
 from .enhancers import photo_effects
-from PIL import Image, ImageEnhance, ImageDraw, ImageFont
-
 
 from editor.serializers import PhotoSerializer
 from editor.permissions import IsAuthenticated
@@ -46,13 +45,12 @@ class PhotoListView(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class PhotoDisplayView(APIView):
-    """This view handles photo display for an authenticated user."""
+class PhotoDetailView(APIView):
+    """This view handles photo details anddisplay for an authenticated user."""
 
     def get(self, request):
         """Return a photo specific data."""
         photo = Photo.objects.get(id=request.query_params['id'])
-
         context = {
             'request': request
         }
@@ -60,8 +58,16 @@ class PhotoDisplayView(APIView):
         return Response(serializer.data)
 
     def delete(self, request):
-        """Delete an image."""
-        pass
+        """Delete an image from both the db and the folder."""
+        media_path = 'static/media/'
+        photo = Photo.objects.get(id=request.query_params['id'])
+        photo.delete()
+        try:
+            media_path += str(photo.image)
+            os.remove(media_path)
+        except:
+            print("File not found")
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LogoutView(View):
