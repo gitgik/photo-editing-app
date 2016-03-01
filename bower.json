@@ -27,5 +27,8 @@
   "resolutions": {
     "angular": "~1.4.9",
     "moment": "^2.11.1"
+  },
+  "devDependencies": {
+    "restangular": "^1.5.2"
   }
 }

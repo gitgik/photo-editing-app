@@ -29,7 +29,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
     $stateProvider
         .state('login', {
-            url: '/login',
+            url: '/',
             controller: 'AuthController',
             templateUrl: '/static/views/login.html',
             module: 'public'
@@ -50,14 +50,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
             url: '/logout',
             controller: function($rootScope, $state, $localStorage) {
                 $localStorage.$reset();
-                $state.go('login', {}, {
-                    reload: true
-                });
+                $state.go('login');
             },
             module: 'private'
         })
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/');
 
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
