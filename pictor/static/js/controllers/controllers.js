@@ -4,7 +4,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
     function AuthController($rootScope, $scope, $state, $localStorage) {
         $scope.login = function () {
             $localStorage.authenticated = true;
-            window.location.href = "http://localhost:8000/account/facebook/login";
+            window.location.href = "http://localhost:8000/account/facebook/login/";
         };
     }])
 

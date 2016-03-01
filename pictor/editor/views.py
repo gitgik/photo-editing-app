@@ -21,9 +21,6 @@ class LoginView(View):
 
     def get(self, request, *args, **kwargs):
         """Render the index/login view."""
-        if request.user.is_authenticated():
-            return redirect(reverse('editor:dashboard'))
-
         context = {}
         context.update(csrf(self.request))
         return render(self.request, 'editor/index.html', context)
