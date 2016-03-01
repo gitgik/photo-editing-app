@@ -1,3 +1,24 @@
+'use strict'
+
+app.factory('RestService', function($resource) {
+    return {
+        Image: $resource('api/photo/', {}, {
+            getImage: {
+                method: 'GET', isArray: false
+            }
+        }, { stripTrailingSlashes: false }),
+        ModifyImage: $resource('api/edit_photo/', {}, {
+            deleteImage: {
+                method: 'DELETE'
+            },
+            getImageEffects: {
+                method: 'GET',
+                isArray: false
+            }
+        }, { stripTrailingSlashes: false }),
+    }
+})
+
 app.factory('Toast', function($mdToast) {
     var last = {
         bottom: false, top: true,

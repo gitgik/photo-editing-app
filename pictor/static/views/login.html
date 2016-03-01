@@ -1,10 +1,26 @@
    <div class="blist-image">
         <div layout="column" layout-align="center center" class="content">
-            <h3 class="description" layout="row" layout-align="center center">
-                    Pictor helps you edit the photos you love and share them to anyone.
-            </h3>
-            <md-button layout="row" class="md-raised fb-button" flex="100" ng-click="login()">
-                Login with Facebook
-            </md-button>
+            <md-card>
+                <md-card-header class="title">
+                    <md-card-header-text layout-align="center center">
+                        <h1>Pictor</h1>
+                    </md-card-header-text>
+                </md-card-header>
+                <md-divider></md-divider>
+                <md-card-content>
+                    <h5 class="description" layout="row" layout-align="center center">
+                    Pictor helps you edit your photos and share them with friends
+                    </h5>
+                    <md-button layout="row" layout-align="center center" class="md-raised fb-button" ng-click="login()">
+                        Log in with Facebook
+                    </md-button>
+                </md-card-content>
+                <md-divider></md-divider>
+                <md-card-footer layout-align="center center" class="footer">
+                    <h5>Copyright &#169; {{ date.now | date: 'yyyy' }}. A <a href="https://github.com/andela-ggikera">Jee Giks</a> production from <a href="http://www.andela.com">Andela</a>
+                    </h5>
+                </md-card-footer>
+            </md-card>
+
         </div>
     </div>

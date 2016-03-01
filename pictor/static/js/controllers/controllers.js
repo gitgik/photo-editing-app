@@ -6,6 +6,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
             $localStorage.authenticated = true;
             window.location.href = "http://localhost:8000/account/facebook/login/";
         };
+        $scope.date = {}
+        $scope.date.now = new Date();
     }])
 
 .controller('MainController', function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu) {

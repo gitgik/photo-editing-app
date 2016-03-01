@@ -8,6 +8,7 @@ var app = angular.module('pictor',
         'angularMoment',
         'ngResource',
         'ngStorage',
+        'restangular',
         'pictor.controllers',
     ]);
 
@@ -48,9 +49,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
         .state('logout', {
             url: '/logout',
-            controller: function($rootScope, $state, $localStorage) {
-                $localStorage.$reset();
-                $state.go('login');
+            controller: function($state, $localStorage, Rectangular) {
+                Rectangular.one('api/logout/').get().then(
+                    function (response) {
+                        $localStorage.$reset();
+                        $state.go('login');
+                    });
             },
             module: 'private'
         })
