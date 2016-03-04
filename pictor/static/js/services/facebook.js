@@ -1,9 +1,7 @@
-'use strict'
 app.factory('Facebook', ["$q", "$state", "$rootScope",
     function($q, $state, $rootScope) {
 
-    // since we are resolving a thirdparty response,
-    // we need to do so in $apply
+    // use $apply to resolve to a third party service.
     var resolve = function(errval, retval, deferred) {
         $rootScope.$apply(function() {
             if (errval) {
@@ -15,23 +13,21 @@ app.factory('Facebook', ["$q", "$state", "$rootScope",
         });
     }
 
-    var _login = function() {
+    var login = function() {
         var deferred = $q.defer();
-        //first check if we already have logged in
+        // check for logged in user.
         FB.getLoginStatus(function(response) {
             if (response.status === 'connected') {
-                // the user is logged in and has authenticated your
-                // app
+                // logged in fb user
                 deferred.resolve(response);
             } else {
-                // the user is logged in to Facebook,
-                // but has not authenticated your app
+                // authenticate a fb logged-in user on the app using a dialog.
                 FB.login(function(response) {
                     if (response.authResponse) {
-                        // redirect the user to the same page let him authorise the application
+                        // redirect to let user authorize app
                         resolve(null, response, deferred);
                     } else {
-                        //redirect user to same page and echo failure to log in
+                        // redirect user to show failure of logging in.
                         resolve(response.error, null, deferred);
                     }
                 });
@@ -39,11 +35,10 @@ app.factory('Facebook', ["$q", "$state", "$rootScope",
         });
 
         return deferred.promise;
-    }
+    };
 
     return {
-        login: _login,
-        // getPhoto: _getPhoto,
+        login: login
     };
 }
 ]);

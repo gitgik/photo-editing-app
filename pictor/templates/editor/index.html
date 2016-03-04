@@ -1,4 +1,6 @@
 {% load staticfiles %}
+{% load socialaccount %}
+{% providers_media_js %}
 <!DOCTYPE html>
 <html ng-app="pictor">
 
@@ -14,6 +16,7 @@
     <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}"/>
 </head>
 <body>
+    <script type="text/javascript" src="{% static 'js/fb_sdk.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular/angular.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular-ui-router/release/angular-ui-router.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular-aria/angular-aria.min.js' %}"></script>
@@ -25,10 +28,10 @@
     <script type="text/javascript" src="{% static 'lib/angular-toastr/dist/angular-toastr.tpls.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular-animate/angular-animate.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/lodash/dist/lodash.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'lib/restangular/dist/restangular.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/restangular/dist/restangular.min.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/services/facebook.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/services/services.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/controllers/controllers.js' %}"></script>
     <div ui-view style="height: inherit;">

@@ -1,9 +1,9 @@
 """Define the editor views."""
 import os
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
-from django.template.context_processors import csrf
 from django.contrib.auth import login, logout
+from allauth.socialaccount.models import SocialAccount
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -14,16 +14,34 @@ from .enhancers import photo_effects
 from editor.serializers import PhotoSerializer
 from editor.permissions import IsAuthenticated
 from editor.models import Photo
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
 
 
-class LoginView(View):
-    """This view defines the login view."""
-
-    def get(self, request, *args, **kwargs):
-        """Render the index/login view."""
-        context = {}
-        context.update(csrf(self.request))
-        return render(self.request, 'editor/index.html', context)
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((permissions.AllowAny,))
+def social_login(request):
+    """View function for handling fb authentication."""
+    if request.method == 'POST':
+        access_token = request.data['accessToken']
+        facebook_id = request.data['userID']
+        if access_token:
+            try:
+                user = SocialAccount.objects.get(uid=facebook_id)
+                avatar = str(user.get_avatar_url)
+                if user:
+                    return Response(
+                        {
+                            "profile_photo": avatar,
+                            "extras": user.extra_data
+                        },
+                        status=status.HTTP_200_OK)
+                else:
+                    return Response("Bad credentials", status=403)
+            except:
+                return Response(
+                    "Bad Request", status=status.HTTP_400_BAD_REQUEST)
 
 
 class PhotoListView(generics.ListCreateAPIView):

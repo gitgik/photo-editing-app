@@ -36,10 +36,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
             module: 'public'
         })
 
-        .state('facebook_auth', {
-            url: '/account/facebook/login',
-        })
-
         .state('dashboard', {
             url: '/dashboard',
             controller: 'MainController',
@@ -49,17 +45,18 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
         .state('logout', {
             url: '/logout',
-            controller: function($state, $localStorage, Rectangular) {
-                Rectangular.one('api/logout/').get().then(
+            controller: function($state, $localStorage, Restangular) {
+                Restangular.one('api/logout/').get().then(
                     function (response) {
                         $localStorage.$reset();
                         $state.go('login');
+                        console.log(response)
                     });
             },
             module: 'private'
         })
 
-    $urlRouterProvider.otherwise('/');
+    // $urlRouterProvider.otherwise('/');
 
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';

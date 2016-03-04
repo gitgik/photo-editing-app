@@ -6,7 +6,7 @@
             </md-button>
             <div flex class="md-padding">
                 <a ui-sref="dashboard">Pictor</a></div>
-            <a flex="10" ui-sref="logout">Logout</a>
+            <a flex="10" ui-sref="logout">{{user.name}}</a>
         </div>
     </md-toolbar>
     <div layout="row" flex>
@@ -27,11 +27,6 @@
             </md-list>
         </md-sidenav>
         <md-content layout-margin layout-padding flex>
-            {% for effect in photo_effects %}
-                <md-list>
-                    <md-list-item>effect</md-list-item>
-                </md-list>
-            {% endfor %}
         </md-content>
     </div>
 </div>
