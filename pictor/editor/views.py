@@ -54,6 +54,7 @@ class PhotoListView(generics.ListCreateAPIView):
         """Method that handles image upload and creation."""
         serializer = PhotoSerializer(
             data=self.request.data, context={'request': self.request})
+        # import pdb; pdb.set_trace()
         if serializer.is_valid():
             serializer.save(user=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

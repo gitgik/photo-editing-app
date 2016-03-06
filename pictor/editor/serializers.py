@@ -1,3 +1,4 @@
+"""Define imports."""
 from rest_framework import serializers
 from .models import Photo, Effect
 
@@ -9,12 +10,15 @@ class PhotoSerializer(serializers.ModelSerializer):
         """This meta class defines the fields for photo serializer class."""
 
         model = Photo
-        fields = ('id', 'image', 'name', 'date_created', 'date_edited',)
-        read_only_fields = ('date_created', 'date_edited',)
+        fields = ('id', 'image', 'name', 'date_created', 'date_modified',)
 
 
 class PhotoEditSerializer(serializers.ModelSerializer):
-    """Serializer class for the Photo model."""
+    """Serializer class for the Photo model.
+
+    Attributes:
+        image_url: the image url from the server.
+    """
 
     image_url = serializers.SerializerMethodField('generate_image_url')
 
@@ -24,6 +28,10 @@ class PhotoEditSerializer(serializers.ModelSerializer):
         model = Photo
         fields = ('id', 'name', 'image', 'image_url', )
 
+    def generate_image_url(self, obj):
+        """Return absolute path of the image from the server."""
+        return self.context['request'].build_absolute_uri(obj.image.url)
+
 
 class EffectSerializer(serializers.ModelSerializer):
     """Serializer class for the Effects model."""
@@ -32,4 +40,4 @@ class EffectSerializer(serializers.ModelSerializer):
         """This class defines meta data for the serializer."""
 
         model = Effect
-        fields = ('id', 'effect', 'photo')
+        fields = ('id', 'effect', 'photo',)

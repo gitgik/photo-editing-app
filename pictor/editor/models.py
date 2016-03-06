@@ -12,7 +12,7 @@ import os
 def get_photo_path(instance, filename):
     """Define the upload path for saving the current user's photo to disk."""
     name, ext = os.path.splitext(filename)
-    new_name = '{}{}'.format(instance.public_id, ext)
+    new_name = '{}{}'.format(instance.name, ext)
     user_slug = "{}{}".format(
         instance.user.username,
         instance.user.id
@@ -38,8 +38,8 @@ class Photo(models.Model):
     name = models.CharField(default=generate_uid, max_length=50)
     caption = models.CharField(blank=True, max_length=255)
     date_created = models.DateTimeField(editable=False, auto_now_add=True)
-    date_edited = models.DateTimeField(editable=False, auto_now=True)
-    user = models.ForeignKey(User, related_name='photos')
+    date_modified = models.DateTimeField(editable=False, auto_now=True)
+    user = models.ForeignKey(User)
 
 
 class Effect(models.Model):
