@@ -20,9 +20,9 @@
                 </md-input-container>
             </md-subheader>
             <md-list class="uppered">
-                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectPhoto(photo);">
+                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); showFilters(photo.image);">
                     <div layout="column">
-                        <h3>{{ photo.name }}</h3>
+                        <h3>{{ photo.image }}</h3>
                     </div>
                     <md-divider></md-divider>
                 </md-list-item>
@@ -31,6 +31,12 @@
         </md-sidenav>
         <md-content layout-margin layout-padding flex>
             <div class="canvas-container" ng-model="selectedImage">
+                <div ng-if="!displayPhoto" layout="row">
+                    <h3 class="title" layout="column" layout-align="center center">No photo selected</h3>
+                </div>
+                <div ng-if="displayPhoto">
+                    <img ng-src="{{displayPhoto}}">
+                </div>
             </div>
             <div class="effects-container" layout="row" layout-align="center center">
                 <md-virtual-repeat-container ng-if="effects" id="horizontal-container" md-orient-horizontal>

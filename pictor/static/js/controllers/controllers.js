@@ -28,8 +28,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.date.now = new Date();
     }])
 
-.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular',
-    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular) {
+.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'PhotoRestService',
+    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, PhotoRestService) {
     $scope.user = {};
     $scope.user.name = $localStorage.currentUser.first_name;
     $scope.user.avatar = $localStorage.currentUser.avatar;
@@ -43,4 +43,13 @@ angular.module('pictor.controllers', ['ngMaterial'])
     Restangular.all('api/photos/').getList().then(function(response) {
         $scope.user.photos = response;
     });
+
+    $scope.showFilters = function (photo) {
+        PhotoRestService.Filters.getAll({ "image_url": photo})
+        .$promise.then(function(response) {
+            $rootScope.imageFilter = response;
+        });
+    };
+
+
 }])

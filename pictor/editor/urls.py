@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^login/', views.social_login, name='social_login'),
     url(r'^account/', include('allauth.urls')),
     url(r'^photos/', views.PhotoListView.as_view(), name='photos'),
+    url(r'^filters/', views.filters, name="filters"),
     url(r'^edit_photo/', views.PhotoDetailView.as_view(), name='editphoto'),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout')
 ]

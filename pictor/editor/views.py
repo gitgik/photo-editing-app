@@ -1,5 +1,8 @@
 """Define the editor views."""
 import os
+import urllib
+import cStringIO
+
 from allauth.socialaccount.models import SocialAccount
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -41,6 +44,32 @@ def social_login(request):
             except:
                 return Response(
                     "Bad Request", status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def filters(request):
+    """View handles the filters on a given photo."""
+    if request.method == 'GET':
+        temp_url = 'static/media/temp/'
+
+        image_url = request.query_params['image_url']
+        photo_name = image_url.rsplit('/', 1)[-1]
+        photo_file = cStringIO.StringIO(urllib.urlopen(image_url).read())
+        data = {
+            'GRAYSCALE': photo_effects.grayscale(photo_file, photo_name),
+            'BLUR': photo_effects.blur(photo_file, photo_name),
+            'SMOOTH': photo_effects.smooth(photo_file, photo_name),
+            'SHARPEN': photo_effects.sharpen(photo_file, photo_name),
+            'DETAIL': photo_effects.detail(photo_file, photo_name),
+            'MIRRORS': photo_effects.mirrors(photo_file, photo_name),
+            'CONTRAST': photo_effects.contrast(photo_file, photo_name),
+            'BRIGHTEN': photo_effects.brighten(photo_file, photo_name),
+            'DARKEN': photo_effects.darken(photo_file, photo_name),
+            'CHARCOAL': photo_effects.charcoal(photo_file, photo_name),
+            'FLIP': photo_effects.flip(photo_file, photo_name)
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class PhotoListView(generics.ListCreateAPIView):

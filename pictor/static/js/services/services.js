@@ -1,12 +1,13 @@
 'use strict'
 
-app.factory('RestService', function($resource) {
+app.factory('PhotoRestService', function($resource) {
     return {
         Image: $resource('api/photo/', {}, {
             getImage: {
                 method: 'GET', isArray: false
             }
         }, { stripTrailingSlashes: false }),
+
         ModifyImage: $resource('api/edit_photo/', {}, {
             deleteImage: {
                 method: 'DELETE'
@@ -16,6 +17,13 @@ app.factory('RestService', function($resource) {
                 isArray: false
             }
         }, { stripTrailingSlashes: false }),
+
+        Filters: $resource('api/filters/', {}, {
+            getAll: {
+                method: 'GET',
+                isArray: false
+            }
+        }, {stripTrailingSlashes: false })
     }
 });
 

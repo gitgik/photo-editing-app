@@ -1,9 +1,21 @@
 .title {
     font-family: 'Tangerine', serif;
     font-size: 48px;
-    line-height: 0px;
-    overflow: hidden;
 }
+
+.login-title {
+    color: #01579b;
+}
+
+.translucent {
+    background-color: rgba(255,255,255, 0.7);
+    position: relative;
+}
+
+.login-container {
+    background-color: rgba(255, 255, 255, 0.7)
+}
+
 .fb-button {
     width: 18em;
     height: 4em;
@@ -117,12 +129,12 @@
 .effects-container {
     margin-top: .2em;
     background-color: #fff;
-    border: 2px solid #eee;
+    border: 2px solid #ddd;
     min-height: 21%;
 }
 
 .effects-container .repeated-item {
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #eee;
   box-sizing: border-box;
   display: inline-block;
   height: 84px;
