@@ -41,11 +41,12 @@
     text-align: center
 }
 
-a {
+.footer-description{
     text-decoration: none;
+    color: #01579b;
 }
 
-a:hover{
+.footer-description:hover{
     text-decoration: underline;
 }
 

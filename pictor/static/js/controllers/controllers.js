@@ -14,7 +14,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
                 req.post(obj).then(function(response) {
                     $scope.user = {};
                     $localStorage.authenticated = true;
-                    $localStorage.currentUser = response.extras
+                    $localStorage.currentUser = response.extras;
+                    $localStorage.currentUser.avatar = response.profile_photo;
                     console.log(JSON.stringify($localStorage.currentUser));
                     $state.go('dashboard');
                 }, function(err) {
@@ -27,14 +28,19 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.date.now = new Date();
     }])
 
-.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu',
-    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu) {
+.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular',
+    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular) {
     $scope.user = {};
     $scope.user.name = $localStorage.currentUser.first_name;
-    console.log($scope.user.name)
+    $scope.user.avatar = $localStorage.currentUser.avatar;
     $scope.toggleLeft = Menu.toggle('left');
     $scope.close = function () {
         $mdSidenav('left').close()
             .then(function () {});
     }
+
+    // populate gallery with photos
+    Restangular.all('api/photos/').getList().then(function(response) {
+        $scope.user.photos = response;
+    });
 }])

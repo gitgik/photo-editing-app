@@ -6,7 +6,10 @@
             </md-button>
             <div flex class="md-padding">
                 <a ui-sref="dashboard">Pictor</a></div>
-            <a flex="10" ui-sref="logout">{{user.name}}</a>
+            <a flex="5" ui-sref="logout">{{user.name}}</a>
+            <md-list-item aria-label="logout" flex="10" ui-sref="logout">
+                <img ng-src="{{user.avatar}}" class="md-avatar"/>
+            </md-list-item>
         </div>
     </md-toolbar>
     <div layout="row" flex>
@@ -17,7 +20,7 @@
                 </md-input-container>
             </md-subheader>
             <md-list class="uppered">
-                <md-list-item ng-if="photo" ng-repeat="photo in photos | filter:search.who" ng-click="close(); selectPhoto(photo);">
+                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectPhoto(photo);">
                     <div layout="column">
                         <h3>{{ photo.name }}</h3>
                     </div>

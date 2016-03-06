@@ -1,12 +1,13 @@
+"""imports."""
 from rest_framework import permissions
 
 
-class IsAuthenticated(permissions.IsAuthenticated):
+class Authenticate(permissions.IsAuthenticated):
     """This class allows only authenticated users to access certain views."""
 
-    def has_permissions(self, request, view):
+    def has_permission(self, request, view):
         """Check whether user has permissions."""
         if request.method == 'POST':
             return True
         return super(
-            IsAuthenticated, self).has_permissions(request, view)
+            Authenticate, self).has_permission(request, view)

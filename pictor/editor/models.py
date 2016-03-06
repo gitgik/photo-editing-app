@@ -39,7 +39,6 @@ class Photo(models.Model):
     caption = models.CharField(blank=True, max_length=255)
     date_created = models.DateTimeField(editable=False, auto_now_add=True)
     date_edited = models.DateTimeField(editable=False, auto_now=True)
-
     user = models.ForeignKey(User, related_name='photos')
 
 

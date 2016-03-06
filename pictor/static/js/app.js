@@ -50,7 +50,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
                     function (response) {
                         $localStorage.$reset();
                         $state.go('login');
-                        console.log(response)
                     });
             },
             module: 'private'
