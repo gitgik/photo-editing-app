@@ -19,38 +19,6 @@ app.factory('RestService', function($resource) {
     }
 });
 
-app.factory('RequestTransformer', function() {
-    var transformRequest = function (data, getHeaders) {
-        var headers = getHeaders();
-        headers['Content-Type'] = "application/x-www-form-urlencoded; charset=utf-8";
-        return (serializeData(data));
-    };
-
-    var serializeData = function (data) {
-        if (! angular.isObject(data)) {
-            return ((data == null) ? "": data.toString());
-        }
-        var buffer = [];
-        // serialize each key in the object
-        for (var name in data) {
-            if (!data.hasOwnProperty(name)) {
-                continue;
-            }
-            var value = data[name];
-            buffer.push(
-                encodeURIComponent(name) + "=" +
-                encodeURIComponen((value == null) ? "" : value)
-            );
-        }
-
-        // serialize data and clean in for transportation
-        var source = buffer.join("&").replace( /%20/g, "+" );
-        return (source);
-    };
-
-    return (transformRequest);
-});
-
 app.factory('Toast', function($mdToast) {
     var last = {
         bottom: false, top: true,
@@ -117,4 +85,37 @@ app.factory('Menu', function($mdSidenav, $timeout, Toast) {
           .then(function () {});
       }, 200);
     }
+});
+
+
+app.factory('RequestTransformer', function() {
+    var transformRequest = function (data, getHeaders) {
+        var headers = getHeaders();
+        headers['Content-Type'] = "application/x-www-form-urlencoded; charset=utf-8";
+        return (serializeData(data));
+    };
+
+    var serializeData = function (data) {
+        if (! angular.isObject(data)) {
+            return ((data == null) ? "": data.toString());
+        }
+        var buffer = [];
+        // serialize each key in the object
+        for (var name in data) {
+            if (!data.hasOwnProperty(name)) {
+                continue;
+            }
+            var value = data[name];
+            buffer.push(
+                encodeURIComponent(name) + "=" +
+                encodeURIComponen((value == null) ? "" : value)
+            );
+        }
+
+        // serialize data and clean in for transportation
+        var source = buffer.join("&").replace( /%20/g, "+" );
+        return (source);
+    };
+
+    return (transformRequest);
 });

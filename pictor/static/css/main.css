@@ -107,3 +107,25 @@
 .instance {
     border: 1px solid #efefef;
 }
+
+.canvas-container {
+    height: 60%;
+    width: inherit;
+    background-color: #efefef;
+}
+
+.effects-container {
+    margin-top: .2em;
+    background-color: #fff;
+    border: 2px solid #eee;
+    min-height: 21%;
+}
+
+.effects-container .repeated-item {
+  border-right: 1px solid #ddd;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 84px;
+  padding-top: 35px;
+  text-align: center;
+  width: 50px; }

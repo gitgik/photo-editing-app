@@ -26,10 +26,20 @@
                     </div>
                     <md-divider></md-divider>
                 </md-list-item>
-                <md-list-item>There is no photo</md-list-item>
+                <md-list-item ng-if="!user.photos">There is no photo</md-list-item>
             </md-list>
         </md-sidenav>
         <md-content layout-margin layout-padding flex>
-        </md-content>
+            <div class="canvas-container" ng-model="selectedImage">
+            </div>
+            <div class="effects-container" layout="row" layout-align="center center">
+                <md-virtual-repeat-container ng-if="effects" id="horizontal-container" md-orient-horizontal>
+                    <div md-virtual-repeat="effect in effects"
+                      class="repeated-item" flex>
+                      {{effect}}
+                    </div>
+                </md-virtual-repeat-container>
+            </div>
+      </md-content>
     </div>
 </div>
