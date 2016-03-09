@@ -63,3 +63,6 @@ target/
 .ipynb_checkpoints
 
 db.sqlite3
+
+# Ignore media photos
+static/media/

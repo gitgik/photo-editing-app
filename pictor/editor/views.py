@@ -8,7 +8,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import View
-from .enhancers import photo_effects
+from editor import photo_effects
 
 from editor.serializers import PhotoSerializer
 from editor.permissions import Authenticate
@@ -50,8 +50,6 @@ def social_login(request):
 def filters(request):
     """View handles the filters on a given photo."""
     if request.method == 'GET':
-        temp_url = 'static/media/temp/'
-
         image_url = request.query_params['image_url']
         photo_name = image_url.rsplit('/', 1)[-1]
         photo_file = cStringIO.StringIO(urllib.urlopen(image_url).read())

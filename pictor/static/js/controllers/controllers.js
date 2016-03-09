@@ -31,6 +31,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
 .controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'PhotoRestService',
     function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, PhotoRestService) {
     $scope.user = {};
+    $scope.render = {};
     $scope.user.name = $localStorage.currentUser.first_name;
     $scope.user.avatar = $localStorage.currentUser.avatar;
     $scope.toggleLeft = Menu.toggle('left');
@@ -43,6 +44,10 @@ angular.module('pictor.controllers', ['ngMaterial'])
     Restangular.all('api/photos/').getList().then(function(response) {
         $scope.user.photos = response;
     });
+
+    $scope.selectImage = function (photo_url) {
+        $scope.render.selectedPhoto = photo_url
+    }
 
     $scope.showFilters = function (photo) {
         PhotoRestService.Filters.getAll({ "image_url": photo})
