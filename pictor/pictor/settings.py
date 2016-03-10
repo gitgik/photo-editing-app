@@ -29,16 +29,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
+    'social.apps.django_app.default',
     'rest_framework',
     'djangobower',
     'editor'
 ]
 
-SITE_ID = 2
+SITE_ID = 5
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -74,10 +71,9 @@ TEMPLATES = [
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'allauth.account.context_processors.account',
-    'allauth.socialaccount.context_processors.socialaccount',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
-
 
 WSGI_APPLICATION = 'pictor.wsgi.application'
 
@@ -85,24 +81,13 @@ WSGI_APPLICATION = 'pictor.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
 )
 
-SOCIALACCOUNT_PROVIDERS = {
-    'facebook': {
-        'SCOPE': ['email', 'public_profile', 'user_friends'],
-        'METHOD': 'js_sdk',
-        'FIELDS': [
-            'id',
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'link',
-            'avatar_url'
-        ]
-    }
-}
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('FACEBOOK_APP_ID')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('FACEBOOK_API_SECRET')
 
 LOGIN_URL = '/'
 
@@ -114,7 +99,7 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'photoedit',
+        'NAME': 'pictor',
         'USER': os.getenv('DATABASE_USER'),
         'PASSWORD': '',
         'HOST': '127.0.0.1',

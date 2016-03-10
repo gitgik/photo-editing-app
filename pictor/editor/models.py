@@ -36,7 +36,6 @@ class Photo(models.Model):
 
     image = models.ImageField(upload_to=get_photo_path, max_length=255)
     name = models.CharField(default=generate_uid, max_length=50)
-    caption = models.CharField(blank=True, max_length=255)
     date_created = models.DateTimeField(editable=False, auto_now_add=True)
     date_modified = models.DateTimeField(editable=False, auto_now=True)
     user = models.ForeignKey(User)

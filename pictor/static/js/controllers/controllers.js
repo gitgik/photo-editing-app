@@ -8,18 +8,20 @@ angular.module('pictor.controllers', ['ngMaterial'])
                 // get the response from a successful JS sdk login
                 var obj = {
                     "accessToken": response.authResponse.accessToken,
-                    "userID": response.authResponse.userID
+                    "userID": response.authResponse.userID,
+                    "backend": "facebook"
                 }
                 var req = Restangular.all('api/login/');
-                req.post(obj).then(function(response) {
+                req.post(obj).then(function(res) {
                     $scope.user = {};
+
                     $localStorage.authenticated = true;
-                    $localStorage.currentUser = response.extras;
-                    $localStorage.currentUser.avatar = response.profile_photo;
+                    $localStorage.userID = response.authResponse.userID;
+                    $localStorage.currentUser = res.user;
                     console.log(JSON.stringify($localStorage.currentUser));
                     $state.go('dashboard');
                 }, function(err) {
-                    $scope.login = {}
+                    $scope.login = {};
                     $scope.login.err = 'Oops! Could not log in using facebook.';
                 })
             })
@@ -32,8 +34,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
     function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, PhotoRestService) {
     $scope.user = {};
     $scope.render = {};
-    $scope.user.name = $localStorage.currentUser.first_name;
-    $scope.user.avatar = $localStorage.currentUser.avatar;
+    $scope.user.name = $localStorage.currentUser;
+    $scope.user.id = $localStorage.userID;
     $scope.toggleLeft = Menu.toggle('left');
     $scope.close = function () {
         $mdSidenav('left').close()

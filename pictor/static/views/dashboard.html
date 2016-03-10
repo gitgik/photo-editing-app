@@ -6,9 +6,9 @@
             </md-button>
             <div flex class="md-padding">
                 <a ui-sref="dashboard">Pictor</a></div>
-            <a flex="5" ui-sref="logout">{{user.name}}</a>
+           <!-- <a flex="5" ui-sref="logout">{{user.name}}</a>-->
             <md-list-item aria-label="logout" flex="10" ui-sref="logout">
-                <img ng-src="{{user.avatar}}" class="md-avatar"/>
+                <img ng-src="https://graph.facebook.com/{{ user.id }}/picture?width=40&height=40" class="md-avatar"/>
             </md-list-item>
         </div>
     </md-toolbar>

@@ -3,19 +3,19 @@ import os
 import urllib
 import cStringIO
 
-from allauth.socialaccount.models import SocialAccount
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import View
 from editor import photo_effects
-
 from editor.serializers import PhotoSerializer
 from editor.permissions import Authenticate
 from editor.models import Photo
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import login
+from social.apps.django_app.utils import load_strategy, load_backend
+from social.exceptions import AuthAlreadyAssociated
 
 
 @csrf_exempt
@@ -25,25 +25,26 @@ def social_login(request):
     """View function for handling fb authentication."""
     if request.method == 'POST':
         access_token = request.data['accessToken']
-        facebook_id = request.data['userID']
+        backend = request.data['backend']
+        print access_token
         if access_token:
+            strategy = load_strategy(request)
+            backend = load_backend(
+                strategy=strategy, name=backend, redirect_uri=None)
             try:
-                user = SocialAccount.objects.get(uid=facebook_id)
-                if user:
-                    _user = user.user
-                    _user.backend = 'django.contrib.auth.backends.ModelBackend'
-                    login(request, _user)
-                    return Response(
-                        {
-                            "profile_photo": user.get_avatar_url(),
-                            "extras": user.extra_data,
-                        },
-                        status=status.HTTP_200_OK)
-                else:
-                    return Response("Bad credentials", status=403)
-            except:
+                user = backend.do_auth(access_token)
+            except AuthAlreadyAssociated:
                 return Response(
-                    "Bad Request", status=status.HTTP_400_BAD_REQUEST)
+                    {"errors": "This social account is already in use"},
+                    status=status.HTTP_400_BAD_REQUEST)
+            if user:
+                login(request, user)
+                return Response(
+                    {'user': user.username}, status=status.HTTP_200_OK)
+            else:
+                return Response("Bad credentials", status=403)
+        else:
+            return Response("Bad request", status=400)
 
 
 @api_view(['GET'])
