@@ -28,22 +28,36 @@
                 <md-list-item ng-if="!user.photos">There is no photo</md-list-item>
             </md-list>
         </md-sidenav>
-        <md-content layout-margin layout-padding flex>
+        <md-content layout-margin layout-padding flex class="box">
             <div class="canvas-container" ng-model="selectedImage">
+                <div class="canvas-settings" layout="row">
+                    <div flex="90">
+                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="clearCanvas()">
+                            <i class="material-icons iconize">arrow_back</i>
+                            <md-tooltip>Undo</md-tooltip>
+                        </md-button>
+                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="restoreOrigin(selectedImage);">
+                            <i class="material-icons iconize">restore</i>
+                            <md-tooltip>Restore</md-tooltip>
+                        </md-button>
+                    </div>
+                    <md-button class="md-icon-button md-primary" aria-label="Settings" flex="10" layout-align="end center" ng-disabled="!render.editingMode">
+                        next
+                    </md-button>
+                </div>
                 <div ng-if="!render.selectedPhoto" layout="row" layout-align="center center">
                     <h3 class="title" layout="column" layout-align="center center">No photo selected</h3>
                 </div>
                 <div ng-if="render.selectedPhoto">
-                    <img alt="{{ photo.name }}" ng-src="{{ render.selectedPhoto }}">
+                    <img class="canvas-image" alt="{{ photo.name }}" ng-src="{{ render.selectedPhoto }}">
                 </div>
             </div>
-            <div class="effects-container" layout="row" layout-align="center center">
-                <md-virtual-repeat-container ng-if="effects" id="horizontal-container" md-orient-horizontal>
-                    <div md-virtual-repeat="effect in effects"
-                      class="repeated-item" flex>
-                      {{effect}}
-                    </div>
-                </md-virtual-repeat-container>
+            <div class="effects-container" ng-if="render.selectedPhoto">
+                <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="row">
+                    <img class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
+                    <md-tooltip>{{key}}</md-tooltip>
+                </div>
+
             </div>
       </md-content>
     </div>
