@@ -9,6 +9,7 @@ var app = angular.module('pictor',
         'ngResource',
         'ngStorage',
         'restangular',
+        'ngFileUpload',
         'pictor.controllers',
     ]);
 

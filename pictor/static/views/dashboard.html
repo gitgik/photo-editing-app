@@ -5,19 +5,27 @@
                 <i class="material-icons iconize">menu</i>
             </md-button>
             <div flex class="md-padding">
-                <a ui-sref="dashboard">Pictor</a></div>
-           <!-- <a flex="5" ui-sref="logout">{{user.name}}</a>-->
-            <md-list-item aria-label="logout" flex="10" ui-sref="logout">
+                <a ui-sref="dashboard">Pictor</a>
+            </div>
+            <md-list-item aria-label="logout" flex="10">
                 <img ng-src="https://graph.facebook.com/{{ user.id }}/picture?width=40&height=40" class="md-avatar"/>
             </md-list-item>
+            <md-button class="md-button-icon" ui-sref="logout">
+                <i class="material-icons iconize">power_settings_new</i>
+                <md-tooltip>log out</md-tooltip>
+            </md-button>
         </div>
     </md-toolbar>
     <div layout="row" flex>
         <md-sidenav md-component-id="left" layout="column" md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z1">
             <md-subheader class="md-no-sticky">
-                <md-input-container>
+                <md-input-container flex="80">
                     <input ng-model="search.who" placeholder="Search photos" flex>
                 </md-input-container>
+                <md-button flex="20" class="md-button-icon md-primary" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
+                    <i class="material-icons iconize">cloud_upload</i>
+                    <md-tooltip>upload</md-tooltip>
+                </md-button>
             </md-subheader>
             <md-list class="uppered">
                 <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);">
@@ -52,12 +60,14 @@
                     <img class="canvas-image" alt="{{ photo.name }}" ng-src="{{ render.selectedPhoto }}">
                 </div>
             </div>
-            <div class="effects-container" ng-if="render.selectedPhoto">
+            <div class="effects-container" ng-if="render.selectedPhoto && doneLoadingFilters">
                 <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="row">
                     <img class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
                     <md-tooltip>{{key}}</md-tooltip>
                 </div>
-
+            </div>
+            <div class="loader" ng-if="!(render.selectedPhoto || doneLoadingFilters)" layout-align="space-around" layout="row">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
       </md-content>
     </div>

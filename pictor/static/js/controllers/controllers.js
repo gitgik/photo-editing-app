@@ -14,7 +14,6 @@ angular.module('pictor.controllers', ['ngMaterial'])
                 var req = Restangular.all('api/login/');
                 req.post(obj).then(function(res) {
                     $scope.user = {};
-
                     $localStorage.authenticated = true;
                     $localStorage.userID = response.authResponse.userID;
                     $localStorage.currentUser = res.user;
@@ -30,8 +29,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.date.now = new Date();
     }])
 
-.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'PhotoRestService',
-    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, PhotoRestService) {
+.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'Upload','PhotoRestService',
+    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, Upload, PhotoRestService) {
 
     $scope.items = [];
     for (var i = 0; i < 1000; i++) {
@@ -62,9 +61,37 @@ angular.module('pictor.controllers', ['ngMaterial'])
         });
     });
 
+    $scope.$on('doneLoadingFilters', function() {
+        // populate images filters in the gallery effects container
+        $rootScope.doneLoadingFilters = true;
+    });
+
+
+
+    $scope.uploadPhoto = function (file) {
+        var photo = Upload.rename(file, 'PHOTO_' + Date.now().toString() +
+            file.name.substr(file.name.lastIndexOf('.'), file.name.length));
+        Upload.upload({
+            url: 'api/photos/',
+            data: {
+                image: photo,
+                name: photo.name
+            }
+        }).then(function (response) {
+            $scope.$emit('updatePhotos');
+            console.log('Success ' + response.config.data.image.name + 'uploaded. Response: ' + response.data);
+        }, function (error) {
+            console.log('Error status: ' + error.status);
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.image.name);
+        });
+    };
+
     $scope.selectImage = function (photo_url) {
         $scope.render.selectedPhoto = photo_url
         $localStorage.initialImage = photo_url
+        delete $rootScope.doneLoadingFilters;
     };
 
     $scope.applyEffect = function(photo_url) {
@@ -77,6 +104,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
         PhotoRestService.Filters.getAll({ "image_url": photo})
         .$promise.then(function(response) {
             $rootScope.effects.url = response;
+            $scope.$emit('doneLoadingFilters');
         });
         $scope.render.editingMode = false;
     };
