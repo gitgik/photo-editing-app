@@ -34,7 +34,7 @@
 .content {
     z-index: 1000 !important;
     position: relative;
-    top: 20%;
+    top: 10%;
     margin: 0 auto;
     max-width: 25em;
 }
@@ -64,6 +64,11 @@
 
 .dashboard {
     background: #efefef;
+}
+
+.photo-caption {
+    color: #aaa;
+    font-size: 1em;
 }
 
 .blist-image {

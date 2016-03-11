@@ -30,8 +30,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.date.now = new Date();
     }])
 
-.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'PhotoRestService',
-    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, PhotoRestService) {
+.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular','Upload', 'PhotoRestService',
+    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, Upload, PhotoRestService) {
 
     $scope.items = [];
     for (var i = 0; i < 1000; i++) {
@@ -62,9 +62,35 @@ angular.module('pictor.controllers', ['ngMaterial'])
         });
     });
 
+    $scope.$on('doneLoadingFilters', function () {
+        $rootScope.doneLoadingFilters = true;
+    });
+
+    $scope.uploadPhoto = function (file) {
+        var photo = Upload.rename(file, 'PHOTO_' + Date.now().toString() +
+            file.name.substr(file.name.lastIndexOf('.'), file.name.length));
+        Upload.upload({
+            url: 'api/photos/',
+            data: {
+                image: photo,
+                name: photo.ngfName
+            }
+        }).then (function (response) {
+            console.log('SUCCESSFULLY UPLOADED '+ response.config.data.photo.name);
+            $scope.emit('updatePhotos');
+        }, function (error) {
+            console.log('Error:' + error.status);
+        }, function (event) {
+            var progressPercentage = parseInt(100 * event.loaded / event.total);
+            console.log('progress:' + progressPercentage + '%' + event.config.data.photo.name);
+        })
+    };
+
     $scope.selectImage = function (photo_url) {
+        delete $rootScope.doneLoadingFilters;
         $scope.render.selectedPhoto = photo_url
         $localStorage.initialImage = photo_url
+
     };
 
     $scope.applyEffect = function(photo_url) {
@@ -76,6 +102,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $rootScope.effects = $rootScope.effects || {};
         PhotoRestService.Filters.getAll({ "image_url": photo})
         .$promise.then(function(response) {
+            $scope.$emit('doneLoadingFilters');
             $rootScope.effects.url = response;
         });
         $scope.render.editingMode = false;
