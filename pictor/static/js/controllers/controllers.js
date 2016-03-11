@@ -113,10 +113,17 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.render.selectedPhoto = undefined;
         $scope.render.editingMode = false;
         delete $localStorage.initialImage;
-    }
+    };
 
     $scope.restoreOrigin = function(image) {
         $scope.render.selectedPhoto = $localStorage.initialImage;
         $scope.render.editingMode = false;
+    };
+
+    $scope.deletePhoto = function (id) {
+        PhotoRestService.ModifyImage.deleteImage(
+            {id: id}, function (response) {
+                $scope.$emit('updatePhotos');
+            });
     }
 }])

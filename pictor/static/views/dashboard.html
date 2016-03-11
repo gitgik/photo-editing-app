@@ -18,20 +18,23 @@
     </md-toolbar>
     <div layout="row" flex>
         <md-sidenav md-component-id="left" layout="column" md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z1">
-            <md-subheader class="md-no-sticky">
+            <md-subheader class="md-no-sticky search-container">
                 <md-input-container flex="80">
                     <input ng-model="search.who" placeholder="Search photos" flex>
                 </md-input-container>
-                <md-button flex="20" class="md-button-icon md-primary" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
+                <md-button flex="20" class="md-icon-button" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
                     <i class="material-icons iconize">cloud_upload</i>
-                    <md-tooltip>upload</md-tooltip>
+                    <md-tooltip>upload photo</md-tooltip>
                 </md-button>
             </md-subheader>
-            <md-list class="uppered">
-                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);">
-                    <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="md-avatar" />
+            <md-list>
+                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
+                    <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
-                    <md-divider></md-divider>
+                    <md-button class="md-icon-button" aria-label="Delete" ng-click="deletePhoto(selectedImage);">
+                        <i class="material-icons iconize">delete</i>
+                        <md-tooltip>Delete</md-tooltip>
+                    </md-button>
                 </md-list-item>
                 <md-list-item ng-if="!user.photos">There is no photo</md-list-item>
             </md-list>
@@ -40,30 +43,34 @@
             <div class="canvas-container" ng-model="selectedImage">
                 <div class="canvas-settings" layout="row">
                     <div flex="90">
-                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="clearCanvas()">
+                        <md-button class="md-icon-button md-primary" aria-label="undo" ng-click="clearCanvas()" ng-disabled="!render.editingMode">
                             <i class="material-icons iconize">arrow_back</i>
                             <md-tooltip>Undo</md-tooltip>
                         </md-button>
-                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="restoreOrigin(selectedImage);">
+                        <md-button class="md-icon-button md-primary" aria-label="restore" ng-click="restoreOrigin(selectedImage);" ng-disabled="!render.editingMode">
                             <i class="material-icons iconize">restore</i>
                             <md-tooltip>Restore</md-tooltip>
+                        </md-button>
+                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="deletePhoto(selectedImage);" ng-disabled="!render.editingMode">
+                            <i class="material-icons iconize">delete</i>
+                            <md-tooltip>Delete</md-tooltip>
                         </md-button>
                     </div>
                     <md-button class="md-icon-button md-primary" aria-label="Settings" flex="10" layout-align="end center" ng-disabled="!render.editingMode">
                         next
                     </md-button>
                 </div>
-                <div ng-if="!render.selectedPhoto" layout="row" layout-align="center center">
-                    <h3 class="title" layout="column" layout-align="center center">No photo selected</h3>
+                <div ng-if="!render.selectedPhoto" class="default-canvas" layout="row" layout-align="center center">
+                    <h3 class="item" layout="column" layout-align="center center">No photo selected</h3>
                 </div>
                 <div ng-if="render.selectedPhoto">
                     <img class="canvas-image" alt="{{ photo.name }}" ng-src="{{ render.selectedPhoto }}">
                 </div>
             </div>
             <div class="effects-container" ng-if="render.selectedPhoto && doneLoadingFilters">
-                <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="row">
-                    <img class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
-                    <md-tooltip>{{key}}</md-tooltip>
+                <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="column">
+                    <img layout="row" layout-align="center center" class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
+                    <span layout="row" class="preview-title" layout-align="center center">{{key}}</span>
                 </div>
             </div>
             <div class="loader" ng-if="render.loading" layout-align="space-around" layout="row">
