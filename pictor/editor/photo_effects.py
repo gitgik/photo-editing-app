@@ -118,14 +118,3 @@ def saturate(image, name):
     photo = photo.enhance(2.0)
     photo.save(temp_url + "SATURATE" + name)
     return temp_url + "SATURATE" + name
-
-
-def charcoal(image, name):
-    """Return an image with charcoal filter enhancements."""
-    photo = Image.open(image)
-    photo = grayscale(photo)
-    photo = contrast(photo)
-    photo = brighten(photo)
-    photo = detail(photo)
-    photo.save(temp_url + "CHARCOAL" + name)
-    return temp_url + "CHARCOAL" + name

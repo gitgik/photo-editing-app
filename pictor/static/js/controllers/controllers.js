@@ -32,6 +32,12 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
 .controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'PhotoRestService',
     function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, PhotoRestService) {
+
+    $scope.items = [];
+    for (var i = 0; i < 1000; i++) {
+        $scope.items.push(i);
+    }
+
     $scope.user = {};
     $scope.render = {};
     $scope.user.name = $localStorage.currentUser;
@@ -45,18 +51,44 @@ angular.module('pictor.controllers', ['ngMaterial'])
     // populate gallery with photos
     Restangular.all('api/photos/').getList().then(function(response) {
         $scope.user.photos = response;
+        delete $localStorage.initialImage;
+    });
+
+    $scope.$on('updatePhotos', function() {
+        // populate images in the gallery
+        Restangular.all('api/photos/').getList().then(function(response) {
+            $scope.user.photos = response;
+            delete $localStorage.initialImage;
+        });
     });
 
     $scope.selectImage = function (photo_url) {
         $scope.render.selectedPhoto = photo_url
-    }
-
-    $scope.showFilters = function (photo) {
-        PhotoRestService.Filters.getAll({ "image_url": photo})
-        .$promise.then(function(response) {
-            $rootScope.imageFilter = response;
-        });
+        $localStorage.initialImage = photo_url
     };
 
+    $scope.applyEffect = function(photo_url) {
+        $scope.render.selectedPhoto = photo_url
+        $scope.render.editingMode = true;
+    };
 
+    $scope.showFilters = function (photo) {
+        $rootScope.effects = $rootScope.effects || {};
+        PhotoRestService.Filters.getAll({ "image_url": photo})
+        .$promise.then(function(response) {
+            $rootScope.effects.url = response;
+        });
+        $scope.render.editingMode = false;
+    };
+
+    $scope.clearCanvas = function () {
+        $scope.render.selectedPhoto = undefined;
+        $scope.render.editingMode = false;
+        delete $localStorage.initialImage;
+    }
+
+    $scope.restoreOrigin = function(image) {
+        $scope.render.selectedPhoto = $localStorage.initialImage;
+        $scope.render.editingMode = false;
+    }
 }])

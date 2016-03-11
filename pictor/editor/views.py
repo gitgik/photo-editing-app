@@ -60,11 +60,9 @@ def filters(request):
             'SMOOTH': photo_effects.smooth(photo_file, photo_name),
             'SHARPEN': photo_effects.sharpen(photo_file, photo_name),
             'DETAIL': photo_effects.detail(photo_file, photo_name),
-            'MIRRORS': photo_effects.mirrors(photo_file, photo_name),
             'CONTRAST': photo_effects.contrast(photo_file, photo_name),
             'BRIGHTEN': photo_effects.brighten(photo_file, photo_name),
             'DARKEN': photo_effects.darken(photo_file, photo_name),
-            'CHARCOAL': photo_effects.charcoal(photo_file, photo_name),
             'FLIP': photo_effects.flip(photo_file, photo_name)
         }
 

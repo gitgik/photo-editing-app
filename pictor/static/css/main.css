@@ -120,24 +120,55 @@
     border: 1px solid #efefef;
 }
 
+.canvas-settings {
+    width: 96%;
+    background-color: #efefef;
+    height: 2.7em;
+}
+
 .canvas-container {
     height: 60%;
-    width: inherit;
+    width: 96%;
     background-color: #efefef;
 }
 
-.effects-container {
-    margin-top: .2em;
-    background-color: #fff;
-    border: 2px solid #ddd;
-    min-height: 21%;
+.canvas-image {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    display: block;
+    object-fit: contain;
 }
 
-.effects-container .repeated-item {
-  border-right: 1px solid #eee;
+.preview-effects {
+    border-radius: 25%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.preview-effects:hover {
+    cursor: pointer;
+}
+
+.effects-container {
+    background-color: #efefef;
+    border-right: 2px solid #efefef;
+    border-left: 2px solid #efefef;
+    border-bottom: 2px solid #efefef;
+    height: 6em;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+.effects-container .repeated-item-container {
+  top:-1em;
+  margin-left: .5em;
+  margin-right: .5em;
   box-sizing: border-box;
   display: inline-block;
-  height: 84px;
-  padding-top: 35px;
+  height: 7em;
   text-align: center;
-  width: 50px; }
+  width: 7em;
+}
+
