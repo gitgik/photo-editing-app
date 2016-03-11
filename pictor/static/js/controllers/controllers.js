@@ -64,9 +64,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
     $scope.$on('doneLoadingFilters', function() {
         // populate images filters in the gallery effects container
         $rootScope.doneLoadingFilters = true;
+        delete $scope.render.loading;
     });
-
-
 
     $scope.uploadPhoto = function (file) {
         var photo = Upload.rename(file, 'PHOTO_' + Date.now().toString() +
@@ -91,6 +90,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
     $scope.selectImage = function (photo_url) {
         $scope.render.selectedPhoto = photo_url
         $localStorage.initialImage = photo_url
+        $scope.render.loading = true;
         delete $rootScope.doneLoadingFilters;
     };
 
