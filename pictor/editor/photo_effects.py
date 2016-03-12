@@ -55,7 +55,7 @@ def detail(image, name):
 def flip(image, name):
     """Flip an image."""
     photo = Image.open(image)
-    photo = ImageOps.invert(photo)
+    photo = ImageOps.flip(photo)
     photo.save(temp_url + "FLIP" + name)
     return temp_url + "FLIP" + name
 
