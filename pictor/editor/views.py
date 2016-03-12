@@ -65,7 +65,6 @@ def filters(request):
             'DARK': photo_effects.darken(photo_file, photo_name),
             'THERMAL': photo_effects.flip(photo_file, photo_name),
             'CONTOUR': photo_effects.contour(photo_file, photo_name),
-            'INVERT': photo_effects.invert(photo_file, photo_name),
             'SATURATE': photo_effects.saturate(photo_file, photo_name),
             'MIRROR': photo_effects.mirror(photo_file, photo_name)
 

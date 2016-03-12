@@ -88,10 +88,10 @@ angular.module('pictor.controllers', ['ngMaterial'])
     };
 
     $scope.selectImage = function (photo_url) {
+        delete $rootScope.doneLoadingFilters;
         $scope.render.selectedPhoto = photo_url
         $localStorage.initialImage = photo_url
         $scope.render.loading = true;
-        delete $rootScope.doneLoadingFilters;
     };
 
     $scope.applyEffect = function(photo_url) {
