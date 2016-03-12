@@ -31,10 +31,34 @@
                 <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
-                    <md-button class="md-icon-button" aria-label="Delete" ng-click="deletePhoto(selectedImage);">
-                        <i class="material-icons iconize">delete</i>
-                        <md-tooltip>Delete</md-tooltip>
-                    </md-button>
+                    <md-menu md-offset="0 -7" class="expand-more">
+                        <md-button aria-label="Open user detail menu"
+                                   class="md-icon-button"
+                                   ng-click="$mdOpenMenu($event)">
+                            <icon md-menu-origin class="material-icons iconize icon-more"
+                                        >expand_more</icon>
+                        </md-button>
+                        <md-menu-content class="photo-menu-content">
+                            <md-menu-item>
+                                <md-button ng-click="()" class="menu-button">
+                                    <icon class="material-icons iconize">mode_edit</icon>
+                                    Rename
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="" class="menu-button">
+                                    <icon class="material-icons iconize">undo</icon>
+                                    Mark as unedited
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="" class="menu-button">
+                                    <icon class="material-icons iconize">delete</icon>
+                                    Delete
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                 </md-list-item>
                 <md-list-item ng-if="!user.photos">There is no photo</md-list-item>
             </md-list>
