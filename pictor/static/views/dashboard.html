@@ -46,12 +46,6 @@
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="markUnedited();" class="menu-button">
-                                    <icon class="material-icons menu-icon">undo</icon>
-                                    Mark as unedited
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
                                 <md-button ng-click="photoDelConfirm($event, photo.id);" class="menu-button">
                                     <icon class="material-icons menu-icon">delete</icon>
                                     Delete
@@ -59,8 +53,9 @@
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
+                    <div class="unedited-photo" ng-if="unedited"></div>
                 </md-list-item>
-                <md-list-item ng-if="!user.photos">You are almost there! Please upload a photo to continue</md-list-item>
+                <md-list-item ng-if="!user.photos">You're almost there! Please upload a photo to continue</md-list-item>
             </md-list>
         </md-sidenav>
         <md-content layout-margin layout-padding flex class="box">

@@ -100,6 +100,14 @@
     opacity: 0.95;
 }
 
+.signup-container {
+    min-width: 20em;
+}
+
+.iconize {
+    margin-top: .3em; position: relative;
+}
+
 .container {
     min-width: 20em;
 }
@@ -157,17 +165,27 @@
     top: 0.25em;
 }
 
-.signup-container {
-    min-width: 20em;
-}
-
-.iconize {
-    margin-top: .3em; position: relative;
-}
-
 .icon-more {
     font-size: 30px;
     color: rgba(0,0,0,.4);
+}
+
+.unedited-photo {
+    transform: scaleX(1) scaleY(1);
+    background-color: #09d261;
+    color: #fff;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    padding: 0 5px;
+    padding-top: 2px;
+    line-height: normal;
+    border-radius: 12px;
+    text-align: center;
+    display: inline-flex;
+    height: 19px;
+    min-width: 19px;
+    box-sizing: border-box;
+    margin-right: -2px;
 }
 
 .custom-button {
