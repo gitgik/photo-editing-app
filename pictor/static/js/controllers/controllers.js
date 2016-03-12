@@ -29,8 +29,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.date.now = new Date();
     }])
 
-.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', 'Menu', 'Restangular', 'Upload','PhotoRestService',
-    function($scope, $rootScope, $state, $localStorage, $mdSidenav, Menu, Restangular, Upload, PhotoRestService) {
+.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', '$mdDialog', 'Menu', 'Restangular', 'Upload','PhotoRestService', 'Toast',
+    function($scope, $rootScope, $state, $localStorage, $mdSidenav, $mdDialog, Menu, Restangular, Upload, PhotoRestService, Toast) {
 
     $scope.items = [];
     for (var i = 0; i < 1000; i++) {
@@ -120,10 +120,21 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.render.editingMode = false;
     };
 
-    $scope.deletePhoto = function (id) {
-        PhotoRestService.ModifyImage.deleteImage(
-            {id: id}, function (response) {
+    $scope.photoDelConfirm = function(ev, photoID) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+              .title('Are you sure?')
+              .textContent('delete this photo?')
+              .ariaLabel('delete')
+              .targetEvent(ev)
+              .ok('DELETE')
+              .cancel('CANCEL');
+        $mdDialog.show(confirm).then(function() {
+            PhotoRestService.ModifyImage.deleteImage(
+            {id: photoID}, function (response) {
                 $scope.$emit('updatePhotos');
+                Toast.show('Photo deleted');
             });
-    }
+        }, function() {});
+    };
 }])

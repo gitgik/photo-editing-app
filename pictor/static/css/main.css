@@ -149,6 +149,12 @@
     font-weight: normal;
     font-size: 1em;
     font-family: 'Roboto', san-serif;
+    top: 0;
+}
+
+.menu-icon {
+    position: relative;
+    top: 0.25em;
 }
 
 .signup-container {
@@ -156,7 +162,7 @@
 }
 
 .iconize {
-    margin-top: .1em; position: relative;
+    margin-top: .3em; position: relative;
 }
 
 .icon-more {

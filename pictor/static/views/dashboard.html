@@ -7,10 +7,10 @@
             <div flex class="md-padding">
                 <a ui-sref="dashboard">Pictor</a>
             </div>
-            <md-list-item aria-label="logout" flex="10">
+            <md-list-item aria-label="logout" flex="5">
                 <img ng-src="https://graph.facebook.com/{{ user.id }}/picture?width=40&height=40" class="md-avatar"/>
             </md-list-item>
-            <md-button class="md-button-icon" ui-sref="logout">
+            <md-button flex="5" class="md-button-icon" ui-sref="logout">
                 <i class="material-icons iconize">power_settings_new</i>
                 <md-tooltip>log out</md-tooltip>
             </md-button>
@@ -40,27 +40,27 @@
                         </md-button>
                         <md-menu-content class="photo-menu-content">
                             <md-menu-item>
-                                <md-button ng-click="()" class="menu-button">
-                                    <icon class="material-icons iconize">mode_edit</icon>
+                                <md-button ng-click="renamePhoto(photo);" class="menu-button">
+                                    <icon class="material-icons menu-icon">mode_edit</icon>
                                     Rename
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="" class="menu-button">
-                                    <icon class="material-icons iconize">undo</icon>
+                                <md-button ng-click="markUnedited();" class="menu-button">
+                                    <icon class="material-icons menu-icon">undo</icon>
                                     Mark as unedited
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="" class="menu-button">
-                                    <icon class="material-icons iconize">delete</icon>
+                                <md-button ng-click="photoDelConfirm($event, photo.id);" class="menu-button">
+                                    <icon class="material-icons menu-icon">delete</icon>
                                     Delete
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
                 </md-list-item>
-                <md-list-item ng-if="!user.photos">There is no photo</md-list-item>
+                <md-list-item ng-if="!user.photos">You are almost there! Please upload a photo to continue</md-list-item>
             </md-list>
         </md-sidenav>
         <md-content layout-margin layout-padding flex class="box">
