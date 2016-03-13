@@ -29,7 +29,7 @@
                 <md-progress-circular ng-if="render.progressPercentage" flex="10" md-mode="determinate" value="{{render.progressPercentage}}" md-diameter="40"></md-progress-circular layout-align="center end">
             </md-subheader>
             <md-list>
-                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
+                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo); showFilters(photo.image);" class="thumbnail-list">
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_created | amCalendar}}</span>
@@ -71,7 +71,7 @@
                             <i class="material-icons iconize">restore</i>
                             <md-tooltip>Restore</md-tooltip>
                         </md-button>
-                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="deletePhoto(selectedImage);" ng-disabled="!render.editingMode">
+                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="photoDelInEditMode($event, render.selectedPhotoID);" ng-disabled="!render.editingMode">
                             <i class="material-icons iconize">delete</i>
                             <md-tooltip>Delete</md-tooltip>
                         </md-button>
@@ -84,7 +84,7 @@
                     <h3 class="item" layout="column" layout-align="center center">No photo selected</h3>
                 </div>
                 <div ng-if="render.selectedPhoto">
-                    <img class="canvas-image" alt="{{ photo.name }}" ng-src="{{ render.selectedPhoto }}">
+                    <img class="canvas-image" ng-src="{{ render.selectedPhoto }}">
                 </div>
             </div>
             <div class="effects-container" ng-if="render.selectedPhoto && doneLoadingFilters">

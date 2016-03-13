@@ -92,10 +92,11 @@ angular.module('pictor.controllers', ['ngMaterial'])
         });
     };
 
-    $scope.selectImage = function (photo_url) {
+    $scope.selectImage = function (photo) {
         delete $rootScope.doneLoadingFilters;
-        $scope.render.selectedPhoto = photo_url
-        $localStorage.initialImage = photo_url
+        $scope.render.selectedPhoto = photo.image;
+        $scope.render.selectedPhotoID = photo.id;
+        $localStorage.initialImage = photo.image;
         $scope.render.loading = true;
     };
 
@@ -117,6 +118,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
     $scope.clearCanvas = function () {
         $scope.render.selectedPhoto = undefined;
+        $scope.render.selectedPhotoID = undefined;
         $scope.render.editingMode = false;
         delete $localStorage.initialImage;
     };
@@ -139,6 +141,26 @@ angular.module('pictor.controllers', ['ngMaterial'])
             PhotoRestService.ModifyImage.deleteImage(
             {id: photoID}, function (response) {
                 $scope.$emit('updatePhotos');
+                Toast.show('Photo deleted');
+            });
+        }, function() {});
+    };
+
+
+    $scope.photoDelInEditMode = function(ev, photoID) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+              .title('Are you sure?')
+              .textContent('delete this photo with all it\'s filters?')
+              .ariaLabel('delete')
+              .targetEvent(ev)
+              .ok('DELETE')
+              .cancel('CANCEL');
+        $mdDialog.show(confirm).then(function() {
+            PhotoRestService.ModifyImage.deleteImage(
+            {id: photoID}, function (response) {
+                $scope.$emit('updatePhotos');
+                delete $scope.render.selectedPhoto;
                 Toast.show('Photo deleted');
             });
         }, function() {});
