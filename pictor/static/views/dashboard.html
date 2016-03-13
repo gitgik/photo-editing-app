@@ -68,7 +68,11 @@
                         </md-menu-content>
                     </md-menu>
                 </md-list-item>
-                <md-list-item ng-if="!user.photos">You're almost there! Please upload a photo to continue</md-list-item>
+                <md-list-item ng-if="user.noPhotos">
+                    <h3 class="photo-caption">
+                        You're almost there! Please upload a photo
+                    </h3>
+                </md-list-item>
             </md-list>
         </md-sidenav>
         <md-content layout-margin layout-padding flex class="box">
@@ -109,7 +113,7 @@
             <div class="loader" ng-if="render.loading" layout-align="space-around" layout="row">
                 <md-progress-circular layout="column" md-mode="indeterminate"></md-progress-circular>
             </div>
-            <span  class="filter-loader" ng-if="render.loading" layout-align="center center" layout="row">applying your filters</span>
+            <span  class="filter-loader" ng-if="render.loading" layout-align="center center" layout="row">rendering your filters</span>
       </md-content>
     </div>
 </div>

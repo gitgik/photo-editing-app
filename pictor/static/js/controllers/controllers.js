@@ -32,11 +32,6 @@ angular.module('pictor.controllers', ['ngMaterial'])
 .controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', '$mdDialog', 'Menu', 'Restangular', 'Upload','PhotoRestService', 'Toast',
     function($scope, $rootScope, $state, $localStorage, $mdSidenav, $mdDialog, Menu, Restangular, Upload, PhotoRestService, Toast) {
 
-    $scope.items = [];
-    for (var i = 0; i < 1000; i++) {
-        $scope.items.push(i);
-    }
-
     $scope.user = {};
     $scope.render = {};
     $scope.user.name = $localStorage.currentUser;
@@ -49,14 +44,32 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
     // populate gallery with photos
     Restangular.all('api/photos/').getList().then(function(response) {
-        $scope.user.photos = response;
-        delete $localStorage.initialImage;
+        if (response.length == 0) {
+            $scope.$emit('noPhotos');
+            $scope.user.noPhotos = true;
+        }
+        else {
+            $scope.user.noPhotos = false;
+            $scope.user.photos = response;
+            delete $localStorage.initialImage;
+        }
+    });
+
+    $scope.$on('noPhotos', function() {
+        $scope.user.noPhotos = true;
+        delete $scope.user.photos;
     });
 
     $scope.$on('updatePhotos', function() {
         // populate images in the gallery
         Restangular.all('api/photos/').getList().then(function(response) {
-            $scope.user.photos = response;
+            if (response.length == 0) {
+                $scope.$emit('noPhotos');
+            }
+            else {
+                delete $scope.user.noPhotos;
+                $scope.user.photos = response;
+            }
             delete $localStorage.initialImage;
         });
     });
@@ -141,6 +154,10 @@ angular.module('pictor.controllers', ['ngMaterial'])
             PhotoRestService.ModifyImage.deleteImage(
             {id: photoID}, function (response) {
                 $scope.$emit('updatePhotos');
+                if ($scope.render.selectedPhotoID == photoID) {
+                    delete $scope.render.selectedPhoto;
+                    console.log('Canvas cleared.')
+                }
                 Toast.show('Photo deleted');
             });
         }, function() {});
