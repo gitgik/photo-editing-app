@@ -28,11 +28,11 @@
                 </md-button>
             </md-subheader>
             <md-list>
-                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
+                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <md-menu md-offset="0 -7" class="expand-more">
-                        <md-button aria-label="Open user detail menu"
+                        <md-button ng-disabled="effects.init" aria-label="Open user detail menu"
                                    class="md-icon-button"
                                    ng-click="$mdOpenMenu($event)">
                             <icon md-menu-origin class="material-icons iconize icon-more"
@@ -53,7 +53,6 @@
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
-                    <div class="unedited-photo" ng-if="unedited"></div>
                 </md-list-item>
                 <md-list-item ng-if="!user.photos">You're almost there! Please upload a photo to continue</md-list-item>
             </md-list>
