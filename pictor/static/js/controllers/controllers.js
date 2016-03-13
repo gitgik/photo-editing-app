@@ -141,6 +141,10 @@ angular.module('pictor.controllers', ['ngMaterial'])
             PhotoRestService.ModifyImage.deleteImage(
             {id: photoID}, function (response) {
                 $scope.$emit('updatePhotos');
+                if ($scope.render.selectedPhotoID == photoID) {
+                    delete $scope.render.selectedPhoto;
+                    console.log('Canvas cleared.')
+                }
                 Toast.show('Photo deleted');
             });
         }, function() {});
