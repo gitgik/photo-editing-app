@@ -127,9 +127,9 @@
 }
 
 .thumbnail {
-    border-radius: 50%;
+    border-radius: 49px;
     overflow: hidden;
-    width: 49px;
+    width: 59px;
     height: 49px;
     padding: 11px 15px 11px 13px;
 }
@@ -175,6 +175,12 @@
 .menu-icon {
     position: relative;
     top: 0.25em;
+    padding:
+}
+
+.user-logout-icon {
+    position: relative;
+    padding: 8px 15px 11px 5px;
 }
 
 .icon-more {
@@ -214,11 +220,24 @@
     height: 2.7em;
 }
 
+.canvas-container-title {
+    position: relative;
+    top: 1.3em;
+    color: #4f4f4f;
+    font-family: 'Roboto', san-serif;
+    font-size: 15px;
+    left: 3em;
+}
+
 .canvas-container {
     height: 70%;
     width: 96%;
     position: relative;
     background-color: #efefef;
+}
+
+.button-next {
+    top: .6em;
 }
 
 .default-canvas {
