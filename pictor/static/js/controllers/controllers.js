@@ -34,6 +34,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
     $scope.user = {};
     $scope.render = {};
+    $localStorage.filters = {};
     $scope.user.name = $localStorage.currentUser;
     $scope.user.id = $localStorage.userID;
     $scope.toggleLeft = Menu.toggle('left');
@@ -121,11 +122,21 @@ angular.module('pictor.controllers', ['ngMaterial'])
     $scope.showFilters = function (photo) {
         $rootScope.effects = $rootScope.effects || {};
         $rootScope.effects.init = true;
-        PhotoRestService.Filters.getAll({ "image_url": photo})
-        .$promise.then(function(response) {
-            $rootScope.effects.url = response;
+        var photoID = photo.id;
+
+        if ($localStorage.filters[photoID] !== undefined) {
+            $rootScope.effects.url = $localStorage.filters[photoID];
             $scope.$emit('doneLoadingFilters');
-        });
+        }
+        else {
+            var image = photo.image;
+            PhotoRestService.Filters.getAll({ "image_url": image })
+            .$promise.then(function(response) {
+                $rootScope.effects.url = response;
+                $localStorage.filters[photoID] = $rootScope.effects.url;
+                $scope.$emit('doneLoadingFilters');
+            });
+        }
         $scope.render.editingMode = false;
     };
 
@@ -143,24 +154,24 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
     $scope.photoDelConfirm = function(ev, photoID) {
         // Appending dialog to document.body to cover sidenav in docs app
-        var confirm = $mdDialog.confirm()
+        if ($scope.render.selectedPhotoID == photoID) {
+            var confirm = $mdDialog.confirm()
               .title('Are you sure?')
               .textContent('delete this photo?')
               .ariaLabel('delete')
               .targetEvent(ev)
               .ok('DELETE')
               .cancel('CANCEL');
-        $mdDialog.show(confirm).then(function() {
-            PhotoRestService.ModifyImage.deleteImage(
-            {id: photoID}, function (response) {
-                $scope.$emit('updatePhotos');
-                if ($scope.render.selectedPhotoID == photoID) {
+            $mdDialog.show(confirm).then(function() {
+                PhotoRestService.ModifyImage.deleteImage(
+                {id: photoID}, function (response) {
+                    $scope.$emit('updatePhotos');
                     delete $scope.render.selectedPhoto;
-                    console.log('Canvas cleared.')
-                }
-                Toast.show('Photo deleted');
-            });
-        }, function() {});
+                    delete $localStorage.filters[photoID];
+                    Toast.show('Photo deleted');
+                });
+            }, function() {});
+        }
     };
 
 
@@ -178,6 +189,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
             {id: photoID}, function (response) {
                 $scope.$emit('updatePhotos');
                 delete $scope.render.selectedPhoto;
+                delete $localStorage.filters[photoID];
                 Toast.show('Photo deleted');
             });
         }, function() {});

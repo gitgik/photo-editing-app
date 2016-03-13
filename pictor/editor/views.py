@@ -6,7 +6,6 @@ import cStringIO
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.generic import View
 from editor import photo_effects
 from editor.serializers import PhotoSerializer
 from editor.permissions import Authenticate
@@ -74,6 +73,18 @@ def filters(request):
         return Response(data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+def remove_effects(request):
+    """This view allows resetting back from filters."""
+    if request.method == 'GET':
+        temp_url = 'static/media/temp/'
+        file_list = os.listdir(temp_url)
+        for file_name in file_list:
+            os.remove(temp_url + "/" + file_name)
+
+        return Response(status=status.HTTP_200_OK)
+
+
 class PhotoListView(generics.ListCreateAPIView):
     """This view creates a photo uploaded from the client."""
 
@@ -121,9 +132,3 @@ class PhotoDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class PhotoUploadView(View):
-    """View to handle image uploads from the authenticated user."""
-
-    def post(self, request, *args, **kwargs):
-        """Handle photo uploads."""
-        pass
