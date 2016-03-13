@@ -79,12 +79,16 @@ angular.module('pictor.controllers', ['ngMaterial'])
             }
         }).then(function (response) {
             $scope.$emit('updatePhotos');
+            Toast.show('Photo uploaded.');
             console.log('Success ' + response.config.data.image.name + 'uploaded. Response: ' + response.data);
         }, function (error) {
             console.log('Error status: ' + error.status);
+            Toast.show('Photo not uploaded. Please try again');
         }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.image.name);
+            $scope.render.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            if ($scope.render.progressPercentage == 100) {
+                delete $scope.render.progressPercentage;
+            }
         });
     };
 
