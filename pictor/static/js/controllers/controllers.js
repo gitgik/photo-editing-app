@@ -29,8 +29,8 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.date.now = new Date();
     }])
 
-.controller('MainController', ['$rootScope', '$scope', '$state', '$localStorage', '$mdSidenav', '$mdDialog', 'Menu', 'Restangular', 'Upload','PhotoRestService', 'Toast',
-    function($scope, $rootScope, $state, $localStorage, $mdSidenav, $mdDialog, Menu, Restangular, Upload, PhotoRestService, Toast) {
+.controller('MainController', ['$rootScope', '$scope', '$state', '$location', '$localStorage', '$mdSidenav', '$mdDialog', 'Menu', 'Restangular', 'Upload','PhotoRestService', 'Toast',
+    function($scope, $rootScope, $state, $location, $localStorage, $mdSidenav, $mdDialog, Menu, Restangular, Upload, PhotoRestService, Toast) {
 
     $scope.user = {};
     $scope.render = {};
@@ -42,6 +42,13 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $mdSidenav('left').close()
             .then(function () {});
     }
+
+    // url for sharing
+    var url = $location.host(),
+        port = $location.port(),
+        protocol = $location.protocol();
+
+    url = protocol + '://' + url + ':' + port + '/';
 
     // populate gallery with photos
     Restangular.all('api/photos/').getList().then(function(response) {
@@ -109,7 +116,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
     $scope.selectImage = function (photo) {
         delete $rootScope.doneLoadingFilters;
         $scope.render.selectedPhoto = photo.image;
-        $scope.render.selectedPhotoID = photo.id;
+        $rootScope.selectedPhotoID = photo.id;
         $localStorage.initialImage = photo.image;
         $scope.render.loading = true;
     };
@@ -142,7 +149,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
     $scope.clearCanvas = function () {
         $scope.render.selectedPhoto = undefined;
-        $scope.render.selectedPhotoID = undefined;
+        $rootScope.selectedPhotoID = undefined;
         $scope.render.editingMode = false;
         delete $localStorage.initialImage;
     };
@@ -152,26 +159,46 @@ angular.module('pictor.controllers', ['ngMaterial'])
         $scope.render.editingMode = false;
     };
 
+    // Share a photo
+    $scope.sharePhoto = function (photo) {
+        console.log(photo);
+        if (photo !== undefined) {
+            if (photo.indexOf(url) === -1) {
+                photo = url + photo;
+                console.log(photo);
+            }
+            FB.ui({
+                method: 'feed',
+                link: photo,
+                picture: photo,
+                caption: '',
+                message: ''
+            });
+        }
+    };
+
     $scope.photoDelConfirm = function(ev, photoID) {
         // Appending dialog to document.body to cover sidenav in docs app
-        if ($scope.render.selectedPhotoID == photoID) {
-            var confirm = $mdDialog.confirm()
-              .title('Are you sure?')
-              .textContent('delete this photo?')
-              .ariaLabel('delete')
-              .targetEvent(ev)
-              .ok('DELETE')
-              .cancel('CANCEL');
-            $mdDialog.show(confirm).then(function() {
-                PhotoRestService.ModifyImage.deleteImage(
-                {id: photoID}, function (response) {
-                    $scope.$emit('updatePhotos');
+        var confirm = $mdDialog.confirm()
+          .title('Are you sure?')
+          .textContent('delete this photo?')
+          .ariaLabel('delete')
+          .targetEvent(ev)
+          .ok('DELETE')
+          .cancel('CANCEL');
+        $mdDialog.show(confirm).then(function() {
+            PhotoRestService.ModifyImage.deleteImage(
+            {id: photoID}, function (response) {
+                if ($rootScope.selectedPhotoID == photoID) {
                     delete $scope.render.selectedPhoto;
-                    delete $localStorage.filters[photoID];
-                    Toast.show('Photo deleted');
-                });
-            }, function() {});
-        }
+                }
+                $scope.$emit('updatePhotos');
+                delete $localStorage.filters[photoID];
+                Toast.show('Photo deleted');
+            }, function(error) {
+                console.log('ERROR: ' + error)
+            });
+        }, function() {});
     };
 
 
