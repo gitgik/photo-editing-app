@@ -67,7 +67,7 @@ def filters(request):
             'CONTOUR': photo_effects.contour(photo_file, photo_name),
             'THERMAL': photo_effects.invert(photo_file, photo_name),
             'SATURATE': photo_effects.saturate(photo_file, photo_name),
-            'MIRROR': photo_effects.mirror(photo_file, photo_name)
+            'MIRROR': photo_effects.mirror(photo_file, photo_name),
 
         }
 

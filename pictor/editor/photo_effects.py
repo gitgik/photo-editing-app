@@ -7,7 +7,7 @@ temp_url = 'static/media/temp/'
 def thumbnail(image, name):
     """Crop the image to the requested aspect ratio and size."""
     photo = Image.open(image)
-    photo = ImageOps.fit(photo, (100, 100))
+    photo = ImageOps.fit(photo, (49, 49))
     photo.save(temp_url + "THUMBNAIL" + name)
     return temp_url + "THUMBNAIL" + name
 

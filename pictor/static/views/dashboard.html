@@ -19,20 +19,22 @@
     <div layout="row" flex>
         <md-sidenav md-component-id="left" layout="column" md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z1">
             <md-subheader class="md-no-sticky search-container">
-                <md-input-container flex="80">
-                    <input ng-model="search.who" placeholder="Search photos" flex>
+                <md-input-container flex="60">
+                    <input ng-model="search.who" placeholder="Search photos">
                 </md-input-container>
                 <md-button flex="20" class="md-icon-button" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
                     <i class="material-icons iconize">cloud_upload</i>
                     <md-tooltip>upload photo</md-tooltip>
                 </md-button>
+                <md-progress-circular ng-if="render.progressPercentage" flex="10" md-mode="determinate" value="{{render.progressPercentage}}" md-diameter="40"></md-progress-circular layout-align="center end">
             </md-subheader>
             <md-list>
-                <md-list-item ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
+                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo.image); showFilters(photo.image);" class="thumbnail-list">
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
+                    <span class="photo-time">{{photo.date_created | amCalendar}}</span>
                     <md-menu md-offset="0 -7" class="expand-more">
-                        <md-button aria-label="Open user detail menu"
+                        <md-button ng-disabled="effects.init" aria-label="Open user detail menu"
                                    class="md-icon-button"
                                    ng-click="$mdOpenMenu($event)">
                             <icon md-menu-origin class="material-icons iconize icon-more"
@@ -53,7 +55,6 @@
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
-                    <div class="unedited-photo" ng-if="unedited"></div>
                 </md-list-item>
                 <md-list-item ng-if="!user.photos">You're almost there! Please upload a photo to continue</md-list-item>
             </md-list>

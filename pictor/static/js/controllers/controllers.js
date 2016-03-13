@@ -65,6 +65,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
         // populate images filters in the gallery effects container
         $rootScope.doneLoadingFilters = true;
         delete $scope.render.loading;
+        $rootScope.effects.init =false;
     });
 
     $scope.uploadPhoto = function (file) {
@@ -78,22 +79,24 @@ angular.module('pictor.controllers', ['ngMaterial'])
             }
         }).then(function (response) {
             $scope.$emit('updatePhotos');
+            Toast.show('Photo uploaded.');
             console.log('Success ' + response.config.data.image.name + 'uploaded. Response: ' + response.data);
         }, function (error) {
             console.log('Error status: ' + error.status);
+            Toast.show('Photo not uploaded. Please try again');
         }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.image.name);
+            $scope.render.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            if ($scope.render.progressPercentage == 100) {
+                delete $scope.render.progressPercentage;
+            }
         });
     };
 
     $scope.selectImage = function (photo_url) {
         delete $rootScope.doneLoadingFilters;
-        delete $scope.render.unedited;
         $scope.render.selectedPhoto = photo_url
         $localStorage.initialImage = photo_url
         $scope.render.loading = true;
-
     };
 
     $scope.applyEffect = function(photo_url) {
@@ -103,6 +106,7 @@ angular.module('pictor.controllers', ['ngMaterial'])
 
     $scope.showFilters = function (photo) {
         $rootScope.effects = $rootScope.effects || {};
+        $rootScope.effects.init = true;
         PhotoRestService.Filters.getAll({ "image_url": photo})
         .$promise.then(function(response) {
             $rootScope.effects.url = response;
