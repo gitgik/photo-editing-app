@@ -170,9 +170,11 @@ angular.module('pictor.controllers', ['ngMaterial'])
             FB.ui({
                 method: 'feed',
                 link: photo,
+                caption: "Share",
                 picture: photo,
-                caption: '',
                 message: ''
+            }, function(response) {
+                Toast.show('Your photo was not shared. Please try again.')
             });
         }
     };
