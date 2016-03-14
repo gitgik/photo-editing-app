@@ -66,3 +66,13 @@ class UserPhotoTestCase(APITestCase):
             image.close()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get('name'), image_name)
+
+    def test_photo_retrievals(self):
+        """Test user can retrieve their photos."""
+        response = self.client.get(reverse('editor:photos'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # test data retrieved
+        data = [i.values() for i in response.data]
+        self.assertIn(
+            u'{}'.format(self.photo_name),
+            data[0])
