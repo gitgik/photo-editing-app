@@ -3,6 +3,7 @@
 import StringIO
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
+from django.core.files import File
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import status
@@ -92,3 +93,18 @@ class UserPhotoTestCase(APITestCase):
             '/api/photos/?id={}'.format(self.created_image.id))
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
         self.assertEqual(rv.data[0].get('name'), self.created_image.name)
+
+    def test_user_can_delete_photo(self):
+        """Test a given photo can be deleted."""
+        self.name = 'test.png'
+        self.image = File(open('static/media/test.png', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        response = self.client.get(reverse('editor:photos'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        rv = self.client.delete(
+            '/api/edit_photo/?id={}'.format(self.created_image.id))
+        self.assertEqual(rv.status_code, status.HTTP_204_NO_CONTENT)
