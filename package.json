@@ -6,7 +6,8 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "postinstall": "node ./node_modules/.bin/bower install"
+    "preinstall": "npm install --save bower",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "dependencies": {
     "bower": "^1.7.7"
