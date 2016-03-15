@@ -26,7 +26,7 @@ def generate_uid():
     salt = settings.SECRET_KEY
     min_length = settings.UID_LENGTH,
     alphabet = settings.UID_ALPHABET
-    hashids = Hashids(salt=salt, min_length=int(min_length), alphabet=alphabet)
+    hashids = Hashids(salt=salt, alphabet=alphabet)
     unique_id = hashids.encode(int(time() * 1000))
     return unique_id
 

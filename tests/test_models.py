@@ -5,7 +5,7 @@ from django.db import IntegrityError
 
 from faker import Factory
 from django.contrib.auth.models import User
-from editor.models import Photo, Effect
+from editor.models import Photo, Effect, generate_uid
 from PIL import Image
 
 from mock import patch, MagicMock
@@ -52,6 +52,11 @@ class UserTestCase(TestCase):
         except IntegrityError as e:
             self.assertIn(
                 "duplicate key value violates unique constraint", e.message)
+
+    def test_uid_generation_for_photo(self):
+        """Test a unique id is generated."""
+        unique_id = generate_uid()
+        self.assertIsNotNone(unique_id)
 
 
 class PhotoTestCase(TestCase):
