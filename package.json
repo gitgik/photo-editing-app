@@ -7,7 +7,7 @@
   },
   "scripts": {
     "preinstall": "npm install --save bower",
-    "postinstall": "./node_modules/.bin/bower install"
+    "postinstall": "bower install"
   },
   "dependencies": {
     "bower": "^1.7.7"
