@@ -1,1 +1,1 @@
-web: python pictor/manage.py migrate; gunicorn bucketlist.wsgi --pythonpath=bucketlist --log-file -
+web: python pictor/manage.py migrate; gunicorn pictor.wsgi --log-file -
