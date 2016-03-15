@@ -1,1 +1,1 @@
-web: python pictor/manage.py migrate; gunicorn pictor.wsgi --log-file -
+web: python manage.py migrate; gunicorn pictor.wsgi --log-file -
