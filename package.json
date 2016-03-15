@@ -6,8 +6,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "preinstall": "npm install --save bower",
-    "postinstall": "bower install"
+    "postinstall": "bower cache clean && bower install"
   },
   "dependencies": {
     "bower": "^1.7.7"
