@@ -1,9 +1,9 @@
 {
   "name": "picto",
   "description": "A django-powered app that allows you to edit your photos and share them on facebook.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
-    "node": ">=4.0.0"
+    "node": "4.0.0"
   },
   "scripts": {
     "preinstall": "npm install --save bower",
