@@ -63,7 +63,7 @@ class PhotoTestCase(TestCase):
         self.username = fake.user_name()
         self.password = fake.password()
         self.photo_name = 'test.png'
-        image = Image.open('static/media/' + self.photo_name)
+        image = Image.open('static/' + self.photo_name)
         self.image = pil_to_django(image, 'png')
         self.user = User.objects.create_user(
             username=self.username, password=self.password)
@@ -85,7 +85,7 @@ class EffectTestCase(TestCase):
         self.username = fake.user_name()
         self.password = fake.password()
         self.photo_name = 'test.png'
-        image = Image.open('static/media/' + self.photo_name)
+        image = Image.open('static/' + self.photo_name)
         self.image = pil_to_django(image, 'png')
         self.user = User.objects.create_user(
             username=self.username, password=self.password)
