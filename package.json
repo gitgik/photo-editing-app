@@ -6,7 +6,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "postinstall": "bower cache clean && bower install"
+    "postinstall": "node ./node_modules/bower/bin/bower install"
   },
   "dependencies": {
     "bower": "^1.7.7"
