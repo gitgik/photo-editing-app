@@ -128,5 +128,5 @@ class PhotoDetailView(APIView):
             media_path += str(photo.image)
             os.remove(media_path)
         except:
-            print("File not found")
+            pass
         return Response(status=status.HTTP_204_NO_CONTENT)

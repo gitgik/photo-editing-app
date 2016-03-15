@@ -23,7 +23,6 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
-    # url(r'^account/', include('allauth.urls')),
     url(r'^api/', include('editor.urls', namespace='editor')),
     url(r'^.*$',
         TemplateView.as_view(template_name='editor/index.html'), name='index'),

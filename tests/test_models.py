@@ -5,7 +5,7 @@ from django.db import IntegrityError
 
 from faker import Factory
 from django.contrib.auth.models import User
-from editor.models import Photo, Effect
+from editor.models import Photo, Effect, generate_uid
 from PIL import Image
 
 from mock import patch, MagicMock
@@ -53,6 +53,11 @@ class UserTestCase(TestCase):
             self.assertIn(
                 "duplicate key value violates unique constraint", e.message)
 
+    def test_uid_generation_for_photo(self):
+        """Test a unique id is generated."""
+        unique_id = generate_uid()
+        self.assertIsNotNone(unique_id)
+
 
 class PhotoTestCase(TestCase):
     """Test case for Photo model."""
@@ -63,7 +68,7 @@ class PhotoTestCase(TestCase):
         self.username = fake.user_name()
         self.password = fake.password()
         self.photo_name = 'test.png'
-        image = Image.open('static/media/' + self.photo_name)
+        image = Image.open('static/' + self.photo_name)
         self.image = pil_to_django(image, 'png')
         self.user = User.objects.create_user(
             username=self.username, password=self.password)
@@ -85,7 +90,7 @@ class EffectTestCase(TestCase):
         self.username = fake.user_name()
         self.password = fake.password()
         self.photo_name = 'test.png'
-        image = Image.open('static/media/' + self.photo_name)
+        image = Image.open('static/' + self.photo_name)
         self.image = pil_to_django(image, 'png')
         self.user = User.objects.create_user(
             username=self.username, password=self.password)

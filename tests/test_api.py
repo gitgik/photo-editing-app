@@ -39,7 +39,7 @@ class UserPhotoTestCase(APITestCase):
         self.password = fake.password()
 
         self.photo_name = 'test.png'
-        self.image_url = 'static/media/test.png'
+        self.image_url = 'static/test.png'
 
         self.user = User.objects.create_user(
             username=self.username, password=self.password)
@@ -97,7 +97,7 @@ class UserPhotoTestCase(APITestCase):
     def test_user_can_delete_photo(self):
         """Test a given photo can be deleted."""
         self.name = 'test.png'
-        self.image = File(open('static/media/test.png', 'rb'))
+        self.image = File(open('static/test.png', 'rb'))
         self.created_image = Photo(
             image=self.image,
             name=self.name, user=self.user)
