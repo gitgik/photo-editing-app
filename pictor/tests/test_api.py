@@ -1,4 +1,4 @@
-"""Test cases for pictor."""
+"""Test cases for pictor api."""
 
 import StringIO
 from django.core.files.base import ContentFile
@@ -90,9 +90,9 @@ class UserPhotoTestCase(APITestCase):
             name=self.photo_name, user=self.user)
         self.created_image.save()
         rv = self.client.get(
-            '/api/photos/?id={}'.format(self.created_image.id))
+            '/api/edit_photo/?id={}'.format(self.created_image.id))
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
-        self.assertEqual(rv.data[0].get('name'), self.created_image.name)
+        self.assertEqual(rv.data.get('name'), self.created_image.name)
 
     def test_user_can_delete_photo(self):
         """Test a given photo can be deleted."""
