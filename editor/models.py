@@ -24,7 +24,6 @@ def get_photo_path(instance, filename):
 def generate_uid():
     """Generate a unique id using a custom salt, alphabet and min length."""
     salt = settings.SECRET_KEY
-    min_length = settings.UID_LENGTH,
     alphabet = settings.UID_ALPHABET
     hashids = Hashids(salt=salt, alphabet=alphabet)
     unique_id = hashids.encode(int(time() * 1000))
