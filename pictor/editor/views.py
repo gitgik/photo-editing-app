@@ -52,7 +52,8 @@ def filters(request):
     if request.method == 'GET':
         image_url = request.query_params['image_url']
         photo_name = image_url.rsplit('/', 1)[-1]
-        photo_file = cStringIO.StringIO(urllib.urlopen(image_url).read())
+        image = urllib.urlopen(image_url).read()
+        photo_file = cStringIO.StringIO(image)
         data = {
             'GRAY': photo_effects.grayscale(photo_file, photo_name),
             'BLUR': photo_effects.blur(photo_file, photo_name),
@@ -67,7 +68,6 @@ def filters(request):
             'THERMAL': photo_effects.invert(photo_file, photo_name),
             'SATURATE': photo_effects.saturate(photo_file, photo_name),
             'MIRROR': photo_effects.mirror(photo_file, photo_name),
-
         }
 
         return Response(data, status=status.HTTP_200_OK)
@@ -75,7 +75,7 @@ def filters(request):
 
 @api_view(['GET'])
 def remove_effects(request):
-    """This view allows resetting back from filters."""
+    """View allows resetting back from filters."""
     if request.method == 'GET':
         temp_url = 'static/media/temp/'
         file_list = os.listdir(temp_url)
@@ -130,5 +130,3 @@ class PhotoDetailView(APIView):
         except:
             print("File not found")
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
