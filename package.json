@@ -1,15 +1,15 @@
 {
-    "name": "picto",
-    "description": "A django-powered app that allows you to edit your photos and share them on facebook.",
-    "version": "0.0.1",
-    "engines": {
-        "node": ">=4.0.0"
-    },
-    "scripts": {
-        "preinstall": "npm install --save bower",
-        "postinstall": "./node_modules/.bin/bower install"
-    },
-    "dependencies": {
-        "bower": "^1.3.2"
-    }
+  "name": "picto",
+  "description": "A django-powered app that allows you to edit your photos and share them on facebook.",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "scripts": {
+    "preinstall": "npm install --save bower",
+    "postinstall": "./node_modules/.bin/bower install"
+  },
+  "dependencies": {
+    "bower": "^1.7.7"
+  }
 }
