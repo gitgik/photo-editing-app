@@ -73,3 +73,31 @@ class PhotoTestCase(TestCase):
     def test_image_is_created(self):
         """Test a photo is created."""
         self.assertEqual(self.created_image.name, self.photo_name)
+
+
+class EffectTestCase(TestCase):
+    """Test case for Effect model."""
+
+    @patch('editor.models.Photo.save', MagicMock(name="save"))
+    @patch('editor.models.Effect.save', MagicMock(name="save"))
+    def setUp(self):
+        """Set up for testing."""
+        self.username = fake.user_name()
+        self.password = fake.password()
+        self.photo_name = 'test.png'
+        image = Image.open('static/media/' + self.photo_name)
+        self.image = pil_to_django(image, 'png')
+        self.user = User.objects.create_user(
+            username=self.username, password=self.password)
+        self.created_image = Photo(
+            image=self.image,
+            name=self.photo_name,
+            user=self.user)
+        self.image_filters = Effect(
+            effect=self.image,
+            photo=self.created_image)
+
+    def test_effect_creation(self):
+        """Test a user can create an effect on a photo."""
+        self.assertIsInstance(self.image_filters, Effect)
+        self.assertEqual(self.image_filters.photo, self.created_image)
