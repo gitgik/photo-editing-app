@@ -51,10 +51,13 @@ def filters(request):
     """View handles the filters on a given photo."""
     if request.method == 'GET':
         image_url = request.query_params['image_url']
+        print "+++++++++++++++++++++++++++++++++++++++++++++++++"
+        print image_url
+        print "++++++++++++++++++++++++++++++++++++++++++++++++"
         # change percent encoded URL to local path syntax.
-        image_local_path = urllib2.url2pathname(image_url)
-        photo_name = image_local_path.rsplit('/', 1)[-1]
-        image_path = urllib2.urlopen(image_local_path).read()
+        image_url = urllib2.url2pathname(image_url)
+        photo_name = image_url.rsplit('/', 1)[-1]
+        image_path = urllib2.urlopen(image_url).read()
         photo_file = cStringIO.StringIO(image_path)
         data = {
             'GRAY': photo_effects.grayscale(photo_file, photo_name),
