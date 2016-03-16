@@ -1,4 +1,4 @@
-"""Test cases for pictor api."""
+"""Test cases for picto api."""
 
 import StringIO
 from django.core.files.base import ContentFile

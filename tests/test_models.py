@@ -1,4 +1,4 @@
-"""Test cases for pictor models."""
+"""Test cases for picto models."""
 import StringIO
 from django.test import TestCase
 from django.db import IntegrityError

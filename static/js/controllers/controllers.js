@@ -1,5 +1,5 @@
 'use strict';
-angular.module('pictor.controllers', ['ngMaterial'])
+angular.module('picto.controllers', ['ngMaterial'])
 .controller('AuthController', ['$rootScope', '$scope', '$state', '$localStorage', 'Restangular', 'Facebook',
     function AuthController($rootScope, $scope, $state, $localStorage, Restangular, Facebook) {
         $scope.login = function () {
