@@ -161,20 +161,16 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     // Share a photo
     $scope.sharePhoto = function (photo) {
-        console.log(photo);
         if (photo !== undefined) {
-            if (photo.indexOf(url) === -1) {
-                photo = url + photo;
-                console.log(photo);
-            }
             FB.ui({
                 method: 'feed',
                 link: photo,
-                caption: "Share",
+                caption: "",
                 picture: photo,
                 message: ''
             }, function(response) {
-                Toast.show('Your photo was not shared. Please try again.')
+            }, function(error) {
+                Toast.show('Your photo could not be shared. Please try again')
             });
         }
     };
