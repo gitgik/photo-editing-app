@@ -1,7 +1,7 @@
 
 'use strict';
 
-var app = angular.module('pictor',
+var app = angular.module('picto',
     [
         'ui.router',
         'ngMaterial',
@@ -10,13 +10,13 @@ var app = angular.module('pictor',
         'ngStorage',
         'restangular',
         'ngFileUpload',
-        'pictor.controllers',
+        'picto.controllers',
     ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$mdThemingProvider',
     function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $mdThemingProvider) {
 
-    $mdThemingProvider.definePalette('pictorTheme', {
+    $mdThemingProvider.definePalette('pictoTheme', {
         '50': '01579b', '100': '01579b', '200': '01579b',
         '300': '01579b', '400': '01579b', '500': '01579b',
         '600': '01579b', '700': '01579b', '800': '01579b',
@@ -27,7 +27,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
          '200', '300', '400', 'A100'],
         'contrastLightColors': undefined
     });
-    $mdThemingProvider.theme('default').primaryPalette('pictorTheme');
+    $mdThemingProvider.theme('default').primaryPalette('pictoTheme');
 
     $stateProvider
         .state('login', {
