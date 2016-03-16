@@ -1,7 +1,9 @@
 """Define the editor views."""
 import os
-import urllib2
-import cStringIO
+import io
+# import requests
+from urllib2 import urlopen
+# from StringIO import StringIO
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -51,17 +53,18 @@ def filters(request):
     """View handles the filters on a given photo."""
     if request.method == 'GET':
         image_url = request.query_params['image_url']
-        print "+++++++++++++++++++++++++++++++++++++++++++++++++"
-        print image_url
-        print "++++++++++++++++++++++++++++++++++++++++++++++++"
-        # change percent encoded URL to local path syntax.
-        image_url = urllib2.url2pathname(image_url)
+        # photo = requests.get(image_url, stream=True)
+        # print photo.headers['content-length']
+        # photo.raw.decode_content = True
+        # photo_file = photo.raw
+        # photo_file = io.BytesIO(photo_file)
         photo_name = image_url.rsplit('/', 1)[-1]
-        image_path = urllib2.urlopen(image_url).read()
-        photo_file = cStringIO.StringIO(image_path)
+        image = urlopen(image_url)
+        photo_file = io.BytesIO(image.read())
         data = {
-            'GRAY': photo_effects.grayscale(photo_file, photo_name),
             'BLUR': photo_effects.blur(photo_file, photo_name),
+            'GRAY': photo_effects.grayscale(photo_file, photo_name),
+
             'SMOOTH': photo_effects.smooth(photo_file, photo_name),
             'SHARP': photo_effects.sharpen(photo_file, photo_name),
             'DETAIL': photo_effects.detail(photo_file, photo_name),
