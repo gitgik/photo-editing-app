@@ -19,8 +19,6 @@ def thumbnail(image, name):
 def grayscale(image, name):
     """Return an image with a contrast of grey."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image, mode='r') as photo:
             photo.seek(0)
             photo = ImageOps.grayscale(photo)
@@ -33,8 +31,6 @@ def grayscale(image, name):
 def smooth(image, name):
     """Return a smoothened image."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = photo.filter(ImageFilter.SMOOTH)
@@ -47,8 +43,6 @@ def smooth(image, name):
 def contour(image, name):
     """Return an image with a contour filter."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = photo.filter(ImageFilter.CONTOUR)
@@ -61,8 +55,6 @@ def contour(image, name):
 def sharpen(image, name):
     """Return a sharpened image."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = photo.filter(ImageFilter.SHARPEN)
@@ -75,8 +67,6 @@ def sharpen(image, name):
 def detail(image, name):
     """Return an image with edge enhancement."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = photo.filter(ImageFilter.EDGE_ENHANCE)
@@ -89,8 +79,6 @@ def detail(image, name):
 def flip(image, name):
     """Flip an image."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageOps.flip(photo)
@@ -103,8 +91,6 @@ def flip(image, name):
 def invert(image, name):
     """Invert an image."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageOps.invert(photo)
@@ -117,8 +103,6 @@ def invert(image, name):
 def mirror(image, name):
     """Flip the image horizontally."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageOps.mirror(photo)
@@ -131,8 +115,6 @@ def mirror(image, name):
 def contrast(image, name):
     """Increase the contrast of an image and return the enhanced image."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageEnhance.Contrast(photo)
@@ -146,8 +128,6 @@ def contrast(image, name):
 def blur(image, name):
     """Return a blur image using a gaussian blur filter."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = photo.filter(
@@ -161,8 +141,6 @@ def blur(image, name):
 def brighten(image, name):
     """Return an image with a brightness enhancement factor of 1.5."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageEnhance.Brightness(photo)
@@ -176,8 +154,6 @@ def brighten(image, name):
 def darken(image, name):
     """Return an image with a brightness enhancement factor of 0.5."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageEnhance.Brightness(photo)
@@ -191,8 +167,6 @@ def darken(image, name):
 def saturate(image, name):
     """Return an image with a saturation enhancement factor of 2.0 ."""
     try:
-        print "SEEKING IMAGE BACK TO ZERO"
-        image.seek(0)
         with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageEnhance.Color(photo)

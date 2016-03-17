@@ -1,9 +1,9 @@
 """Define the editor views."""
 import os
-# from io import BytesIO
+from io import BytesIO
 import requests
-from urllib2 import urlopen
-from StringIO import StringIO
+# from urllib2 import urlopen
+# from StringIO import StringIO
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -54,14 +54,14 @@ def filters(request):
     if request.method == 'GET':
         image_url = request.query_params['image_url']
         photo_name = image_url.rsplit('/', 1)[-1]
-        photo = requests.get(image_url)
+        photo = requests.get(image_url, stream=True)
         photo_file = photo.content
         # print photo.headers['content-length']
         # photo.raw.decode_content = True
         # photo_file = io.BytesIO(photo_file)
         # image = urlopen(image_url)
-        # photo_file = io.BytesIO(image.read())
-        photo_file = StringIO(photo_file)
+        photo_file = BytesIO(photo_file)
+        # photo_file = StringIO(photo_file)
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
             'BRIGHT': photo_effects.brighten(photo_file, photo_name),
