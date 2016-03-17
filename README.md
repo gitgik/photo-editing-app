@@ -1,6 +1,6 @@
 # photo-editing-app [![Build Status](https://travis-ci.org/andela-ggikera/photo-editing-app.svg?branch=master)](https://travis-ci.org/andela-ggikera/photo-editing-app) [![Coverage Status](https://coveralls.io/repos/github/andela-ggikera/photo-editing-app/badge.svg?branch=feature-socialmedia)](https://coveralls.io/github/andela-ggikera/photo-editing-app?branch=feature-socialmedia) [![Code Health](https://landscape.io/github/andela-ggikera/photo-editing-app/develop/landscape.svg?style=flat)](https://landscape.io/github/andela-ggikera/photo-editing-app/develop) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 A django-powered app that allows you to edit your photos and share them on facebook.
-Live version available [here](https://pictor.herokuapp.com/)
+Live version available [here](https://picto.herokuapp.com/)
 
 
 ## Technologies used

@@ -76,8 +76,15 @@
                 </md-list-item>
                 <md-list-item ng-if="user.noPhotos">
                     <h3 class="photo-caption">
-                        You're almost there! Please upload a photo
+                        You're almost there! Please upload a photo.
                     </h3>
+                    <br\>
+                </md-list-item>
+                <md-list-item ng-if="user.noPhotos">
+                    <h3 class="photo-caption">
+                        Click the icon above to start.
+                    </h3>
+                    <br\>
                 </md-list-item>
             </md-list>
         </md-sidenav>
@@ -97,10 +104,14 @@
                             <i class="material-icons iconize">delete</i>
                             <md-tooltip>Delete</md-tooltip>
                         </md-button>
+                        <md-button class="md-icon-button md-primary" aria-label="save" ng-click="savePhoto(render.selectedPhoto,selectedPhotoID)" ng-disabled="!render.editingMode">
+                            <i class="material-icons iconize">save</i>
+                            <md-tooltip>Save</md-tooltip>
+                        </md-button>
                     </div>
                     <span ng-show="render.selectedPhoto" class="canvas-container-title" flex="40">EDIT PHOTO</span>
-                    <md-button ng-show="render.selectedPhoto" class="md-icon-button md-primary button-next" aria-label="Settings" flex="20" layout-align="end center" ng-disabled="!render.editingMode">
-                        next
+                    <md-button ng-show="render.selectedPhoto" class="md-icon-button md-primary button-next" aria-label="Settings" flex="20" layout-align="end center" ng-disabled="!render.editingMode" ng-click="sharePhoto(render.selectedPhoto);">
+                        SHARE
                     </md-button>
                 </div>
                 <div ng-if="!render.selectedPhoto" class="default-canvas" layout="row" layout-align="center center">
