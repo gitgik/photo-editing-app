@@ -1,7 +1,9 @@
 """Define the editor views."""
 import os
-import urllib
-import cStringIO
+from io import BytesIO
+import requests
+# from urllib2 import urlopen
+# from StringIO import StringIO
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -52,22 +54,28 @@ def filters(request):
     if request.method == 'GET':
         image_url = request.query_params['image_url']
         photo_name = image_url.rsplit('/', 1)[-1]
-        image = urllib.urlopen(image_url).read()
-        photo_file = cStringIO.StringIO(image)
+        photo = requests.get(image_url, stream=True)
+        photo_file = photo.content
+        # print photo.headers['content-length']
+        # photo.raw.decode_content = True
+        # photo_file = io.BytesIO(photo_file)
+        # image = urlopen(image_url)
+        photo_file = BytesIO(photo_file)
+        # photo_file = StringIO(photo_file)
         data = {
-            'GRAY': photo_effects.grayscale(photo_file, photo_name),
             'BLUR': photo_effects.blur(photo_file, photo_name),
+            'BRIGHT': photo_effects.brighten(photo_file, photo_name),
+            'CONTOUR': photo_effects.contour(photo_file, photo_name),
+            'CONTRAST': photo_effects.contrast(photo_file, photo_name),
+            'DARK': photo_effects.darken(photo_file, photo_name),
+            'DETAIL': photo_effects.detail(photo_file, photo_name),
+            'FLIP': photo_effects.flip(photo_file, photo_name),
+            'GRAY': photo_effects.grayscale(photo_file, photo_name),
+            'MIRROR': photo_effects.mirror(photo_file, photo_name),
             'SMOOTH': photo_effects.smooth(photo_file, photo_name),
             'SHARP': photo_effects.sharpen(photo_file, photo_name),
-            'DETAIL': photo_effects.detail(photo_file, photo_name),
-            'CONTRAST': photo_effects.contrast(photo_file, photo_name),
-            'BRIGHT': photo_effects.brighten(photo_file, photo_name),
-            'DARK': photo_effects.darken(photo_file, photo_name),
-            'FLIP': photo_effects.flip(photo_file, photo_name),
-            'CONTOUR': photo_effects.contour(photo_file, photo_name),
-            'THERMAL': photo_effects.invert(photo_file, photo_name),
             'SATURATE': photo_effects.saturate(photo_file, photo_name),
-            'MIRROR': photo_effects.mirror(photo_file, photo_name),
+            'THERMAL': photo_effects.invert(photo_file, photo_name),
         }
 
         return Response(data, status=status.HTTP_200_OK)
