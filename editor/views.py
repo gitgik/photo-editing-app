@@ -1,7 +1,7 @@
 """Define the editor views."""
 import os
 import io
-# import requests
+import requests
 from urllib2 import urlopen
 # from StringIO import StringIO
 
@@ -53,14 +53,15 @@ def filters(request):
     """View handles the filters on a given photo."""
     if request.method == 'GET':
         image_url = request.query_params['image_url']
-        # photo = requests.get(image_url, stream=True)
+        photo_name = image_url.rsplit('/', 1)[-1]
+        photo = requests.get(image_url)
+        photo_file = photo.content
         # print photo.headers['content-length']
         # photo.raw.decode_content = True
-        # photo_file = photo.raw
         # photo_file = io.BytesIO(photo_file)
-        photo_name = image_url.rsplit('/', 1)[-1]
-        image = urlopen(image_url)
-        photo_file = io.BytesIO(image.read())
+        # image = urlopen(image_url)
+        # photo_file = io.BytesIO(image.read())
+        photo_file = io.BytesIO(photo_file)
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
             'GRAY': photo_effects.grayscale(photo_file, photo_name),
