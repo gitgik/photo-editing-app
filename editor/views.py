@@ -9,9 +9,9 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from editor import photo_effects
-from editor.serializers import PhotoSerializer
+from editor.serializers import PhotoSerializer, EffectSerializer
 from editor.permissions import Authenticate
-from editor.models import Photo
+from editor.models import Photo, Effect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import login
@@ -81,6 +81,19 @@ def filters(request):
         return Response(data, status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+def handle_photo_effects(request):
+    """View allows saving photo effects."""
+    if request.method == 'POST':
+        photo_id = request.data['photo_id']
+        effect = request.data['effect']
+        current_photo = Photo.objects.get(id=photo_id)
+        photo_effect = Effect(effect=effect, photo=current_photo)
+        if photo_effect:
+            return Response(
+                {'effect': effect}, status=status.HTTP_200_OK)
+
+
 @api_view(['GET'])
 def remove_effects(request):
     """View allows resetting back from filters."""
@@ -116,16 +129,25 @@ class PhotoListView(generics.ListCreateAPIView):
 
 
 class PhotoDetailView(APIView):
-    """This view handles photo details anddisplay for an authenticated user."""
+    """This view handles photo details for an authenticated user."""
 
     def get(self, request):
         """Return a photo specific data."""
         photo = Photo.objects.get(id=request.query_params['id'])
-        context = {
-            'request': request
-        }
-        serializer = PhotoSerializer(photo, context=context)
-        return Response(serializer.data)
+        try:
+            photo_effect = Effect.objects.get(photo=photo)
+            if photo_effect:
+                context = {
+                    'request': request
+                }
+                serializer = EffectSerializer(photo, context=context)
+                return Response(serializer.data)
+        except:
+            context = {
+                'request': request
+            }
+            serializer = PhotoSerializer(photo, context=context)
+            return Response(serializer.data)
 
     def delete(self, request):
         """Delete an image from both the db and the folder."""
