@@ -62,7 +62,6 @@ def filters(request):
         # image = urlopen(image_url)
         # photo_file = io.BytesIO(image.read())
         photo_file = StringIO(photo_file)
-        photo_file.seek(0)
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
             'BRIGHT': photo_effects.brighten(photo_file, photo_name),
