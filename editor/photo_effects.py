@@ -19,7 +19,7 @@ def thumbnail(image, name):
 def grayscale(image, name):
     """Return an image with a contrast of grey."""
     try:
-        with Image.open(image, mode='r') as photo:
+        with Image.open(image) as photo:
             photo.seek(0)
             photo = ImageOps.grayscale(photo)
             photo.save(temp_url + "GRAYSCALE" + name)
@@ -31,10 +31,10 @@ def grayscale(image, name):
 def smooth(image, name):
     """Return a smoothened image."""
     try:
-        with Image.open(image) as photo:
-            photo.seek(0)
-            photo = photo.filter(ImageFilter.SMOOTH)
-            photo.save(temp_url + "SMOOTH" + name)
+        photo = Image.open(image)
+        photo.seek(0)
+        photo = photo.filter(ImageFilter.SMOOTH)
+        photo.save(temp_url + "SMOOTH" + name)
         return temp_url + "SMOOTH" + name
     except IOError as e:
         print (e)
@@ -43,10 +43,10 @@ def smooth(image, name):
 def contour(image, name):
     """Return an image with a contour filter."""
     try:
-        with Image.open(image) as photo:
-            photo.seek(0)
-            photo = photo.filter(ImageFilter.CONTOUR)
-            photo.save(temp_url + "CONTOUR" + name)
+        photo = Image.open(image)
+        photo.seek(0)
+        photo = photo.filter(ImageFilter.CONTOUR)
+        photo.save(temp_url + "CONTOUR" + name)
         return temp_url + "CONTOUR" + name
     except IOError as e:
         print (e)

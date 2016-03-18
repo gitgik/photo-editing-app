@@ -141,12 +141,17 @@
 
 .thumbnail-list:hover .expand-more {
     visibility: visible;
+    opacity: 1;
+    transform: translateX(-2em);
 }
 
 .expand-more {
-    visibility: hidden;
+    position: relative;
+    opacity: 0;
     z-index: 10000 !important;
-    margin-left: 6px;
+    margin-left: 12px;
+    left: 25px;
+    transition: transform 200ms ease-in-out;
 }
 
 .thumbnail-list:active {
@@ -183,9 +188,14 @@
     padding: 8px 15px 11px 5px;
 }
 
+.icon-upload {
+    font-size: 50px !important;
+}
+
 .icon-more {
     font-size: 30px;
     color: rgba(0,0,0,.4);
+    top: -0.2em;
 }
 
 .unedited-photo {
