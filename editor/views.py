@@ -1,7 +1,5 @@
 """Define the editor views."""
 import os
-from io import BytesIO
-import requests
 from PIL import Image
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -55,12 +53,10 @@ def filters(request):
         photo_name = photo_obj.name
         photo_file = Image.open(photo_obj.image)
         """
-            # photo_name = image_url.rsplit('/', 1)[-1]
-            # photo = requests.get(image_url)
-            # photo_file = Image.open(BytesIO(photo.content))
-            # photo_file.save(
-            # 'static/media/temp/{}'.format(photo_name), photo_file.format)
-            print photo_file, photo_name
+            This is an alternative: but not a good idea when doing IO in
+            heroku servers.
+            photo = requests.get(image_url)
+            photo_file = Image.open(BytesIO(photo.content))
         """
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
@@ -125,7 +121,18 @@ class PhotoListView(generics.ListCreateAPIView):
     def get_queryset(self):
         """Method to return photos of logged in user."""
         user = self.request.user
-        return Photo.objects.filter(user=user)
+        try:
+            queryset = Photo.objects.filter(user=user)
+            print queryset
+            for photo in queryset:
+                if (Effect.objects.get(photo=photo)):
+                    photo_effect = Effect.objects.get(photo=photo)
+                    queryset[photo] = photo_effect
+                else:
+                    continue
+            return queryset
+        except:
+            return Photo.objects.filter(user=user)
 
 
 class PhotoDetailView(APIView):
@@ -133,10 +140,10 @@ class PhotoDetailView(APIView):
 
     def get(self, request):
         """Return a photo specific data."""
-        photo = Photo.objects.get(id=request.query_params['id'])
+        photo_obj = Photo.objects.get(id=request.query_params['id'])
         try:
-            photo_effect = Effect.objects.get(photo=photo)
-            if photo_effect:
+            photo = Effect.objects.get(photo=photo_obj)
+            if photo:
                 context = {
                     'request': request
                 }
