@@ -50,13 +50,18 @@ def social_login(request):
 def filters(request):
     """View handles the filters on a given photo."""
     if request.method == 'GET':
-        image_url = request.query_params['image_url']
-        photo_name = image_url.rsplit('/', 1)[-1]
-        photo = requests.get(image_url)
-        photo_file = Image.open(BytesIO(photo.content))
-        photo_file.save(
-            'static/media/temp/{}'.format(photo_name), photo_file.format)
-        print photo_file
+        image_id = request.query_params['imageID']
+        photo_obj = Photo.objects.get(id=image_id)
+        photo_name = photo_obj.name
+        photo_file = Image.open(photo_obj.image)
+        """
+            # photo_name = image_url.rsplit('/', 1)[-1]
+            # photo = requests.get(image_url)
+            # photo_file = Image.open(BytesIO(photo.content))
+            # photo_file.save(
+            # 'static/media/temp/{}'.format(photo_name), photo_file.format)
+            print photo_file, photo_name
+        """
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
             'BRIGHT': photo_effects.brighten(photo_file, photo_name),

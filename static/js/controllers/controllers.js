@@ -149,8 +149,8 @@ angular.module('picto.controllers', ['ngMaterial'])
             $scope.$emit('doneLoadingFilters');
         }
         else {
-            var image = photo.image;
-            PhotoRestService.Filters.getAll({ "image_url": image })
+            var imageID = photo.id;
+            PhotoRestService.Filters.getAll({ "imageID": imageID })
             .$promise.then(function(response) {
                 $rootScope.effects.url = response;
                 $localStorage.filters[photoID] = $rootScope.effects.url;

@@ -34,8 +34,8 @@
                 <md-input-container flex="60">
                     <input ng-model="search.who" placeholder="Search photos">
                 </md-input-container>
-                <md-button flex="30" class="md-icon-button icon-upload" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
-                    <i class="material-icons iconize">cloud_upload</i>
+                <md-button flex="30" class="md-icon-button upload-button" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
+                    <i class="material-icons icon-upload">cloud_upload</i>
                     <md-tooltip>upload photo</md-tooltip>
                 </md-button>
                 <md-progress-circular ng-if="render.progressPercentage" flex="10" md-mode="determinate" value="{{render.progressPercentage}}" md-diameter="40"></md-progress-circular layout-align="center end">
