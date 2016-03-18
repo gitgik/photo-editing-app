@@ -49,32 +49,34 @@ def filters(request):
     """View handles the filters on a given photo."""
     if request.method == 'GET':
         image_id = request.query_params['imageID']
-        photo_obj = Photo.objects.get(id=image_id)
-        photo_name = photo_obj.name
-        photo_file = Image.open(photo_obj.image)
-        """
-            This is an alternative: but not a good idea when doing IO in
-            heroku servers.
-            photo = requests.get(image_url)
-            photo_file = Image.open(BytesIO(photo.content))
-        """
-        data = {
-            'BLUR': photo_effects.blur(photo_file, photo_name),
-            'BRIGHT': photo_effects.brighten(photo_file, photo_name),
-            'CONTOUR': photo_effects.contour(photo_file, photo_name),
-            'CONTRAST': photo_effects.contrast(photo_file, photo_name),
-            'DARK': photo_effects.darken(photo_file, photo_name),
-            'DETAIL': photo_effects.detail(photo_file, photo_name),
-            'FLIP': photo_effects.flip(photo_file, photo_name),
-            'GRAY': photo_effects.grayscale(photo_file, photo_name),
-            'MIRROR': photo_effects.mirror(photo_file, photo_name),
-            'SMOOTH': photo_effects.smooth(photo_file, photo_name),
-            'SHARP': photo_effects.sharpen(photo_file, photo_name),
-            'SATURATE': photo_effects.saturate(photo_file, photo_name),
-            'THERMAL': photo_effects.invert(photo_file, photo_name),
-        }
-
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            photo_obj = Photo.objects.get(id=image_id)
+            photo_name = photo_obj.name
+            photo_file = Image.open(photo_obj.image)
+            """
+                This is an alternative: but not a good idea when doing IO in
+                heroku servers.
+                photo = requests.get(image_url)
+                photo_file = Image.open(BytesIO(photo.content))
+            """
+            data = {
+                'BLUR': photo_effects.blur(photo_file, photo_name),
+                'BRIGHT': photo_effects.brighten(photo_file, photo_name),
+                'CONTOUR': photo_effects.contour(photo_file, photo_name),
+                'CONTRAST': photo_effects.contrast(photo_file, photo_name),
+                'DARK': photo_effects.darken(photo_file, photo_name),
+                'DETAIL': photo_effects.detail(photo_file, photo_name),
+                'FLIP': photo_effects.flip(photo_file, photo_name),
+                'GRAY': photo_effects.grayscale(photo_file, photo_name),
+                'MIRROR': photo_effects.mirror(photo_file, photo_name),
+                'SMOOTH': photo_effects.smooth(photo_file, photo_name),
+                'SHARP': photo_effects.sharpen(photo_file, photo_name),
+                'SATURATE': photo_effects.saturate(photo_file, photo_name),
+                'THERMAL': photo_effects.invert(photo_file, photo_name),
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response("Bad request", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

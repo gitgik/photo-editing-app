@@ -42,9 +42,9 @@
             </md-subheader>
             <md-list>
                 <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo); showFilters(photo);" class="thumbnail-list">
-                    <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
+                    <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" ng-model="preview" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
-                    <span class="photo-time">{{photo.date_created | amCalendar}}</span>
+                    <span class="photo-time">{{photo.date_modified | amCalendar}}</span>
 
                     <md-input-container ng-if="pending" class="md-icon-float md-block rename-input-container" id="name-container">
                         <!-- Use floating label -->

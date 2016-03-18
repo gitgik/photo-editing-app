@@ -12,7 +12,7 @@ def thumbnail(image, name):
         photo.save(temp_url + "THUMBNAIL" + name)
         return temp_url + "THUMBNAIL" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def grayscale(image, name):
@@ -23,7 +23,7 @@ def grayscale(image, name):
         photo.save(temp_url + "GRAYSCALE" + name)
         return temp_url + "GRAYSCALE" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def smooth(image, name):
@@ -34,7 +34,7 @@ def smooth(image, name):
         photo.save(temp_url + "SMOOTH" + name)
         return temp_url + "SMOOTH" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def contour(image, name):
@@ -45,7 +45,7 @@ def contour(image, name):
         photo.save(temp_url + "CONTOUR" + name)
         return temp_url + "CONTOUR" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def sharpen(image, name):
@@ -56,7 +56,7 @@ def sharpen(image, name):
         photo.save(temp_url + "SHARPEN" + name)
         return temp_url + "SHARPEN" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def detail(image, name):
@@ -67,7 +67,7 @@ def detail(image, name):
         photo.save(temp_url + "DETAIL" + name)
         return temp_url + "DETAIL" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def flip(image, name):
@@ -78,7 +78,7 @@ def flip(image, name):
         photo.save(temp_url + "FLIP" + name)
         return temp_url + "FLIP" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def invert(image, name):
@@ -89,7 +89,7 @@ def invert(image, name):
         photo.save(temp_url + "INVERT" + name)
         return temp_url + "INVERT" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def mirror(image, name):
@@ -100,7 +100,7 @@ def mirror(image, name):
         photo.save(temp_url + "MIRROR" + name)
         return temp_url + "MIRROR" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def contrast(image, name):
@@ -112,7 +112,7 @@ def contrast(image, name):
         photo.save(temp_url + "CONTRAST" + name)
         return temp_url + "CONTRAST" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def blur(image, name):
@@ -124,7 +124,7 @@ def blur(image, name):
         photo.save(temp_url + "BLUR" + name)
         return temp_url + "BLUR" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def brighten(image, name):
@@ -136,7 +136,7 @@ def brighten(image, name):
         photo.save(temp_url + "BRIGHTEN" + name)
         return temp_url + "BRIGHTEN" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def darken(image, name):
@@ -148,7 +148,7 @@ def darken(image, name):
         photo.save(temp_url + "SATURATE" + name)
         return temp_url + "SATURATE" + name
     except IOError as e:
-        print (e)
+        return e.message
 
 
 def saturate(image, name):
@@ -158,6 +158,6 @@ def saturate(image, name):
         photo = ImageEnhance.Color(image)
         photo = photo.enhance(2.0)
         photo.save(temp_url + "SATURATE" + name)
+        return temp_url + "SATURATE" + name
     except IOError as e:
-        print (e)
-    return temp_url + "SATURATE" + name
+        return e.message

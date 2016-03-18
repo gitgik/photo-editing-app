@@ -150,17 +150,29 @@ class ImageEffectsTestCase(APITestCase):
 
     def test_application_of_filters(self):
         """Test that filters can be applied to images."""
-        self.name = 'test.png'
-        self.image = File(open('static/test.png', 'rb'))
-        self.created_image = Photo(
-            image=self.image,
-            name=self.name, user=self.user)
-        self.created_image.save()
-        data = {
-            'imageID': self.created_image.id
+        try:
+            self.name = 'test.png'
+            self.image = File(open('static/test.png', 'rb'))
+            self.created_image = Photo(
+                image=self.image,
+                name=self.name, user=self.user)
+            self.created_image.save()
+            data = {
+                'imageID': self.created_image.id
+            }
+            response = self.client.get(reverse('editor:filters'), data)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+        except IOError as e:
+            self.assertIn(
+                "IO error", e.message)
+
+    def test_application_of_filters_error_response(self):
+        """Test correct server response when an IO error occurs."""
+        invalid_data = {
+            'imageID': 300
         }
-        response = self.client.get(reverse('editor:filters'), data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(reverse('editor:filters'), invalid_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def tearDown(self):
         """Tear down."""

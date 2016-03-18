@@ -119,9 +119,10 @@ angular.module('picto.controllers', ['ngMaterial'])
         }
         PhotoRestService.ImageEffects.save(
             data, function(res) {
+                console.log(res)
                 Toast.show('Photo saved');
                 $scope.$emit('updatePhotos');
-                // $scope.showFilters(photo);
+                $scope.preview = res.effect;
             }, function(error) {
                 Toast.show('Could not save photo. Check your internet connectivity.')
             });
