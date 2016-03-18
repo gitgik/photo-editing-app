@@ -101,7 +101,6 @@ angular.module('picto.controllers', ['ngMaterial'])
         }).then(function (response) {
             $scope.$emit('updatePhotos');
             Toast.show('Photo uploaded.');
-            console.log('Success ' + response.config.data.image.name + 'uploaded. Response: ' + response.data);
         }, function (error) {
             console.log('Error status: ' + error.status);
             Toast.show('Photo not uploaded. Please try again');
@@ -111,6 +110,20 @@ angular.module('picto.controllers', ['ngMaterial'])
                 delete $scope.render.progressPercentage;
             }
         });
+    };
+
+    $scope.savePhoto = function(photo, photoID) {
+        var data = {
+            effect: photo,
+            photo_id: photoID
+        }
+        PhotoRestService.ImageEffects.save(
+            data, function(res) {
+                Toast.show('Photo saved');
+                $scope.$emit('updatePhotos');
+            }, function(error) {
+                Toast.show('Could not save photo. Check your internet connectivity.')
+            });
     };
 
     $scope.selectImage = function (photo) {
@@ -169,6 +182,10 @@ angular.module('picto.controllers', ['ngMaterial'])
                 picture: photo,
                 message: ''
             }, function(response) {
+                if (response.error_code != 4201) {
+                    console.log(response)
+                    Toast.show('Photo shared on Facebook');
+                }
             }, function(error) {
                 Toast.show('Your photo could not be shared. Please try again')
             });
