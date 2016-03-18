@@ -188,8 +188,27 @@
     padding: 8px 15px 11px 5px;
 }
 
+.upload-button {
+    top: .7em;
+    position: relative;
+    min-width: 5em !important;
+    height: 3em !important;
+}
+
 .icon-upload {
-    font-size: 50px !important;
+    position: relative;
+    top: -.1em !important;
+    font-size: 39px !important;
+}
+
+.rename-input-container {
+    position: absolute;
+    background-color: #fff;
+    width: 15em;
+    height: 3em;
+    left: 4em;
+    top: .7em;
+    transition: transform 300ms ease-in-out;
 }
 
 .icon-more {

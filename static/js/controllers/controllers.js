@@ -121,6 +121,7 @@ angular.module('picto.controllers', ['ngMaterial'])
             data, function(res) {
                 Toast.show('Photo saved');
                 $scope.$emit('updatePhotos');
+                // $scope.showFilters(photo);
             }, function(error) {
                 Toast.show('Could not save photo. Check your internet connectivity.')
             });
@@ -149,8 +150,8 @@ angular.module('picto.controllers', ['ngMaterial'])
             $scope.$emit('doneLoadingFilters');
         }
         else {
-            var image = photo.image;
-            PhotoRestService.Filters.getAll({ "image_url": image })
+            var imageID = photo.id;
+            PhotoRestService.Filters.getAll({ "imageID": imageID })
             .$promise.then(function(response) {
                 $rootScope.effects.url = response;
                 $localStorage.filters[photoID] = $rootScope.effects.url;
@@ -174,6 +175,10 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     // Share a photo
     $scope.sharePhoto = function (photo) {
+        // check to see if the image has a valid url host and port prefixed
+        if (photo.indexOf(url) === -1) {
+            photo = url + photo;
+        }
         if (photo !== undefined) {
             FB.ui({
                 method: 'feed',
