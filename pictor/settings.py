@@ -140,8 +140,12 @@ STATICFILES_FINDERS = (
 )
 
 static_path = os.path.join(BASE_DIR, "static")
+
+# media paths
+
 MEDIA_ROOT = os.path.join(static_path, 'media')
 MEDIA_URL = '/static/media/'
+MEDIAFILES_DIRS = (MEDIA_ROOT)
 
 # Photo unique id settings
 
