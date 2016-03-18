@@ -136,12 +136,29 @@ class ImageEffectsTestCase(APITestCase):
         self.patcher = patch('urllib2.urlopen')
         self.urlopen_mock = self.patcher.start()
 
+        self.username = fake.user_name()
+        self.password = fake.password()
+
+        self.photo_name = 'test.png'
+        self.image_url = 'static/test.png'
+
+        self.user = User.objects.create_user(
+            username=self.username, password=self.password)
+        self.user = authenticate(
+            username=self.username, password=self.password)
+        self.client.login(username=self.username, password=self.password)
+
     def test_application_of_filters(self):
         """Test that filters can be applied to images."""
+        self.name = 'test.png'
+        self.image = File(open('static/test.png', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
         data = {
-            'image_url': 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/f9af0618846673.562d053f70803.jpg'
+            'imageID': self.created_image.id
         }
-        self.urlopen_mock.return_value = MockResponse(data)
         response = self.client.get(reverse('editor:filters'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
