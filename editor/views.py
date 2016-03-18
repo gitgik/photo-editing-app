@@ -63,19 +63,19 @@ def filters(request):
         photo_file = BytesIO(photo_file)
         # photo_file = StringIO(photo_file)
         data = {
-            # 'BLUR': photo_effects.blur(photo_file, photo_name),
-            # 'BRIGHT': photo_effects.brighten(photo_file, photo_name),
+            'BLUR': photo_effects.blur(photo_file, photo_name),
+            'BRIGHT': photo_effects.brighten(photo_file, photo_name),
             'CONTOUR': photo_effects.contour(photo_file, photo_name),
-            # 'CONTRAST': photo_effects.contrast(photo_file, photo_name),
-            # 'DARK': photo_effects.darken(photo_file, photo_name),
-            # 'DETAIL': photo_effects.detail(photo_file, photo_name),
-            # 'FLIP': photo_effects.flip(photo_file, photo_name),
-            # 'GRAY': photo_effects.grayscale(photo_file, photo_name),
-            # 'MIRROR': photo_effects.mirror(photo_file, photo_name),
+            'CONTRAST': photo_effects.contrast(photo_file, photo_name),
+            'DARK': photo_effects.darken(photo_file, photo_name),
+            'DETAIL': photo_effects.detail(photo_file, photo_name),
+            'FLIP': photo_effects.flip(photo_file, photo_name),
+            'GRAY': photo_effects.grayscale(photo_file, photo_name),
+            'MIRROR': photo_effects.mirror(photo_file, photo_name),
             'SMOOTH': photo_effects.smooth(photo_file, photo_name),
-            # 'SHARP': photo_effects.sharpen(photo_file, photo_name),
-            # 'SATURATE': photo_effects.saturate(photo_file, photo_name),
-            # 'THERMAL': photo_effects.invert(photo_file, photo_name),
+            'SHARP': photo_effects.sharpen(photo_file, photo_name),
+            'SATURATE': photo_effects.saturate(photo_file, photo_name),
+            'THERMAL': photo_effects.invert(photo_file, photo_name),
         }
 
         return Response(data, status=status.HTTP_200_OK)
