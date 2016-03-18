@@ -2,9 +2,7 @@
 import os
 from io import BytesIO
 import requests
-# from urllib2 import urlopen
-# from StringIO import StringIO
-
+from PIL import Image
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -56,12 +54,8 @@ def filters(request):
         photo_name = image_url.rsplit('/', 1)[-1]
         photo = requests.get(image_url, stream=True)
         photo_file = photo.content
-        # print photo.headers['content-length']
-        # photo.raw.decode_content = True
-        # photo_file = io.BytesIO(photo_file)
-        # image = urlopen(image_url)
-        photo_file = BytesIO(photo_file)
-        # photo_file = StringIO(photo_file)
+        image_bytes = BytesIO(photo_file)
+        photo_file = Image.open(image_bytes)
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
             'BRIGHT': photo_effects.brighten(photo_file, photo_name),

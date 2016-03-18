@@ -12,12 +12,12 @@ import os
 def get_photo_path(instance, filename):
     """Define the upload path for saving the current user's photo to disk."""
     name, ext = os.path.splitext(filename)
-    new_name = '{}{}'.format(instance.name, ext)
+    photo_name = '{}{}'.format(name, ext)
     user_slug = "{}{}".format(
         instance.user.username,
         instance.user.id
     )
-    upload_path = "photos/{}/{}".format(user_slug, new_name)
+    upload_path = "photos/{}/{}".format(user_slug, photo_name)
     return upload_path
 
 

@@ -8,7 +8,7 @@
                 <a ui-sref="dashboard">Picto</a>
             </div>
             <md-list-item flex="5">
-                <img ng-src="https://graph.facebook.com/{{ user.id }}/picture?width=40&height=40" class="md-avatar"/>
+                <img class="md-avatar" ng-src="https://graph.facebook.com/{{ user.id }}/picture?width=40&height=40"/>
             </md-list-item>
             <md-menu flex="5" md-position-mode="target-right target">
                 <md-button aria-label="Open user menu"
@@ -34,7 +34,7 @@
                 <md-input-container flex="60">
                     <input ng-model="search.who" placeholder="Search photos">
                 </md-input-container>
-                <md-button flex="20" class="md-icon-button" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
+                <md-button flex="30" class="md-icon-button icon-upload" ngf-select="uploadPhoto($file)" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="10MB">
                     <i class="material-icons iconize">cloud_upload</i>
                     <md-tooltip>upload photo</md-tooltip>
                 </md-button>
