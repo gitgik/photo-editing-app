@@ -153,7 +153,7 @@ class PhotoDetailView(APIView):
             context = {
                 'request': request
             }
-            serializer = PhotoSerializer(photo, context=context)
+            serializer = PhotoSerializer(photo_obj, context=context)
             return Response(serializer.data)
 
     def delete(self, request):

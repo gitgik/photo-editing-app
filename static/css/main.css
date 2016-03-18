@@ -201,6 +201,16 @@
     font-size: 39px !important;
 }
 
+.rename-input-container {
+    position: absolute;
+    background-color: #fff;
+    width: 15em;
+    height: 3em;
+    left: 4em;
+    top: .7em;
+    transition: transform 300ms ease-in-out;
+}
+
 .icon-more {
     font-size: 30px;
     color: rgba(0,0,0,.4);

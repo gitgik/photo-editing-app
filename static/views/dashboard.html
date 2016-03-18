@@ -45,6 +45,13 @@
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_created | amCalendar}}</span>
+
+                    <md-input-container ng-if="pending" class="md-icon-float md-block rename-input-container" id="name-container">
+                        <!-- Use floating label -->
+                        <label>Enter name...</label>
+                        <icon class="material-icons iconize">edit</icon>
+                        <input ng-model="photo.name" type="text">
+                    </md-input-container>
                     <md-menu md-offset="0 -7" class="expand-more">
                         <md-button ng-disabled="effects.init" aria-label="Open user detail menu"
                                    class="md-icon-button"
