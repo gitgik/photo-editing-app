@@ -1,5 +1,5 @@
 """Define imports."""
-from PIL import Image, ImageFilter, ImageOps, ImageEnhance
+from PIL import ImageFilter, ImageOps, ImageEnhance
 
 temp_url = 'static/media/temp/'
 

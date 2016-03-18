@@ -52,10 +52,11 @@ def filters(request):
     if request.method == 'GET':
         image_url = request.query_params['image_url']
         photo_name = image_url.rsplit('/', 1)[-1]
-        photo = requests.get(image_url, stream=True)
-        photo_file = photo.content
-        image_bytes = BytesIO(photo_file)
-        photo_file = Image.open(image_bytes)
+        photo = requests.get(image_url)
+        photo_file = Image.open(BytesIO(photo.content))
+        photo_file.save(
+            'static/media/temp/{}'.format(photo_name), photo_file.format)
+        print photo_file
         data = {
             'BLUR': photo_effects.blur(photo_file, photo_name),
             'BRIGHT': photo_effects.brighten(photo_file, photo_name),
