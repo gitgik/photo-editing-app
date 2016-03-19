@@ -39,6 +39,7 @@
                     <md-tooltip>upload photo</md-tooltip>
                 </md-button>
                 <md-progress-circular ng-if="render.progressPercentage" flex="10" md-mode="determinate" value="{{render.progressPercentage}}" md-diameter="40"></md-progress-circular layout-align="center end">
+                <span ng-show="render.progressPercentage">{{render.progressPercentage}}</span>
             </md-subheader>
             <md-list>
                 <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo); showFilters(photo);" class="thumbnail-list">
