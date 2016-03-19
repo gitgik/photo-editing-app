@@ -260,7 +260,7 @@
 
 .canvas-container {
     height: 70%;
-    width: 96%;
+    width: 98%;
     position: relative;
     background-color: #efefef;
 }
@@ -295,16 +295,14 @@
 }
 
 .effects-container {
-    border: 2px solid #e2e2e2;
     height: 10%;
-    width: 95%;
-    right: 0;
-    left: 0;
+    width: 98%;
+    position: relative;
     margin-top: 1em;
     overflow-y: hidden;
     overflow-x: scroll;
     white-space: nowrap;
-    background-color: #424242;
+    background-color: rgba(0, 0, 0, 0.54);
 }
 
 ::-webkit-scrollbar {

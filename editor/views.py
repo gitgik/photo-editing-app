@@ -1,5 +1,7 @@
 """Define the editor views."""
 import os
+import requests
+from io import BytesIO
 from PIL import Image
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -53,12 +55,13 @@ def filters(request):
             photo_obj = Photo.objects.get(id=image_id)
             photo_name = photo_obj.name
             photo_file = Image.open(photo_obj.image)
-            """
-                This is an alternative: but not a good idea when doing IO in
-                heroku servers.
+
+            if request.query_params['image_url']:
+                image_url = request.query_params['image_url']
+                photo_name = image_url.rsplit('/', 1)[-1]
                 photo = requests.get(image_url)
-                photo_file = Image.open(BytesIO(photo.content))
-            """
+                image_bytes = BytesIO(photo.content)
+                photo_file = Image.open(image_bytes)
             data = {
                 'BLUR': photo_effects.blur(photo_file, photo_name),
                 'BRIGHT': photo_effects.brighten(photo_file, photo_name),
