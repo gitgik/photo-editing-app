@@ -3,6 +3,7 @@ import os
 import requests
 from io import BytesIO
 from PIL import Image
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -78,8 +79,11 @@ def filters(request):
                 'THERMAL': photo_effects.invert(photo_file, photo_name),
             }
             return Response(data, status=status.HTTP_200_OK)
-        except:
-            return Response("Bad request", status=status.HTTP_400_BAD_REQUEST)
+
+        except ObjectDoesNotExist:
+            return Response(
+                "Bad request",
+                status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
