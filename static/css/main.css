@@ -202,29 +202,20 @@
 }
 
 .rename-input-container {
+    z-index: 100000 !important;
     position: absolute;
-    background-color: #4b4b4b;
-    width: 15em;
-    height: 3em;
-    left: 16em;
-    top: .7em;
+    background-color: #fff;
+    border-bottom: 1px solid #efefef;
+    border-top: 1 px solid #efefef;
+    border-right: 1px solid #efefef;
+    width: 14em;
+    height: 5.5em;
+    left: 6.4em;
+    top: -.7em;
     opacity: 1;
-    transition: transform 1200ms ease-in-out;
+    transition: transform 900ms ease-in-out;
 }
 
-
-input[type=checkbox] {
-    opacity: 0;
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-}
-
-/* Toggled State */
-input[type=checkbox]:checked ~ .rename-input-container {
-    transform: translateX(-16em);
-    opacity: 1
-}
 
 .icon-more {
     font-size: 30px;

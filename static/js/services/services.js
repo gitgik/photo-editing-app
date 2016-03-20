@@ -12,6 +12,9 @@ app.factory('PhotoRestService', function($resource) {
             deleteImage: {
                 method: 'DELETE'
             },
+            editImageName: {
+                method: 'PUT'
+            },
             getImageEffects: {
                 method: 'GET',
                 isArray: false

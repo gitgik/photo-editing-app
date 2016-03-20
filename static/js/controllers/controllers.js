@@ -38,9 +38,14 @@ angular.module('picto.controllers', ['ngMaterial'])
     $scope.user.name = $localStorage.currentUser;
     $scope.user.id = $localStorage.userID;
     $scope.toggleLeft = Menu.toggle('left');
-    $scope.close = function () {
-        $mdSidenav('left').close()
+    $scope.close = function (photoID) {
+        if ($rootScope.disablePhotoID == photoID) {
+            angular.noop();
+        }
+        else {
+            $mdSidenav('left').close()
             .then(function () {});
+        }
     }
 
     // url for sharing
@@ -130,10 +135,20 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     $scope.selectImage = function (photo) {
         delete $rootScope.doneLoadingFilters;
-        $scope.render.selectedPhoto = photo.image;
-        $rootScope.selectedPhotoID = photo.id;
-        $localStorage.initialImage = photo.image;
-        $scope.render.loading = true;
+
+        if ($rootScope.disablePhotoID == photo.id) {
+            angular.noop();
+        }
+        else {
+            // remove renaming mechanisms from previous active item.
+            delete $scope.renameContainer;
+            $rootScope.disablePhotoID = undefined;
+            $scope.render.disablePhotoSelection = undefined;
+            $rootScope.selectedPhotoID = photo.id;
+            $scope.render.selectedPhoto = photo.image;
+            $localStorage.initialImage = photo.image;
+            $scope.render.loading = true;
+        }
     };
 
     $scope.applyEffect = function(photo_url) {
@@ -142,22 +157,28 @@ angular.module('picto.controllers', ['ngMaterial'])
     };
 
     $scope.showFilters = function (photo) {
-        $rootScope.effects = $rootScope.effects || {};
-        $rootScope.effects.init = true;
-        var photoID = photo.id;
 
-        if ($localStorage.filters[photoID] !== undefined) {
-            $rootScope.effects.url = $localStorage.filters[photoID];
-            $scope.$emit('doneLoadingFilters');
+        if ($rootScope.disablePhotoID == photo.id) {
+            angular.noop();
         }
         else {
-            var imageID = photo.id;
-            PhotoRestService.Filters.getAll({ "imageID": imageID })
-            .$promise.then(function(response) {
-                $rootScope.effects.url = response;
-                $localStorage.filters[photoID] = $rootScope.effects.url;
+            $rootScope.effects = $rootScope.effects || {};
+            $rootScope.effects.init = true;
+            var photoID = photo.id;
+
+            if ($localStorage.filters[photoID] !== undefined) {
+                $rootScope.effects.url = $localStorage.filters[photoID];
                 $scope.$emit('doneLoadingFilters');
-            });
+            }
+            else {
+                var imageID = photo.id;
+                PhotoRestService.Filters.getAll({ "imageID": imageID })
+                .$promise.then(function(response) {
+                    $rootScope.effects.url = response;
+                    $localStorage.filters[photoID] = $rootScope.effects.url;
+                    $scope.$emit('doneLoadingFilters');
+                });
+            }
         }
         $scope.render.editingMode = false;
     };
@@ -179,8 +200,31 @@ angular.module('picto.controllers', ['ngMaterial'])
             $scope.renameContainer = {};
             $scope.renameContainer[photo.id] = true;
             $scope.render.rename = photo.name;
-            console.log($scope.renameContainer)
         }
+        $scope.render.disablePhotoSelection = {};
+        $rootScope.disablePhotoID = photo.id;
+        $scope.render.disablePhotoSelection[photo.id] = true;
+    };
+
+    $scope.finishRename = function (photo) {
+        // get the new photo name
+        var data = {
+            id: photo.id,
+            newName: $scope.render.rename
+        }
+        PhotoRestService.ModifyImage.editImageName(data, function (response) {
+            Toast.show('Photo renamed to' + $scope.render.rename);
+            $scope.renameContainer[photo.id] = undefined;
+            delete $scope.render.disablePhotoSelection;
+            delete $rootScope.disablePhotoID;
+            $scope.$emit('updatePhotos');
+        });
+    };
+
+    $scope.cancelRename = function (photo) {
+        $scope.renameContainer[photo.id] = undefined;
+        delete $scope.render.disablePhotoSelection;
+        delete $rootScope.disablePhotoID;
     };
 
     // Share a photo
