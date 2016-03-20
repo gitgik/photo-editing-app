@@ -52,14 +52,15 @@ Live version available [here](https://picto.herokuapp.com/)
 
 * #### Run It
     Fire the engines using this one simple command:
-        ```
-            $ python manage.py collectstatic --noinput
-        ```
+    ```
+        $ python manage.py collectstatic --noinput
+    ```
 
-        ```
-            $ python manage.py runserver
-        ```
+    ```
+        $ python manage.py runserver
+    ```
+
     You can now access the service on your browser by using
-        ```
-            http://localhost:8000/
-        ```
+    ```
+        http://localhost:8000/
+    ```
