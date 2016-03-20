@@ -203,12 +203,27 @@
 
 .rename-input-container {
     position: absolute;
-    background-color: #fff;
+    background-color: #4b4b4b;
     width: 15em;
     height: 3em;
-    left: 4em;
+    left: 16em;
     top: .7em;
-    transition: transform 300ms ease-in-out;
+    opacity: 1;
+    transition: transform 1200ms ease-in-out;
+}
+
+
+input[type=checkbox] {
+    opacity: 0;
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+/* Toggled State */
+input[type=checkbox]:checked ~ .rename-input-container {
+    transform: translateX(-16em);
+    opacity: 1
 }
 
 .icon-more {

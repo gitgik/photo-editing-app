@@ -97,7 +97,7 @@ class UserPhotoTestCase(APITestCase):
     def test_user_can_delete_photo(self):
         """Test a given photo can be deleted."""
         self.name = 'test.png'
-        self.image = File(open('static/test.png', 'rb'))
+        self.image = File(open('static/test.jpg', 'rb'))
         self.created_image = Photo(
             image=self.image,
             name=self.name, user=self.user)
@@ -165,7 +165,6 @@ class ImageEffectsTestCase(APITestCase):
             name=self.name, user=self.user)
         self.created_image.save()
         data = {
-            'image_url': 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/f9af0618846673.562d053f70803.jpg',
             'imageID': self.created_image.id
         }
         self.urlopen_mock.return_value = MockResponse(data)

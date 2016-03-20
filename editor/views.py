@@ -56,13 +56,6 @@ def filters(request):
             photo_obj = Photo.objects.get(id=image_id)
             photo_name = photo_obj.name
             photo_file = Image.open(photo_obj.image)
-
-            if request.query_params['image_url']:
-                image_url = request.query_params['image_url']
-                photo_name = image_url.rsplit('/', 1)[-1]
-                photo = requests.get(image_url)
-                image_bytes = BytesIO(photo.content)
-                photo_file = Image.open(image_bytes)
             data = {
                 'BLUR': photo_effects.blur(photo_file, photo_name),
                 'BRIGHT': photo_effects.brighten(photo_file, photo_name),
@@ -76,7 +69,6 @@ def filters(request):
                 'SMOOTH': photo_effects.smooth(photo_file, photo_name),
                 'SHARP': photo_effects.sharpen(photo_file, photo_name),
                 'SATURATE': photo_effects.saturate(photo_file, photo_name),
-                'THERMAL': photo_effects.invert(photo_file, photo_name),
             }
             return Response(data, status=status.HTTP_200_OK)
 
