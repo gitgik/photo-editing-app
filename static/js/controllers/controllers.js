@@ -199,7 +199,9 @@ angular.module('picto.controllers', ['ngMaterial'])
         if (photo.id) {
             $scope.renameContainer = {};
             $scope.renameContainer[photo.id] = true;
-            $scope.render.rename = photo.name;
+            var real_name = photo.name.substr(0, photo.name.lastIndexOf("."));
+            $localStorage.imageExt = photo.name.substr((~-photo.name.lastIndexOf(".") >>> 0) + 2);
+            $scope.render.rename = real_name;
         }
         $scope.render.disablePhotoSelection = {};
         $rootScope.disablePhotoID = photo.id;
@@ -207,13 +209,13 @@ angular.module('picto.controllers', ['ngMaterial'])
     };
 
     $scope.finishRename = function (photo) {
-        // get the new photo name
+        // get the new photo name, append it's extension before sending.
         var data = {
             id: photo.id,
-            newName: $scope.render.rename
+            newName: $scope.render.rename + "." + $localStorage.imageExt
         }
         PhotoRestService.ModifyImage.editImageName(data, function (response) {
-            Toast.show('Photo renamed to' + $scope.render.rename);
+            Toast.show('Photo renamed to ' + $scope.render.rename);
             $scope.renameContainer[photo.id] = undefined;
             delete $scope.render.disablePhotoSelection;
             delete $rootScope.disablePhotoID;
