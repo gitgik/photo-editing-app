@@ -46,13 +46,12 @@
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" ng-model="preview" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_modified | amCalendar}}</span>
-
-                    <md-input-container ng-if="pending" class="md-icon-float md-block rename-input-container" id="name-container">
-                        <!-- Use floating label -->
-                        <label>Enter name...</label>
-                        <icon class="material-icons iconize">edit</icon>
-                        <input ng-model="photo.name" type="text">
-                    </md-input-container>
+                    <div ng-if="renameContainer[photo.id]" class="rename-input-container">
+                        <md-input-container md-no-float class="md-block">
+                            <icon class="material-icons iconize">edit</icon>
+                            <input ng-model="render.rename" type="text" placeholder="enter name...">
+                        </md-input-container>
+                    </div>
                     <md-menu md-offset="0 -7" class="expand-more">
                         <md-button ng-disabled="effects.init" aria-label="Open user detail menu"
                                    class="md-icon-button"
@@ -62,10 +61,11 @@
                         </md-button>
                         <md-menu-content class="photo-menu-content">
                             <md-menu-item>
-                                <md-button ng-click="renamePhoto(photo);" class="menu-button">
+                                <md-button for="rename-toggle" ng-click="renamePhoto(photo);" class="menu-button">
                                     <icon class="material-icons menu-icon">mode_edit</icon>
                                     Rename
                                 </md-button>
+                                <input type="checkbox" id="rename-toggle"/>
                             </md-menu-item>
                             <md-menu-item>
                                 <md-button ng-click="photoDelConfirm($event, photo.id);" class="menu-button">

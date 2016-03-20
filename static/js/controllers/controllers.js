@@ -169,9 +169,18 @@ angular.module('picto.controllers', ['ngMaterial'])
         delete $localStorage.initialImage;
     };
 
-    $scope.restoreOrigin = function(image) {
+    $scope.restoreOrigin = function (image) {
         $scope.render.selectedPhoto = $localStorage.initialImage;
         $scope.render.editingMode = false;
+    };
+
+    $scope.renamePhoto = function (photo) {
+        if (photo.id) {
+            $scope.renameContainer = {};
+            $scope.renameContainer[photo.id] = true;
+            $scope.render.rename = photo.name;
+            console.log($scope.renameContainer)
+        }
     };
 
     // Share a photo
