@@ -6,18 +6,15 @@ from django.contrib.auth.models import User
 from time import time
 from hashids import Hashids
 from django.conf import settings
-import os
 
 
 def get_photo_path(instance, filename):
     """Define the upload path for saving the current user's photo to disk."""
-    name, ext = os.path.splitext(filename)
-    photo_name = '{}{}'.format(name, ext)
     user_slug = "{}{}".format(
         instance.user.username,
         instance.user.id
     )
-    upload_path = "photos/{}/{}".format(user_slug, photo_name)
+    upload_path = "photos/{}/{}".format(user_slug, filename)
     return upload_path
 
 
@@ -34,7 +31,7 @@ class Photo(models.Model):
     """This model represents photo records uploaded by the current user."""
 
     image = models.ImageField(upload_to=get_photo_path, max_length=255)
-    name = models.CharField(default=generate_uid, max_length=50)
+    name = models.CharField(default=generate_uid, max_length=255)
     date_created = models.DateTimeField(editable=False, auto_now_add=True)
     date_modified = models.DateTimeField(editable=False, auto_now=True)
     user = models.ForeignKey(User)

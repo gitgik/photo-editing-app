@@ -39,18 +39,29 @@ Live version available [here](https://picto.herokuapp.com/)
     3. Install the dependencies needed to run the app:
         ```
             $ pip install -r requirements.txt
+        ```
+
+        ```
             $ npm install -g bower
+        ```
+
+        ```
             $ bower install
         ```
 
 
 * #### Run It
     Fire the engines using this one simple command:
+
         ```
             $ python manage.py collectstatic --noinput
+        ```
+
+        ```
             $ python manage.py runserver
         ```
     You can now access the service on your browser by using
+
         ```
             http://localhost:8000/
         ```
