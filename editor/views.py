@@ -86,7 +86,7 @@ def handle_photo_effects(request):
         photo_effect = Effect(effect=effect, photo=current_photo)
         if photo_effect:
             return Response(
-                {'effect': effect}, status=status.HTTP_200_OK)
+                {'effect': effect}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
@@ -96,6 +96,8 @@ def remove_effects(request):
         temp_url = 'static/media/temp/'
         file_list = os.listdir(temp_url)
         for file_name in file_list:
+            if file_name == ".gitignore":
+                continue
             os.remove(temp_url + "/" + file_name)
 
         return Response(status=status.HTTP_200_OK)

@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from editor.models import Photo
 from faker import Factory
-from PIL import Image
+from PIL import Image, ImageOps
 from mock import MagicMock, patch
 
 # define extensions object
@@ -132,7 +132,25 @@ class UserPhotoTestCase(APITestCase):
             '/api/edit_photo/?id={}'.format(self.created_image.id))
         self.assertEqual(rv.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_application_of_filters_error_response(self):
+    def test_users_can_save_effects_of_photo(self):
+        """Test a selected effect can be saved."""
+        self.name = 'test.png'
+        self.image = File(open('static/test.jpg', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        image = Image.open(self.image)
+        new_effect = ImageOps.grayscale(image)
+        new_effect.save("static/gray.jpg")
+
+        with open('static/gray.jpg', 'rb') as image:
+            data = {'effect': image, 'photo_id': self.created_image.id}
+            response = self.client.post(reverse('editor:photo_effects'), data)
+            image.close()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_filters_request_of_invalid_image(self):
         """Test correct server response when an IO error occurs."""
         invalid_data = {
             'imageID': 300
@@ -193,6 +211,24 @@ class ImageEffectsTestCase(APITestCase):
         self.urlopen_mock.return_value = MockResponse(data)
         response = self.client.get(reverse('editor:filters'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_image_effects_deletion(self):
+        """Test deletion of image effects from the server."""
+        self.name = 'test.png'
+        self.image = File(open('static/test.png', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        data = {
+            'imageID': self.created_image.id
+        }
+        self.urlopen_mock.return_value = MockResponse(data)
+        response = self.client.get(reverse('editor:filters'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # actual deletion
+        rv = self.client.get(reverse('editor:remove_effects'))
+        self.assertEqual(rv.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
         """Tear down."""

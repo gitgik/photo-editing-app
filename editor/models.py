@@ -40,7 +40,7 @@ class Photo(models.Model):
 class Effect(models.Model):
     """This model represents the effects applied to a given image."""
 
-    effect = models.FileField(upload_to=get_photo_path)
+    effect = models.ImageField(upload_to=get_photo_path, max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(editable=False, auto_now=True)
     photo = models.ForeignKey(Photo)

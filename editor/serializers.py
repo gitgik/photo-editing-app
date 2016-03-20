@@ -11,6 +11,7 @@ class PhotoSerializer(serializers.ModelSerializer):
 
         model = Photo
         fields = ('id', 'image', 'name', 'date_created', 'date_modified',)
+        read_only_fields = ('date_modified', 'date_created')
 
 
 class PhotoEditSerializer(serializers.ModelSerializer):
