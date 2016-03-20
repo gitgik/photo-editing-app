@@ -1,7 +1,6 @@
 """Test cases for picto api."""
 
 import StringIO
-import json
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -151,7 +150,7 @@ class UserPhotoTestCase(APITestCase):
             image.close()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_application_of_filters_error_response(self):
+    def test_filters_request_of_invalid_image(self):
         """Test correct server response when an IO error occurs."""
         invalid_data = {
             'imageID': 300
@@ -212,6 +211,24 @@ class ImageEffectsTestCase(APITestCase):
         self.urlopen_mock.return_value = MockResponse(data)
         response = self.client.get(reverse('editor:filters'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_image_effects_deletion(self):
+        """Test deletion of image effects from the server."""
+        self.name = 'test.png'
+        self.image = File(open('static/test.png', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        data = {
+            'imageID': self.created_image.id
+        }
+        self.urlopen_mock.return_value = MockResponse(data)
+        response = self.client.get(reverse('editor:filters'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # actual deletion
+        rv = self.client.get(reverse('editor:remove_effects'))
+        self.assertEqual(rv.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
         """Tear down."""
