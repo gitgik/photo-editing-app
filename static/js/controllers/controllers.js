@@ -232,6 +232,7 @@ angular.module('picto.controllers', ['ngMaterial'])
     // Share a photo
     $scope.sharePhoto = function (photo) {
         // check to see if the image has a valid url host and port prefixed
+        console.log(photo)
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
         }
