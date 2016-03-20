@@ -86,7 +86,7 @@ def handle_photo_effects(request):
         photo_effect = Effect(effect=effect, photo=current_photo)
         if photo_effect:
             return Response(
-                {'effect': effect}, status=status.HTTP_200_OK)
+                {'effect': effect}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
