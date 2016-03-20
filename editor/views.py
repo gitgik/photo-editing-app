@@ -1,7 +1,5 @@
 """Define the editor views."""
 import os
-import requests
-from io import BytesIO
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
@@ -156,6 +154,21 @@ class PhotoDetailView(APIView):
             }
             serializer = PhotoSerializer(photo_obj, context=context)
             return Response(serializer.data)
+
+    def put(self, request):
+        """Edit the name of an image."""
+        photo = Photo.objects.get(id=request.data['id'])
+        name = request.data['newName']
+        data = {
+            'id': photo.id,
+            'image': photo.image,
+            'name': name
+        }
+        serializer = PhotoSerializer(photo, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         """Delete an image from both the db and the folder."""

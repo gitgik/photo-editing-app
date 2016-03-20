@@ -94,6 +94,29 @@ class UserPhotoTestCase(APITestCase):
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
         self.assertEqual(rv.data.get('name'), self.created_image.name)
 
+    def test_user_can_edit_photo(self):
+        """Test a given photo can be deleted."""
+        self.name = 'test.png'
+        self.image = File(open('static/test.jpg', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        response = self.client.get(reverse('editor:photos'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = {
+            'id': self.created_image.id,
+            'image': self.created_image.image,
+            'newName': 'the new picture'
+        }
+        rv = self.client.put('/api/edit_photo/', data=data)
+        self.assertEqual(rv.status_code, status.HTTP_200_OK)
+
+        # test actual data of edited photo
+        rv = self.client.get(
+            '/api/edit_photo/?id={}'.format(self.created_image.id))
+        self.assertContains(rv, data['newName'], status_code=200)
+
     def test_user_can_delete_photo(self):
         """Test a given photo can be deleted."""
         self.name = 'test.png'

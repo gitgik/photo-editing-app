@@ -42,16 +42,10 @@
                 <span ng-show="render.progressPercentage">{{render.progressPercentage}}</span>
             </md-subheader>
             <md-list>
-                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(); selectImage(photo); showFilters(photo);" class="thumbnail-list">
+                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(photo.id); selectImage(photo); showFilters(photo);" class="thumbnail-list">
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image }}" ng-model="preview" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_modified | amCalendar}}</span>
-                    <div ng-if="renameContainer[photo.id]" class="rename-input-container">
-                        <md-input-container md-no-float class="md-block">
-                            <icon class="material-icons iconize">edit</icon>
-                            <input ng-model="render.rename" type="text" placeholder="enter name...">
-                        </md-input-container>
-                    </div>
                     <md-menu md-offset="0 -7" class="expand-more">
                         <md-button ng-disabled="effects.init" aria-label="Open user detail menu"
                                    class="md-icon-button"
@@ -65,7 +59,6 @@
                                     <icon class="material-icons menu-icon">mode_edit</icon>
                                     Rename
                                 </md-button>
-                                <input type="checkbox" id="rename-toggle"/>
                             </md-menu-item>
                             <md-menu-item>
                                 <md-button ng-click="photoDelConfirm($event, photo.id);" class="menu-button">
@@ -81,6 +74,18 @@
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
+                    <div ng-if="renameContainer[photo.id]" class="rename-input-container">
+                        <md-input-container md-no-float class="md-block">
+                            <md-icon class="material-icons">edit</md-icon>
+                            <input layout="row" ng-model="render.rename" type="text" placeholder="enter name...">
+                            <md-button ng-click="cancelRename(photo);" flex="50" class="md-icon-button" aria-label="cancel">
+                                <md-icon class="material-icons">cancel</md-icon>
+                            </md-button>
+                            <md-button ng-click="finishRename(photo);" flex="50" class="md-icon-button" aria-label="ok">
+                                <md-icon class="material-icons">done</md-icon>
+                            </md-button>
+                        </md-input-container>
+                    </div>
                 </md-list-item>
                 <md-list-item ng-if="user.noPhotos">
                     <h3 class="photo-caption">
