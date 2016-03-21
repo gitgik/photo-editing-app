@@ -84,7 +84,7 @@ def handle_photo_effects(request):
     if request.method == 'POST':
         photo_id = request.data['photo_id']
         effect = request.data['effect']
-        image_raw = requests.get(effect, stream=True)
+        image_raw = requests.get(effect)
         b64response = b64encode(image_raw.content)
         current_photo = Photo.objects.get(id=photo_id)
         data = {
