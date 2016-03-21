@@ -64,6 +64,7 @@ angular.module('picto.controllers', ['ngMaterial'])
         else {
             $scope.user.noPhotos = false;
             $scope.user.photos = response;
+            $localStorage.photos = response;
             delete $localStorage.initialImage;
         }
     });
@@ -82,6 +83,7 @@ angular.module('picto.controllers', ['ngMaterial'])
             else {
                 delete $scope.user.noPhotos;
                 $scope.user.photos = response;
+                $localStorage.photos = response;
             }
             delete $localStorage.initialImage;
         });
@@ -125,13 +127,26 @@ angular.module('picto.controllers', ['ngMaterial'])
             effect: photo,
             photo_id: photoID
         }
+        // get the name of the photo being edited
+        for (var i = 0; i < $localStorage.photos.length; i++) {
+            if ($localStorage.photos[i].id == photoID) {
+                name = $localStorage.photos[i].name
+            }
+        }
 
+        var photoData = {
+            id: photoID,
+            name: name,
+            image_effect: photo
+        }
         PhotoRestService.ImageEffects.save(
             data, function(res) {
-                console.log(res)
-                Toast.show('Filter saved');
-                $scope.$emit('updatePhotos');
-                $scope.preview = res.effect;
+                PhotoRestService.ModifyImage.editImage(photoData, function (response) {
+                    console.log(response)
+                    Toast.show('Photo edited');
+                    $scope.$emit('updatePhotos');
+                    $scope.preview = res.effect;
+                });
             }, function(error) {
                 Toast.show('Oops! That didn\'t work. Please try again.')
             });
@@ -161,7 +176,6 @@ angular.module('picto.controllers', ['ngMaterial'])
     };
 
     $scope.showFilters = function (photo) {
-
         if ($rootScope.disablePhotoID == photo.id) {
             angular.noop();
         }
@@ -216,9 +230,9 @@ angular.module('picto.controllers', ['ngMaterial'])
         // get the new photo name, append it's extension before sending.
         var data = {
             id: photo.id,
-            newName: $scope.render.rename + "." + $localStorage.imageExt
+            name: $scope.render.rename + "." + $localStorage.imageExt
         }
-        PhotoRestService.ModifyImage.editImageName(data, function (response) {
+        PhotoRestService.ModifyImage.editImage(data, function (response) {
             Toast.show('Photo renamed to ' + $scope.render.rename);
             $scope.renameContainer[photo.id] = undefined;
             delete $scope.render.disablePhotoSelection;

@@ -97,9 +97,12 @@ def handle_photo_effects(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            print serializer.errors
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'GET':
+        effect = Effect.objects.all()
+        return Response(effect)
 
 
 @api_view(['GET'])
@@ -137,16 +140,6 @@ class PhotoListView(generics.ListCreateAPIView):
         user = self.request.user
         try:
             queryset = Photo.objects.filter(user=user)
-            for photo in queryset:
-                try:
-                    photo_effect = Effect.objects.get(photo=photo)
-                    print photo_effect
-                    print queryset
-                    # print queryset[photo].image
-                    queryset[photo].image = photo_effect.effect
-                except ObjectDoesNotExist:
-                    # no effect for this particular photo object
-                    continue
             return queryset
         except:
             return Photo.objects.filter(user=user)
@@ -176,17 +169,18 @@ class PhotoDetailView(APIView):
     def put(self, request):
         """Edit the name of an image."""
         photo = Photo.objects.get(id=request.data['id'])
-        name = request.data['newName']
-        data = {
-            'id': photo.id,
-            'image': photo.image,
-            'name': name
-        }
-        serializer = PhotoSerializer(photo, data=data)
+        request.data['image'] = photo.image
+        serializer = PhotoSerializer(
+            photo, data=request.data,
+            context={'request': self.request}
+        )
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print serializer.errors
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         """Delete an image from both the db and the folder."""
