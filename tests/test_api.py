@@ -95,7 +95,7 @@ class UserPhotoTestCase(APITestCase):
         self.assertEqual(rv.data.get('name'), self.created_image.name)
 
     def test_user_can_edit_photo(self):
-        """Test a given photo can be deleted."""
+        """Test a given photo can be edited."""
         self.name = 'test.png'
         self.image = File(open('static/test.jpg', 'rb'))
         self.created_image = Photo(
@@ -107,7 +107,7 @@ class UserPhotoTestCase(APITestCase):
         data = {
             'id': self.created_image.id,
             'image': self.created_image.image,
-            'newName': 'the new picture'
+            'name': 'the new picture'
         }
         rv = self.client.put('/api/edit_photo/', data=data)
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
@@ -115,7 +115,7 @@ class UserPhotoTestCase(APITestCase):
         # test actual data of edited photo
         rv = self.client.get(
             '/api/edit_photo/?id={}'.format(self.created_image.id))
-        self.assertContains(rv, data['newName'], status_code=200)
+        self.assertContains(rv, data['name'], status_code=200)
 
     def test_user_can_delete_photo(self):
         """Test a given photo can be deleted."""
@@ -144,10 +144,11 @@ class UserPhotoTestCase(APITestCase):
         new_effect = ImageOps.grayscale(image)
         new_effect.save("static/gray.jpg")
 
-        with open('static/gray.jpg', 'rb') as image:
-            data = {'effect': image, 'photo_id': self.created_image.id}
-            response = self.client.post(reverse('editor:photo_effects'), data)
-            image.close()
+        data = {
+            'effect': 'http://localhost:8000/static/gray.jpg',
+            'photo_id': self.created_image.id
+        }
+        response = self.client.post(reverse('editor:photo_effects'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_filters_request_of_invalid_image(self):

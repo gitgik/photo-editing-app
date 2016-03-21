@@ -64,6 +64,7 @@ angular.module('picto.controllers', ['ngMaterial'])
         else {
             $scope.user.noPhotos = false;
             $scope.user.photos = response;
+            $localStorage.photos = response;
             delete $localStorage.initialImage;
         }
     });
@@ -82,6 +83,7 @@ angular.module('picto.controllers', ['ngMaterial'])
             else {
                 delete $scope.user.noPhotos;
                 $scope.user.photos = response;
+                $localStorage.photos = response;
             }
             delete $localStorage.initialImage;
         });
@@ -118,18 +120,35 @@ angular.module('picto.controllers', ['ngMaterial'])
     };
 
     $scope.savePhoto = function(photo, photoID) {
+        if (photo.indexOf(url) === -1) {
+            photo = url + photo;
+        }
         var data = {
             effect: photo,
             photo_id: photoID
         }
+        // get the name of the photo being edited
+        for (var i = 0; i < $localStorage.photos.length; i++) {
+            if ($localStorage.photos[i].id == photoID) {
+                name = $localStorage.photos[i].name
+            }
+        }
+
+        var photoData = {
+            id: photoID,
+            name: name,
+            image_effect: photo
+        }
         PhotoRestService.ImageEffects.save(
             data, function(res) {
-                console.log(res)
-                Toast.show('Photo saved');
-                $scope.$emit('updatePhotos');
-                $scope.preview = res.effect;
+                PhotoRestService.ModifyImage.editImage(photoData, function (response) {
+                    console.log(response)
+                    Toast.show('Photo edited');
+                    $scope.$emit('updatePhotos');
+                    $scope.preview = res.effect;
+                });
             }, function(error) {
-                Toast.show('Could not save photo. Check your internet connectivity.')
+                Toast.show('Oops! That didn\'t work. Please try again.')
             });
     };
 
@@ -157,7 +176,6 @@ angular.module('picto.controllers', ['ngMaterial'])
     };
 
     $scope.showFilters = function (photo) {
-
         if ($rootScope.disablePhotoID == photo.id) {
             angular.noop();
         }
@@ -212,9 +230,9 @@ angular.module('picto.controllers', ['ngMaterial'])
         // get the new photo name, append it's extension before sending.
         var data = {
             id: photo.id,
-            newName: $scope.render.rename + "." + $localStorage.imageExt
+            name: $scope.render.rename + "." + $localStorage.imageExt
         }
-        PhotoRestService.ModifyImage.editImageName(data, function (response) {
+        PhotoRestService.ModifyImage.editImage(data, function (response) {
             Toast.show('Photo renamed to ' + $scope.render.rename);
             $scope.renameContainer[photo.id] = undefined;
             delete $scope.render.disablePhotoSelection;
@@ -232,7 +250,6 @@ angular.module('picto.controllers', ['ngMaterial'])
     // Share a photo
     $scope.sharePhoto = function (photo) {
         // check to see if the image has a valid url host and port prefixed
-        console.log(photo)
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
         }
@@ -245,7 +262,6 @@ angular.module('picto.controllers', ['ngMaterial'])
                 message: ''
             }, function(response) {
                 if (response.error_code != 4201) {
-                    console.log(response)
                     Toast.show('Photo shared on Facebook');
                 }
             }, function(error) {
@@ -273,7 +289,7 @@ angular.module('picto.controllers', ['ngMaterial'])
                 delete $localStorage.filters[photoID];
                 Toast.show('Photo deleted');
             }, function(error) {
-                console.log('ERROR: ' + error)
+                Toast.show('Oops! That didn\'t work. Please check your connectivity');
             });
         }, function() {});
     };
@@ -295,6 +311,8 @@ angular.module('picto.controllers', ['ngMaterial'])
                 delete $scope.render.selectedPhoto;
                 delete $localStorage.filters[photoID];
                 Toast.show('Photo deleted');
+            }, function(error) {
+                Toast.show('Oops! That didn\'t work. Please check your connectivity');
             });
         }, function() {});
     };
