@@ -18,6 +18,12 @@ def get_photo_path(instance, filename):
     return upload_path
 
 
+def get_effect_path(instance, filename):
+    """Define the destination upload path for a saved effect."""
+    upload_path = "effects/{}".format(filename)
+    return upload_path
+
+
 def generate_uid():
     """Generate a unique id using a custom salt, alphabet and min length."""
     salt = settings.SECRET_KEY
@@ -40,7 +46,7 @@ class Photo(models.Model):
 class Effect(models.Model):
     """This model represents the effects applied to a given image."""
 
-    effect = models.ImageField(upload_to=get_photo_path, max_length=255)
+    effect = models.ImageField(upload_to=get_effect_path, max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(editable=False, auto_now=True)
     photo = models.ForeignKey(Photo)

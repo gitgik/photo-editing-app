@@ -1,5 +1,7 @@
 """Define the editor views."""
 import os
+import requests
+from base64 import b64encode
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
@@ -82,11 +84,22 @@ def handle_photo_effects(request):
     if request.method == 'POST':
         photo_id = request.data['photo_id']
         effect = request.data['effect']
+        image_raw = requests.get(effect, stream=True)
+        b64response = b64encode(image_raw.content)
         current_photo = Photo.objects.get(id=photo_id)
-        photo_effect = Effect(effect=effect, photo=current_photo)
-        if photo_effect:
+        data = {
+            'effect': b64response,
+            'photo': current_photo.pk
+        }
+        serializer = EffectSerializer(data=data, context={'request': request})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print serializer.errors
             return Response(
-                {'effect': effect}, status=status.HTTP_201_CREATED)
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -124,12 +137,15 @@ class PhotoListView(generics.ListCreateAPIView):
         user = self.request.user
         try:
             queryset = Photo.objects.filter(user=user)
-            print queryset
             for photo in queryset:
-                if (Effect.objects.get(photo=photo)):
+                try:
                     photo_effect = Effect.objects.get(photo=photo)
-                    queryset[photo] = photo_effect
-                else:
+                    print photo_effect
+                    print queryset
+                    # print queryset[photo].image
+                    queryset[photo].image = photo_effect.effect
+                except ObjectDoesNotExist:
+                    # no effect for this particular photo object
                     continue
             return queryset
         except:
