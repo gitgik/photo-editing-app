@@ -26,7 +26,6 @@ def social_login(request):
     if request.method == 'POST':
         access_token = request.data['accessToken']
         backend = request.data['backend']
-        print access_token
         if access_token:
             strategy = load_strategy(request)
             backend = load_backend(
@@ -55,20 +54,43 @@ def filters(request):
         try:
             photo_obj = Photo.objects.get(id=image_id)
             photo_name = photo_obj.name
-            photo_file = Image.open(photo_obj.image)
+            # check to see if image has a saved effect
+            if (photo_obj.image_effect.strip()):
+                image = Effect.objects.filter(
+                    photo=photo_obj.pk).latest('date_edited')
+                input_image = image.effect
+            else:
+                input_image = photo_obj.image
+            photo_file = Image.open(input_image)
+            temp_url = 'static/media/temp/{}/'.format(image_id)
+            if not os.path.isdir(temp_url):
+                os.makedirs(temp_url)
+
             data = {
-                'BLUR': photo_effects.blur(photo_file, photo_name),
-                'BRIGHT': photo_effects.brighten(photo_file, photo_name),
-                'CONTOUR': photo_effects.contour(photo_file, photo_name),
-                'CONTRAST': photo_effects.contrast(photo_file, photo_name),
-                'DARK': photo_effects.darken(photo_file, photo_name),
-                'DETAIL': photo_effects.detail(photo_file, photo_name),
-                'FLIP': photo_effects.flip(photo_file, photo_name),
-                'GRAY': photo_effects.grayscale(photo_file, photo_name),
-                'MIRROR': photo_effects.mirror(photo_file, photo_name),
-                'SMOOTH': photo_effects.smooth(photo_file, photo_name),
-                'SHARP': photo_effects.sharpen(photo_file, photo_name),
-                'SATURATE': photo_effects.saturate(photo_file, photo_name),
+                'BLUR': photo_effects.blur(
+                    photo_file, photo_name, temp_url),
+                'BRIGHT': photo_effects.brighten(
+                    photo_file, photo_name, temp_url),
+                'CONTOUR': photo_effects.contour(
+                    photo_file, photo_name, temp_url),
+                'CONTRAST': photo_effects.contrast(
+                    photo_file, photo_name, temp_url),
+                'DARK': photo_effects.darken(
+                    photo_file, photo_name, temp_url),
+                'DETAIL': photo_effects.detail(
+                    photo_file, photo_name, temp_url),
+                'FLIP': photo_effects.flip(
+                    photo_file, photo_name, temp_url),
+                'GRAY': photo_effects.grayscale(
+                    photo_file, photo_name, temp_url),
+                'MIRROR': photo_effects.mirror(
+                    photo_file, photo_name, temp_url),
+                'SMOOTH': photo_effects.smooth(
+                    photo_file, photo_name, temp_url),
+                'SHARP': photo_effects.sharpen(
+                    photo_file, photo_name, temp_url),
+                'SATURATE': photo_effects.saturate(
+                    photo_file, photo_name, temp_url),
             }
             return Response(data, status=status.HTTP_200_OK)
 
@@ -92,7 +114,6 @@ def handle_photo_effects(request):
             'photo': current_photo.pk
         }
         serializer = EffectSerializer(data=data, context={'request': request})
-
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -105,17 +126,19 @@ def handle_photo_effects(request):
         return Response(effect)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def remove_effects(request):
     """View allows resetting back from filters."""
-    if request.method == 'GET':
-        temp_url = 'static/media/temp/'
+    if request.method == 'POST':
+        temp_url = 'static/media/temp/{}/'.format(request.data['id'])
+        exception_photo = request.data['image_url']
         file_list = os.listdir(temp_url)
-        for file_name in file_list:
-            if file_name == ".gitignore":
-                continue
-            os.remove(temp_url + "/" + file_name)
+        persist = exception_photo.split('/')[-1]
 
+        for file_name in file_list:
+            if file_name in persist:
+                continue
+            os.remove(temp_url + file_name)
         return Response(status=status.HTTP_200_OK)
 
 
@@ -178,7 +201,6 @@ class PhotoDetailView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            print serializer.errors
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -186,10 +208,19 @@ class PhotoDetailView(APIView):
         """Delete an image from both the db and the folder."""
         media_path = 'static/media/'
         photo = Photo.objects.get(id=request.query_params['id'])
-        photo.delete()
+
         try:
-            media_path += str(photo.image)
+            effect = Effect.objects.get(photo=photo)
+            effect.delete()
+            media_path += str(effect.effect)
             os.remove(media_path)
         except:
             pass
+
+        try:
+            photo.delete()
+            media_path += str(photo.image)
+            os.remove(media_path)
+        except:
+            print "Could not remove image files from server"
         return Response(status=status.HTTP_204_NO_CONTENT)

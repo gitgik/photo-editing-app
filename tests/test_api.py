@@ -228,7 +228,8 @@ class ImageEffectsTestCase(APITestCase):
         response = self.client.get(reverse('editor:filters'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # actual deletion
-        rv = self.client.get(reverse('editor:remove_effects'))
+        data = {'id': self.created_image.pk, 'image_url': ''}
+        rv = self.client.post(reverse('editor:remove_effects'), data)
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
