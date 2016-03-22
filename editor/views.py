@@ -1,6 +1,7 @@
 """Define the editor views."""
 import os
-import requests
+from cStringIO import StringIO
+from urllib2 import urlopen, Request
 from base64 import b64encode
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
@@ -106,8 +107,9 @@ def handle_photo_effects(request):
     if request.method == 'POST':
         photo_id = request.data['photo_id']
         effect = request.data['effect']
-        image_raw = requests.get(effect)
-        b64response = b64encode(image_raw.content)
+        image = Request(effect)
+        image_raw = urlopen(image).read()
+        b64response = b64encode(image_raw)
         current_photo = Photo.objects.get(id=photo_id)
         data = {
             'effect': b64response,
