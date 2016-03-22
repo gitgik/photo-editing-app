@@ -1,10 +1,8 @@
 """Define imports."""
 from PIL import ImageFilter, ImageOps, ImageEnhance
 
-temp_url = 'static/media/temp/'
 
-
-def grayscale(image, name):
+def grayscale(image, name, temp_url):
     """Return an image with a contrast of grey."""
     image.seek(0)
     photo = ImageOps.grayscale(image)
@@ -12,7 +10,7 @@ def grayscale(image, name):
     return temp_url + "GRAYSCALE" + name
 
 
-def smooth(image, name):
+def smooth(image, name, temp_url):
     """Return a smoothened image."""
     image.seek(0)
     photo = image.filter(ImageFilter.SMOOTH)
@@ -20,7 +18,7 @@ def smooth(image, name):
     return temp_url + "SMOOTH" + name
 
 
-def contour(image, name):
+def contour(image, name, temp_url):
     """Return an image with a contour filter."""
     image.seek(0)
     photo = image.filter(ImageFilter.CONTOUR)
@@ -28,7 +26,7 @@ def contour(image, name):
     return temp_url + "CONTOUR" + name
 
 
-def sharpen(image, name):
+def sharpen(image, name, temp_url):
     """Return a sharpened image."""
     image.seek(0)
     photo = image.filter(ImageFilter.SHARPEN)
@@ -36,7 +34,7 @@ def sharpen(image, name):
     return temp_url + "SHARPEN" + name
 
 
-def detail(image, name):
+def detail(image, name, temp_url):
     """Return an image with edge enhancement."""
     image.seek(0)
     photo = image.filter(ImageFilter.EDGE_ENHANCE)
@@ -44,7 +42,7 @@ def detail(image, name):
     return temp_url + "DETAIL" + name
 
 
-def flip(image, name):
+def flip(image, name, temp_url):
     """Flip an image."""
     image.seek(0)
     photo = ImageOps.flip(image)
@@ -52,7 +50,7 @@ def flip(image, name):
     return temp_url + "FLIP" + name
 
 
-def invert(image, name):
+def invert(image, name, temp_url):
     """Invert an image."""
     image.seek(0)
     photo = ImageOps.invert(image)
@@ -60,7 +58,7 @@ def invert(image, name):
     return temp_url + "INVERT" + name
 
 
-def mirror(image, name):
+def mirror(image, name, temp_url):
     """Flip the image horizontally."""
     image.seek(0)
     photo = ImageOps.mirror(image)
@@ -68,7 +66,7 @@ def mirror(image, name):
     return temp_url + "MIRROR" + name
 
 
-def contrast(image, name):
+def contrast(image, name, temp_url):
     """Increase the contrast of an image and return the enhanced image."""
     image.seek(0)
     photo = ImageEnhance.Contrast(image)
@@ -77,7 +75,7 @@ def contrast(image, name):
     return temp_url + "CONTRAST" + name
 
 
-def blur(image, name):
+def blur(image, name, temp_url):
     """Return a blur image using a gaussian blur filter."""
     image.seek(0)
     photo = image.filter(
@@ -86,7 +84,7 @@ def blur(image, name):
     return temp_url + "BLUR" + name
 
 
-def brighten(image, name):
+def brighten(image, name, temp_url):
     """Return an image with a brightness enhancement factor of 1.5."""
     image.seek(0)
     photo = ImageEnhance.Brightness(image)
@@ -95,7 +93,7 @@ def brighten(image, name):
     return temp_url + "BRIGHTEN" + name
 
 
-def darken(image, name):
+def darken(image, name, temp_url):
     """Return an image with a brightness enhancement factor of 0.5."""
     image.seek(0)
     photo = ImageEnhance.Brightness(image)
@@ -104,7 +102,7 @@ def darken(image, name):
     return temp_url + "SATURATE" + name
 
 
-def saturate(image, name):
+def saturate(image, name, temp_url):
     """Return an image with a saturation enhancement factor of 2.0 ."""
     image.seek(0)
     photo = ImageEnhance.Color(image)

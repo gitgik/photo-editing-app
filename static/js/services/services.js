@@ -28,6 +28,12 @@ app.factory('PhotoRestService', function($resource) {
             }
         }, {stripTrailingSlashes: false }),
 
+        RemoveFilters: $resource('api/remove_effects/', {}, {
+            delete: {
+                method: 'POST'
+            }
+        }, {stripTrailingSlashes: false }),
+
         ImageEffects: $resource('api/photo_effects/', {}, {
             save: {
                 method: 'POST'

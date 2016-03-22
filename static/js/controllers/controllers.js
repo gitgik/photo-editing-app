@@ -74,7 +74,7 @@ angular.module('picto.controllers', ['ngMaterial'])
         delete $scope.user.photos;
     });
 
-    $scope.$on('updatePhotos', function() {
+    $scope.$on('updatePhotos', function(event, args) {
         // populate images in the gallery
         Restangular.all('api/photos/').getList().then(function(response) {
             if (response.length == 0) {
@@ -86,6 +86,21 @@ angular.module('picto.controllers', ['ngMaterial'])
                 $localStorage.photos = response;
             }
             delete $localStorage.initialImage;
+        });
+    });
+
+    $scope.$on('updateFilters', function(event, args) {
+        delete $localStorage.filters;
+        delete $rootScope.effects;
+        $localStorage.filters = {};
+        $rootScope.effects = {};
+        // get a fresh batch of filters from the server
+        PhotoRestService.Filters.getAll({ "imageID": args.photoID })
+        .$promise.then(function(response) {
+            Toast.show('Photo edited');
+            $rootScope.effects.url = response;
+            $localStorage.filters[args.photoID] = $rootScope.effects.url;
+            $scope.$emit('doneLoadingFilters');
         });
     });
 
@@ -120,6 +135,17 @@ angular.module('picto.controllers', ['ngMaterial'])
     };
 
     $scope.savePhoto = function(photo, photoID) {
+        // delete the old filters to create room for new ones
+        var data = {
+            'id': photoID,
+            'image_url': photo
+        }
+        PhotoRestService.RemoveFilters.delete(data).$promise.then(
+        function(response) {
+            console.log('Deleting old photo filters')
+            console.log(response)
+        });
+
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
         }
@@ -139,17 +165,23 @@ angular.module('picto.controllers', ['ngMaterial'])
             name: name,
             image_effect: photo
         }
-        PhotoRestService.ImageEffects.save(
-            data, function(res) {
-                PhotoRestService.ModifyImage.editImage(photoData, function (response) {
-                    console.log(response)
-                    Toast.show('Photo edited');
-                    $scope.$emit('updatePhotos');
-                    $scope.preview = res.effect;
+        PhotoRestService.ImageEffects.save(data, function(res) {
+            PhotoRestService.ModifyImage.editImage(photoData, function (response) {
+                // initiate filter loading mechanisms
+                delete $rootScope.doneLoadingFilters;
+                // restart the loading spinner
+                $scope.render.loading = true;
+                console.log(response);
+                $scope.$emit('updatePhotos');
+                $scope.$emit('updateFilters',
+                {
+                    photoID: photoID,
+                    effectURL: photo
                 });
-            }, function(error) {
-                Toast.show('Oops! That didn\'t work. Please try again.')
             });
+        }, function(error) {
+            Toast.show('Oops! That didn\'t work. Please try again.');
+        });
     };
 
     $scope.selectImage = function (photo) {
@@ -163,8 +195,9 @@ angular.module('picto.controllers', ['ngMaterial'])
             delete $scope.renameContainer;
             $rootScope.disablePhotoID = undefined;
             $scope.render.disablePhotoSelection = undefined;
+
             $rootScope.selectedPhotoID = photo.id;
-            $scope.render.selectedPhoto = photo.image;
+            $scope.render.selectedPhoto = photo.image_effect ? photo.image_effect : photo.image;
             $localStorage.initialImage = photo.image;
             $scope.render.loading = true;
         }
@@ -177,20 +210,20 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     $scope.showFilters = function (photo) {
         if ($rootScope.disablePhotoID == photo.id) {
+            // disable actions when editing photo name
             angular.noop();
         }
         else {
-            $rootScope.effects = $rootScope.effects || {};
+            $rootScope.effects = {};
             $rootScope.effects.init = true;
             var photoID = photo.id;
 
-            if ($localStorage.filters[photoID] !== undefined) {
+            if ($localStorage.filters[photoID]) {
                 $rootScope.effects.url = $localStorage.filters[photoID];
                 $scope.$emit('doneLoadingFilters');
             }
             else {
-                var imageID = photo.id;
-                PhotoRestService.Filters.getAll({ "imageID": imageID })
+                PhotoRestService.Filters.getAll({ "imageID": photoID })
                 .$promise.then(function(response) {
                     $rootScope.effects.url = response;
                     $localStorage.filters[photoID] = $rootScope.effects.url;
@@ -210,7 +243,7 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     $scope.restoreOrigin = function (image) {
         $scope.render.selectedPhoto = $localStorage.initialImage;
-        $scope.render.editingMode = false;
+        $scope.render.editingMode = true;
     };
 
     $scope.renamePhoto = function (photo) {
@@ -285,6 +318,15 @@ angular.module('picto.controllers', ['ngMaterial'])
                 if ($rootScope.selectedPhotoID == photoID) {
                     delete $scope.render.selectedPhoto;
                 }
+                // delete the filters
+                var data = {
+                    'id': photoID,
+                    'image_url': ""
+                }
+                PhotoRestService.RemoveFilters.delete(data).$promise.then(
+                function(response) {
+                    console.log(response)
+                });
                 $scope.$emit('updatePhotos');
                 delete $localStorage.filters[photoID];
                 Toast.show('Photo deleted');

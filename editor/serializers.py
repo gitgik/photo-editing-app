@@ -20,8 +20,8 @@ class Base64ImageField(serializers.ImageField):
         if isinstance(data, six.string_types):
             # Check if the base64 string is in the "data:" format
             if 'data:' in data and ';base64,' in data:
-                # retrieve the header from the base64 content
-                header, data = data.split(';base64,')
+                # retrieve the data from the base64 content
+                data = data.split(';base64,')[1]
 
             # Try to decode the file. Returns validation error if it fails.
             try:

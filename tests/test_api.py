@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from editor.models import Photo
 from faker import Factory
-from PIL import Image, ImageOps
+from PIL import Image
 from mock import MagicMock, patch
 
 # define extensions object
@@ -132,25 +132,6 @@ class UserPhotoTestCase(APITestCase):
             '/api/edit_photo/?id={}'.format(self.created_image.id))
         self.assertEqual(rv.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_users_can_save_effects_of_photo(self):
-        """Test a selected effect can be saved."""
-        self.name = 'test.png'
-        self.image = File(open('static/test.jpg', 'rb'))
-        self.created_image = Photo(
-            image=self.image,
-            name=self.name, user=self.user)
-        self.created_image.save()
-        image = Image.open(self.image)
-        new_effect = ImageOps.grayscale(image)
-        new_effect.save("static/gray.jpg")
-
-        data = {
-            'effect': 'http://localhost:8000/static/gray.jpg',
-            'photo_id': self.created_image.id
-        }
-        response = self.client.post(reverse('editor:photo_effects'), data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
     def test_filters_request_of_invalid_image(self):
         """Test correct server response when an IO error occurs."""
         invalid_data = {
@@ -228,7 +209,8 @@ class ImageEffectsTestCase(APITestCase):
         response = self.client.get(reverse('editor:filters'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # actual deletion
-        rv = self.client.get(reverse('editor:remove_effects'))
+        data = {'id': self.created_image.pk, 'image_url': ''}
+        rv = self.client.post(reverse('editor:remove_effects'), data)
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
