@@ -1,22 +1,36 @@
 """Define the editor views."""
 import os
 from cStringIO import StringIO
-from urllib2 import urlopen, Request
-from base64 import b64encode
+# import base64
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from editor import photo_effects
-from editor.serializers import PhotoSerializer, EffectSerializer
+from editor.serializers import PhotoSerializer
 from editor.permissions import Authenticate
-from editor.models import Photo, Effect
+from editor.models import Photo
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import login
 from social.apps.django_app.utils import load_strategy, load_backend
 from social.exceptions import AuthAlreadyAssociated
+
+
+extensions = {
+    'jpg': 'JPEG',
+    'jpeg': 'JPEG',
+    'png': 'PNG',
+    'gif': 'GIF'
+}
+
+
+def pil_to_django(image, ext):
+    """Return a file in a format django understands."""
+    fobject = StringIO()
+    image.save(fobject, format=extensions[ext.lower()])
+    return fobject.getvalue()
 
 
 @csrf_exempt
@@ -56,12 +70,8 @@ def filters(request):
             photo_obj = Photo.objects.get(id=image_id)
             photo_name = photo_obj.name
             # check to see if image has a saved effect
-            if (photo_obj.image_effect.strip()):
-                image = Effect.objects.filter(
-                    photo=photo_obj.pk).latest('date_edited')
-                input_image = image.effect
-            else:
-                input_image = photo_obj.image
+            input_image = photo_obj.image_effect if photo_obj.image_effect \
+                else photo_obj.image
             photo_file = Image.open(input_image)
             temp_url = 'static/media/temp/{}/'.format(image_id)
             if not os.path.isdir(temp_url):
@@ -102,33 +112,6 @@ def filters(request):
 
 
 @api_view(['POST'])
-def handle_photo_effects(request):
-    """View allows saving photo effects."""
-    if request.method == 'POST':
-        photo_id = request.data['photo_id']
-        effect = request.data['effect']
-        image = Request(effect)
-        image_raw = urlopen(image).read()
-        b64response = b64encode(image_raw)
-        current_photo = Photo.objects.get(id=photo_id)
-        data = {
-            'effect': b64response,
-            'photo': current_photo.pk
-        }
-        serializer = EffectSerializer(data=data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    if request.method == 'GET':
-        effect = Effect.objects.all()
-        return Response(effect)
-
-
-@api_view(['POST'])
 def remove_effects(request):
     """View allows resetting back from filters."""
     if request.method == 'POST':
@@ -138,7 +121,7 @@ def remove_effects(request):
         persist = exception_photo.split('/')[-1]
 
         for file_name in file_list:
-            if file_name in persist:
+            if persist in file_name:
                 continue
             os.remove(temp_url + file_name)
         return Response(status=status.HTTP_200_OK)
@@ -155,7 +138,6 @@ class PhotoListView(generics.ListCreateAPIView):
         """Method that handles image upload and creation."""
         serializer = PhotoSerializer(
             data=self.request.data, context={'request': self.request})
-        # import pdb; pdb.set_trace()
         if serializer.is_valid():
             serializer.save(user=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -176,25 +158,37 @@ class PhotoDetailView(APIView):
     def get(self, request):
         """Return a photo specific data."""
         photo_obj = Photo.objects.get(id=request.query_params['id'])
-        try:
-            photo = Effect.objects.get(photo=photo_obj)
-            if photo:
-                context = {
-                    'request': request
-                }
-                serializer = EffectSerializer(photo, context=context)
-                return Response(serializer.data)
-        except:
-            context = {
-                'request': request
-            }
-            serializer = PhotoSerializer(photo_obj, context=context)
-            return Response(serializer.data)
+        context = {
+            'request': request
+        }
+        serializer = PhotoSerializer(photo_obj, context=context)
+        return Response(serializer.data)
 
     def put(self, request):
-        """Edit the name of an image."""
+        """Edit the image."""
         photo = Photo.objects.get(id=request.data['id'])
-        request.data['image'] = photo.image
+        try:
+            request.data['image'] = photo.image
+            image_url = request.data['image_effect']
+            image_name = image_url.split('/')[-1]
+            image_path = image_url.split(':8000/')[-1]
+            effect_path = "static/media/photos/{}{}/effects/".format(
+                request.user.username, request.user.id)
+            # create the directory for saving effects
+            if not os.path.isdir(effect_path):
+                os.makedirs(effect_path)
+
+            image = Image.open(image_path)
+            image.save(effect_path + image_name)
+            # replace the custom effect path with the one sent from the client
+            if (request.user.username in image_path):
+                request.data['image_effect'] = ''
+            else:
+                request.data['image_effect'] = effect_path + image_name
+        except:
+            """Edit the name of an image."""
+            pass
+
         serializer = PhotoSerializer(
             photo, data=request.data,
             context={'request': self.request}
@@ -203,26 +197,22 @@ class PhotoDetailView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
+            print serializer.errors
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         """Delete an image from both the db and the folder."""
         media_path = 'static/media/'
+        effect_path = 'static/effects/'
         photo = Photo.objects.get(id=request.query_params['id'])
-
-        try:
-            effect = Effect.objects.get(photo=photo)
-            effect.delete()
-            media_path += str(effect.effect)
-            os.remove(media_path)
-        except:
-            pass
 
         try:
             photo.delete()
             media_path += str(photo.image)
+            effect_path += str(photo.image_effect)
             os.remove(media_path)
+            os.remove(effect_path)
         except:
             print "Could not remove image files from server"
         return Response(status=status.HTTP_204_NO_CONTENT)

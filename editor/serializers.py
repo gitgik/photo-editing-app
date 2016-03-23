@@ -1,6 +1,6 @@
 """Define imports."""
 from rest_framework import serializers
-from .models import Photo, Effect
+from .models import Photo
 
 
 class Base64ImageField(serializers.ImageField):
@@ -34,7 +34,7 @@ class Base64ImageField(serializers.ImageField):
             # Get the file name extension:
             file_extension = self.get_file_extension(file_name, decoded_file)
 
-            complete_file_name = "%s.%s" % (file_name, file_extension, )
+            complete_file_name = "{}.{}".format(file_name, file_extension,)
 
             data = ContentFile(decoded_file, name=complete_file_name)
 
@@ -62,16 +62,3 @@ class PhotoSerializer(serializers.ModelSerializer):
             'date_created', 'date_modified',
         )
         read_only_fields = ('date_modified', 'date_created')
-
-
-class EffectSerializer(serializers.ModelSerializer):
-    """Serializer class for the Effects model."""
-
-    effect = Base64ImageField(max_length=None, use_url=True,)
-
-    class Meta:
-        """This class defines meta data for the serializer."""
-
-        model = Effect
-        fields = ('id', 'effect', 'photo', 'date_created', 'date_edited',)
-        read_only_fields = ('date_edited', 'date_created')

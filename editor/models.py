@@ -42,12 +42,3 @@ class Photo(models.Model):
     date_created = models.DateTimeField(editable=False, auto_now_add=True)
     date_modified = models.DateTimeField(editable=False, auto_now=True)
     user = models.ForeignKey(User)
-
-
-class Effect(models.Model):
-    """This model represents the effects applied to a given image."""
-
-    effect = models.ImageField(upload_to=get_effect_path, max_length=255)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_edited = models.DateTimeField(editable=False, auto_now=True)
-    photo = models.ForeignKey(Photo)
