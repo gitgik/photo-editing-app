@@ -140,11 +140,11 @@ angular.module('picto.controllers', ['ngMaterial'])
             'id': photoID,
             'image_url': photo
         }
-        PhotoRestService.RemoveFilters.delete(data).$promise.then(
-        function(response) {
-            console.log('Deleting old photo filters')
-            console.log(response)
-        });
+        // PhotoRestService.RemoveFilters.delete(data).$promise.then(
+        // function(response) {
+        //     console.log('Deleting old photo filters')
+        //     console.log(response)
+        // });
 
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
@@ -165,22 +165,20 @@ angular.module('picto.controllers', ['ngMaterial'])
             name: name,
             image_effect: photo
         }
-        PhotoRestService.ImageEffects.save(data, function(res) {
-            PhotoRestService.ModifyImage.editImage(photoData, function (response) {
-                // initiate filter loading mechanisms
-                delete $rootScope.doneLoadingFilters;
-                // restart the loading spinner
-                $scope.render.loading = true;
-                console.log(response);
-                $scope.$emit('updatePhotos');
-                $scope.$emit('updateFilters',
-                {
-                    photoID: photoID,
-                    effectURL: photo
-                });
+        PhotoRestService.ModifyImage.editImage(photoData, function (response) {
+            // initiate filter loading mechanisms
+            delete $rootScope.doneLoadingFilters;
+            // restart the loading spinner
+            $scope.render.loading = true;
+            console.log(response);
+            $scope.$emit('updatePhotos');
+            $scope.$emit('updateFilters',
+            {
+                photoID: photoID,
+                effectURL: photo
             });
         }, function(error) {
-            Toast.show('Oops! That didn\'t work. Please try again.');
+             Toast.show('Oops! That didn\'t work. Please try again.');
         });
     };
 
