@@ -63,8 +63,20 @@
 }
 
 .box {
+    position: relative;
     margin: 0;
     background-color: #f2f2f2;
+}
+
+.box::after {
+    content: "";
+    background-image: url('../images/canvas.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 0; right: 0; left: 0; bottom: 0;
+    position: absolute;
+    z-index: 1;
+    opacity: 0.02;
 }
 
 .dashboard {
@@ -184,6 +196,11 @@
     padding:
 }
 
+.done-rename-button {
+    position: relative;
+    left: 2.5em;
+}
+
 .user-logout-icon {
     position: relative;
     padding: 8px 15px 11px 5px;
@@ -191,9 +208,15 @@
 
 .upload-button {
     top: .7em;
+    outline: none !important;
     position: relative;
     min-width: 5em !important;
     height: 3em !important;
+}
+
+.progress-percentage {
+    padding-top: .3em;
+    left: .7em;
 }
 
 .icon-upload {
@@ -252,7 +275,7 @@
 
 .canvas-settings {
     width: 96%;
-    background-color: #efefef;
+    background-color: #fff;
     height: 2.7em;
 }
 
@@ -277,7 +300,8 @@
     margin: 0 auto -3em;
     width: 98%;
     position: relative;
-    background-color: #efefef;
+    background-color: rgba(255, 255, 255, 0.01);
+    z-index: 100;
 }
 
 .button-next {
@@ -286,8 +310,11 @@
 
 .default-canvas {
     max-width: 100%;
-    height: 50%;
+    text-align: center;
+    top: 50%;
+    position: relative;
     margin: auto;
+    color: rgba(0, 0, 0, 0.5)
 }
 
 .preview-effects {
@@ -298,8 +325,12 @@
     transition: opacity 1s;
 }
 
-.canvas-image {
+.c-i-container {
+    top: .6em;
+    position: relative;
+}
 
+.canvas-image {
     max-width: 100%;
     max-height: 27em;
     margin: auto;
@@ -309,7 +340,7 @@
     padding: .4em;
     border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: 7.5px;
-    box-shadow: 0 1px .5px rgba(0,0,0,.13);
+    box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
 
 }
 
@@ -328,17 +359,16 @@
 .canvas-divider {
     left: -1em;
     margin-right: -1.5em;
-    top: 3em;
+    top: 4em;
     max-width: 100%;
     position: relative;
     background-color: rgba(0, 0, 0, 0.15);
-    border-left: 1px solid rgba(0, 0, 5, 0.08);
     border-top: 1.5px solid rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
 
 .effects-container {
-    height: 8em;
-    top: 0em !important;
+    min-height: 9em;
     width: inherit;
     position: relative;
     margin-top: 0em;
@@ -347,6 +377,7 @@
     white-space: nowrap;
     padding-top: 1em;
     padding-bottom: .5em;
+    z-index: 100;
 }
 
 ::-webkit-scrollbar {
@@ -375,6 +406,7 @@
     font-size: 14px;
     font-weight: bold;
     padding-top: .5em;
+    z-index: 150;
 }
 
 .filter-loader {
@@ -393,5 +425,6 @@
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
+    z-index: 105;
 }
 
