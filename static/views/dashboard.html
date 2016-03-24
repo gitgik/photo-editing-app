@@ -39,10 +39,10 @@
                     <md-tooltip>upload photo</md-tooltip>
                 </md-button>
                 <md-progress-circular ng-if="render.progressPercentage" flex="10" md-mode="determinate" value="{{render.progressPercentage}}" md-diameter="40"></md-progress-circular layout-align="center end">
-                <span ng-show="render.progressPercentage">{{render.progressPercentage}}</span>
+                <span class="progress-percentage" ng-show="render.progressPercentage">{{render.progressPercentage}}% complete</span>
             </md-subheader>
             <md-list>
-                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who" ng-click="close(photo.id); selectImage(photo); showFilters(photo);" class="thumbnail-list">
+                <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who | orderBy:'-date_modified'" ng-click="close(photo.id); selectImage(photo); showFilters(photo);" class="thumbnail-list">
                     <img alt="{{ photo.name }}" ng-src="{{ photo.image_effect ? photo.image_effect:photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_modified | amCalendar}}</span>
@@ -78,11 +78,13 @@
                         <md-input-container md-no-float class="md-block">
                             <md-icon class="material-icons">edit</md-icon>
                             <input layout="row" ng-model="render.rename" type="text" placeholder="enter name...">
-                            <md-button ng-click="cancelRename(photo);" flex="50" class="md-icon-button" aria-label="cancel">
+                            <md-button ng-click="cancelRename(photo);" flex="70" class="md-icon-button" aria-label="cancel">
                                 <md-icon class="material-icons">cancel</md-icon>
+                                <md-tooltip>cancel</md-tooltip>
                             </md-button>
-                            <md-button ng-click="finishRename(photo);" flex="50" class="md-icon-button" aria-label="ok">
+                            <md-button class="done-rename-button" ng-click="finishRename(photo);" flex="30" class="md-icon-button" aria-label="ok">
                                 <md-icon class="material-icons">done</md-icon>
+                                <md-tooltip>done</md-tooltip>
                             </md-button>
                         </md-input-container>
                     </div>
@@ -103,7 +105,7 @@
         </md-sidenav>
         <md-content layout-margin layout-padding flex class="box">
             <div class="canvas-container" ng-model="selectedImage">
-                <div class="canvas-settings" layout="row">
+                <div ng-if="render.selectedPhoto" class="canvas-settings" layout="row">
                     <div flex="40" ng-show="render.selectedPhoto">
                         <md-button class="md-icon-button md-primary" aria-label="undo" ng-click="clearCanvas()" ng-disabled="!render.editingMode">
                             <i class="material-icons iconize">arrow_back</i>
@@ -130,20 +132,21 @@
                 <div ng-if="!render.selectedPhoto" class="default-canvas" layout="row" layout-align="center center">
                     <h3 class="item" layout="column" layout-align="center center">No photo selected</h3>
                 </div>
-                <div ng-if="render.selectedPhoto">
+                <div class="c-i-container" ng-if="render.selectedPhoto">
                     <img class="canvas-image" ng-src="{{ render.selectedPhoto }}">
                 </div>
             </div>
-            <div class="effects-container" ng-if="render.selectedPhoto && doneLoadingFilters">
-                <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="column">
-                    <img layout="row" layout-align="center center" class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
-                    <span layout="row" class="preview-title" layout-align="center center">{{key}}</span>
-                </div>
-            </div>
-            <div class="loader" ng-if="render.loading" layout-align="space-around" layout="row">
+            <div class="canvas-loader" ng-if="render.loading" layout-align="space-around" layout="row">
                 <md-progress-circular layout="column" md-mode="indeterminate"></md-progress-circular>
             </div>
-            <span  class="filter-loader" ng-if="render.loading" layout-align="center center" layout="row">rendering your filters</span>
+            <div ng-if="render.selectedPhoto && doneLoadingFilters" class="canvas-divider">
+                <div class="effects-container">
+                    <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="column">
+                        <img onload="this.style.opacity='1';" layout="row" layout-align="center center" class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
+                        <span layout="row" class="preview-title" layout-align="center center">{{key}}</span>
+                    </div>
+                </div>
+            </div>
       </md-content>
     </div>
 </div>

@@ -140,12 +140,6 @@ angular.module('picto.controllers', ['ngMaterial'])
             'id': photoID,
             'image_url': photo
         }
-        // PhotoRestService.RemoveFilters.delete(data).$promise.then(
-        // function(response) {
-        //     console.log('Deleting old photo filters')
-        //     console.log(response)
-        // });
-
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
         }
@@ -184,7 +178,6 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     $scope.selectImage = function (photo) {
         delete $rootScope.doneLoadingFilters;
-
         if ($rootScope.disablePhotoID == photo.id) {
             angular.noop();
         }
@@ -280,6 +273,7 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     // Share a photo
     $scope.sharePhoto = function (photo) {
+        console.log(photo)
         // check to see if the image has a valid url host and port prefixed
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
