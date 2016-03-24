@@ -63,6 +63,7 @@
 }
 
 .box {
+    margin: 0;
     background-color: #f2f2f2;
 }
 
@@ -264,8 +265,16 @@
     left: 3em;
 }
 
+.footer {
+    height: 64px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid #ddd;
+}
 .canvas-container {
-    height: 70%;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -3em;
     width: 98%;
     position: relative;
     background-color: #efefef;
@@ -281,38 +290,68 @@
     margin: auto;
 }
 
+.preview-effects {
+    opacity:0;
+    -moz-transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+}
+
 .canvas-image {
+
     max-width: 100%;
     max-height: 27em;
     margin: auto;
     display: block;
     object-fit: contain;
+    background-color: #fff;
+    padding: .4em;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 7.5px;
+    box-shadow: 0 1px .5px rgba(0,0,0,.13);
+
 }
 
 .preview-effects {
-    border-radius: 25%;
+    border-radius: 12.5px;
     max-width: 100%;
     max-height: 100%;
     outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.8)
 }
 
 .preview-effects:hover {
     cursor: pointer;
 }
 
-.effects-container {
-    height: 10%;
-    width: 98%;
+.canvas-divider {
+    left: -1em;
+    margin-right: -1.5em;
+    top: 3em;
+    max-width: 100%;
     position: relative;
-    margin-top: 1em;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-left: 1px solid rgba(0, 0, 5, 0.08);
+    border-top: 1.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.effects-container {
+    height: 8em;
+    top: 0em !important;
+    width: inherit;
+    position: relative;
+    margin-top: 0em;
     overflow-y: hidden;
     overflow-x: scroll;
     white-space: nowrap;
-    background-color: rgba(0, 0, 0, 0.54);
+    padding-top: 1em;
+    padding-bottom: .5em;
 }
 
 ::-webkit-scrollbar {
-    width: 6px!important;
+    width: 5px!important;
+    margin-bottom: 0;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -332,7 +371,7 @@
 
 .preview-title {
     font-family: "Roboto", san-serif;
-    color: #fff;
+    color: #4d4d4d;
     font-size: 14px;
     font-weight: bold;
     padding-top: .5em;
@@ -341,5 +380,18 @@
 .filter-loader {
     color: #01579b;
     font-weight: bold;
+}
+
+.canvas-loader {
+    position: absolute;
+    margin: 0 auto;
+    top: 35%;
+    left: 47.5%;
+    width: 4.2em;
+    height: 4.2em;
+    vertical-align: center;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
 }
 

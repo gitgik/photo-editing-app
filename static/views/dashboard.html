@@ -134,16 +134,17 @@
                     <img class="canvas-image" ng-src="{{ render.selectedPhoto }}">
                 </div>
             </div>
-            <div class="effects-container" ng-if="render.selectedPhoto && doneLoadingFilters">
-                <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="column">
-                    <img layout="row" layout-align="center center" class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
-                    <span layout="row" class="preview-title" layout-align="center center">{{key}}</span>
-                </div>
-            </div>
-            <div class="loader" ng-if="render.loading" layout-align="space-around" layout="row">
+            <div class="canvas-loader" ng-if="render.loading" layout-align="space-around" layout="row">
                 <md-progress-circular layout="column" md-mode="indeterminate"></md-progress-circular>
             </div>
-            <span  class="filter-loader" ng-if="render.loading" layout-align="center center" layout="row">rendering your filters</span>
+            <div ng-if="render.selectedPhoto && doneLoadingFilters" class="canvas-divider">
+                <div class="effects-container">
+                    <div class="repeated-item-container" ng-repeat="(key, value) in effects.url" layout="column">
+                        <img onload="this.style.opacity='1';" layout="row" layout-align="center center" class="preview-effects" ng-src="{{value}}" ng-click="applyEffect(value);">
+                        <span layout="row" class="preview-title" layout-align="center center">{{key}}</span>
+                    </div>
+                </div>
+            </div>
       </md-content>
     </div>
 </div>

@@ -186,7 +186,7 @@ class PhotoDetailView(APIView):
             else:
                 request.data['image_effect'] = effect_path + image_name
         except:
-            """Edit the name of an image."""
+            """Gracefully pass when editing the name of an image."""
             pass
 
         serializer = PhotoSerializer(
