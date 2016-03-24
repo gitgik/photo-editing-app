@@ -124,7 +124,8 @@
                             <md-tooltip>Save</md-tooltip>
                         </md-button>
                     </div>
-                    <span ng-show="render.selectedPhoto" class="canvas-container-title" flex="40">EDIT PHOTO</span>
+                    <span ng-if="render.selectedPhoto && !render.loading" class="canvas-container-title" flex="40">EDIT PHOTO</span>
+                    <span class="canvas-container-title" ng-if="render.loading" flex="40">loading filters...</span>
                     <md-button ng-show="render.selectedPhoto" class="md-icon-button md-primary button-next" aria-label="Settings" flex="20" layout-align="end center" ng-disabled="!render.editingMode" ng-click="sharePhoto(render.selectedPhoto);">
                         SHARE
                     </md-button>
