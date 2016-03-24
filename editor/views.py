@@ -145,11 +145,8 @@ class PhotoListView(generics.ListCreateAPIView):
     def get_queryset(self):
         """Method to return photos of logged in user."""
         user = self.request.user
-        try:
-            queryset = Photo.objects.filter(user=user)
-            return queryset
-        except:
-            return Photo.objects.filter(user=user)
+        queryset = Photo.objects.filter(user=user)
+        return queryset
 
 
 class PhotoDetailView(APIView):
@@ -166,8 +163,13 @@ class PhotoDetailView(APIView):
 
     def put(self, request):
         """Edit the image."""
-        photo = Photo.objects.get(id=request.data['id'])
         try:
+            photo = Photo.objects.get(id=request.data['id'])
+        except ObjectDoesNotExist as e:
+            return Response(e.message, status.HTTP_400_BAD_REQUEST)
+
+        try:
+            photo = Photo.objects.get(id=request.data['id'])
             request.data['image'] = photo.image
             image_url = request.data['image_effect']
             image_name = image_url.split('/')[-1]
@@ -187,7 +189,6 @@ class PhotoDetailView(APIView):
                 request.data['image_effect'] = effect_path + image_name
         except:
             """Gracefully pass when editing the name of an image."""
-            pass
 
         serializer = PhotoSerializer(
             photo, data=request.data,
@@ -197,7 +198,6 @@ class PhotoDetailView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            print serializer.errors
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

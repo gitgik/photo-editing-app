@@ -117,6 +117,16 @@ class UserPhotoTestCase(APITestCase):
             '/api/edit_photo/?id={}'.format(self.created_image.id))
         self.assertContains(rv, data['name'], status_code=200)
 
+    def test_invalid_editing_of_photo(self):
+        """Test invalid data (bad request) should be handled appropriately."""
+        data = {
+            'id': 5000000,
+            'image': 'http://localhost:8000/noimage.jee',
+            'name': 'the new picture'
+        }
+        rv = self.client.put('/api/edit_photo/', data=data)
+        self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_user_can_delete_photo(self):
         """Test a given photo can be deleted."""
         self.name = 'test.png'
