@@ -1,6 +1,5 @@
 """Define the editor views."""
 import os
-from cStringIO import StringIO
 # import base64
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,21 +15,6 @@ from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import login
 from social.apps.django_app.utils import load_strategy, load_backend
 from social.exceptions import AuthAlreadyAssociated
-
-
-extensions = {
-    'jpg': 'JPEG',
-    'jpeg': 'JPEG',
-    'png': 'PNG',
-    'gif': 'GIF'
-}
-
-
-def pil_to_django(image, ext):
-    """Return a file in a format django understands."""
-    fobject = StringIO()
-    image.save(fobject, format=extensions[ext.lower()])
-    return fobject.getvalue()
 
 
 @csrf_exempt

@@ -76,7 +76,7 @@
     top: 0; right: 0; left: 0; bottom: 0;
     position: absolute;
     z-index: 1;
-    opacity: 0.02;
+    opacity: 0.06;
 }
 
 .dashboard {
@@ -226,7 +226,7 @@
 }
 
 .rename-input-container {
-    z-index: 100000 !important;
+    z-index: 100 !important;
     position: absolute;
     background-color: #fff;
     border-bottom: 1px solid #efefef;
@@ -285,7 +285,7 @@
     color: #4f4f4f;
     font-family: 'Roboto', san-serif;
     font-size: 15px;
-    left: 3em;
+    left: 4em;
 }
 
 .footer {
@@ -301,7 +301,7 @@
     width: 98%;
     position: relative;
     background-color: rgba(255, 255, 255, 0.01);
-    z-index: 100;
+    z-index: 10;
 }
 
 .button-next {
@@ -338,14 +338,12 @@
     object-fit: contain;
     background-color: #fff;
     padding: .4em;
-    border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: 7.5px;
     box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
-
 }
 
 .preview-effects {
-    border-radius: 12.5px;
+    border-radius: 2.5px;
     max-width: 100%;
     max-height: 100%;
     outline: none;
@@ -362,7 +360,7 @@
     top: 4em;
     max-width: 100%;
     position: relative;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.35);
     border-top: 1.5px solid rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
@@ -377,7 +375,7 @@
     white-space: nowrap;
     padding-top: 1em;
     padding-bottom: .5em;
-    z-index: 100;
+    z-index: 10;
 }
 
 ::-webkit-scrollbar {
@@ -395,18 +393,21 @@
   margin-right: .5em;
   box-sizing: border-box;
   display: inline-block;
-  height: 7em;
+  min-height: 7em;
+  background-color: #fff;
   text-align: center;
   width: 7em;
+  border-radius: 12.5px;
+  box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
 }
 
 .preview-title {
     font-family: "Roboto", san-serif;
-    color: #4d4d4d;
+    color: #5d5d5d;
     font-size: 14px;
     font-weight: bold;
     padding-top: .5em;
-    z-index: 150;
+    z-index: 10;
 }
 
 .filter-loader {
@@ -425,6 +426,8 @@
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
-    z-index: 105;
+    z-index: 10;
 }
+
+
 
