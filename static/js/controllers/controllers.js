@@ -17,7 +17,6 @@ angular.module('picto.controllers', ['ngMaterial'])
                     $localStorage.authenticated = true;
                     $localStorage.userID = response.authResponse.userID;
                     $localStorage.currentUser = res.user;
-                    console.log(JSON.stringify($localStorage.currentUser));
                     $state.go('dashboard');
                 }, function(err) {
                     $scope.login = {};
@@ -124,7 +123,6 @@ angular.module('picto.controllers', ['ngMaterial'])
             $scope.$emit('updatePhotos');
             Toast.show('Photo uploaded.');
         }, function (error) {
-            console.log('Error status: ' + error.status);
             Toast.show('Photo not uploaded. Please try again');
         }, function (evt) {
             $scope.render.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -164,7 +162,6 @@ angular.module('picto.controllers', ['ngMaterial'])
             delete $rootScope.doneLoadingFilters;
             // restart the loading spinner
             $scope.render.loading = true;
-            console.log(response);
             $scope.$emit('updatePhotos');
             $scope.$emit('updateFilters',
             {
@@ -273,7 +270,6 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     // Share a photo
     $scope.sharePhoto = function (photo) {
-        console.log(photo)
         // check to see if the image has a valid url host and port prefixed
         if (photo.indexOf(url) === -1) {
             photo = url + photo;
@@ -316,9 +312,7 @@ angular.module('picto.controllers', ['ngMaterial'])
                     'image_url': ""
                 }
                 PhotoRestService.RemoveFilters.delete(data).$promise.then(
-                function(response) {
-                    console.log(response)
-                });
+                function(response) {});
                 $scope.$emit('updatePhotos');
                 delete $localStorage.filters[photoID];
                 Toast.show('Photo deleted');
