@@ -167,7 +167,7 @@
 .expand-more {
     position: relative;
     opacity: 0;
-    z-index: 10000 !important;
+    z-index: 100;
     margin-left: 12px;
     left: 25px;
     transition: transform 200ms ease-in-out;
