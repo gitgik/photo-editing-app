@@ -140,11 +140,17 @@
 }
 
 .thumbnail {
+    position: relative;
     border-radius: 49px;
     overflow: hidden;
     width: 59px;
     height: 49px;
+    left: -4em;
     padding: 11px 15px 11px 13px;
+    -moz-transition: transform 400ms;
+    -webkit-transition: transform 400ms;
+    -o-transition: transform 400ms;
+    transition: transform 400ms;
 }
 
 .thumbnail-list {
@@ -326,20 +332,28 @@
 }
 
 .c-i-container {
+    max-width: 100%;
+    max-height: 27em;
     top: .6em;
     position: relative;
 }
 
 .canvas-image {
+    margin: auto;
+    position: relative;
+    top: -40em;
     max-width: 100%;
     max-height: 27em;
-    margin: auto;
     display: block;
     object-fit: contain;
     background-color: #fff;
     padding: .4em;
     border-radius: 7.5px;
     box-shadow: 0 1px 1.5px rgba(0,0,0,.23);
+    -moz-transition: top 100ms ease-in-out 1s;
+    -webkit-transition: top 100ms ease-in-out 1s;
+    -o-transition: top 100ms ease-in-out 1s;
+    transition: top 100ms ease-in-out 1s;
 }
 
 .preview-effects {
