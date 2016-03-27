@@ -121,6 +121,26 @@
     margin-top: .3em; position: relative;
 }
 
+.no-upload-container {
+    position: relative;
+    display: block;
+    max-width: 10em;
+    min-height: 4em;
+    overflow: hidden;
+}
+
+.no-upload-description {
+    position: relative;
+    flex-grow: 1;
+    color: #4b4b4b;
+    font-size: .9em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: 'Roboto', san-serif;
+    min-width: 3em;
+}
+
 .container {
     min-width: 20em;
 }

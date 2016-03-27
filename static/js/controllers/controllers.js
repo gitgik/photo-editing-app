@@ -54,6 +54,9 @@ angular.module('picto.controllers', ['ngMaterial'])
 
     url = protocol + '://' + url + ':' + port + '/';
 
+    //default image when no uploads are present.
+    $scope.user.noUploads = url + "static/images/canvas.jpg";
+
     // populate gallery with photos
     Restangular.all('api/photos/').getList().then(function(response) {
         if (response.length == 0) {

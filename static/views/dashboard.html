@@ -11,7 +11,7 @@
                 <img class="md-avatar" ng-src="https://graph.facebook.com/{{ user.id }}/picture?width=40&height=40"/>
             </md-list-item>
             <md-menu flex="5" md-position-mode="target-right target">
-                <md-button aria-label="Open user menu"
+                <md-button aria-label="menu"
                            class="md-icon-button"
                            ng-click="$mdOpenMenu($event)">
                     <icon md-menu-origin class="material-icons iconize"
@@ -47,7 +47,7 @@
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_modified | amCalendar}}</span>
                     <md-menu md-offset="0 -7" class="expand-more">
-                        <md-button ng-disabled="effects.init" aria-label="Open user detail menu"
+                        <md-button ng-disabled="effects.init" aria-label="menu"
                                    class="md-icon-button"
                                    ng-click="$mdOpenMenu($event)">
                             <icon md-menu-origin class="material-icons iconize icon-more"
@@ -78,7 +78,7 @@
                         <md-input-container md-no-float class="md-block">
                             <md-icon class="material-icons">edit</md-icon>
                             <input layout="row" ng-model="render.rename" type="text" placeholder="enter name...">
-                            <md-button ng-click="cancelRename(photo);" flex="70" class="md-icon-button" aria-label="cancel">
+                            <md-button ng-click="cancelRename(photo);" flex="70" class="md-icon-button" aria-label="no">
                                 <md-icon class="material-icons">cancel</md-icon>
                                 <md-tooltip>cancel</md-tooltip>
                             </md-button>
@@ -89,17 +89,14 @@
                         </md-input-container>
                     </div>
                 </md-list-item>
-                <md-list-item ng-if="user.noPhotos">
-                    <h3 class="photo-caption">
-                        You're almost there! Please upload a photo.
+                <md-list-item ng-if="user.noPhotos" layout="column">
+                    <h3 layout="row" class="no-upload-description">
+                        You currently have no photos.
                     </h3>
-                    <br\>
-                </md-list-item>
-                <md-list-item ng-if="user.noPhotos">
-                    <h3 class="photo-caption">
-                        Click the icon above to start.
+                    <h3 layout="row" class="no-upload-description">
+                        Click the icon above to upload.
                     </h3>
-                    <br\>
+                    <img layout="row" ng-src="{{ user.noUploads }}" class="no-upload-container" />
                 </md-list-item>
             </md-list>
         </md-sidenav>
@@ -115,7 +112,7 @@
                             <i class="material-icons iconize">restore</i>
                             <md-tooltip>Restore</md-tooltip>
                         </md-button>
-                        <md-button class="md-icon-button md-primary" aria-label="Settings" ng-click="photoDelInEditMode($event, selectedPhotoID);" ng-disabled="!render.editingMode">
+                        <md-button class="md-icon-button md-primary" aria-label="del" ng-click="photoDelInEditMode($event, selectedPhotoID);" ng-disabled="!render.editingMode">
                             <i class="material-icons iconize">delete</i>
                             <md-tooltip>Delete</md-tooltip>
                         </md-button>
@@ -126,7 +123,7 @@
                     </div>
                     <span ng-if="render.selectedPhoto && !render.loading" class="canvas-container-title" flex="40">EDIT PHOTO</span>
                     <span class="canvas-container-title" ng-if="render.loading" flex="40">loading filters...</span>
-                    <md-button ng-show="render.selectedPhoto" class="md-icon-button md-primary button-next" aria-label="Settings" flex="20" layout-align="end center" ng-disabled="!render.editingMode" ng-click="sharePhoto(render.selectedPhoto);">
+                    <md-button ng-show="render.selectedPhoto" class="md-icon-button md-primary button-next" aria-label="share" flex="20" layout-align="end center" ng-disabled="!render.editingMode" ng-click="sharePhoto(render.selectedPhoto);">
                         SHARE
                     </md-button>
                 </div>
