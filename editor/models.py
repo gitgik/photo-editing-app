@@ -18,12 +18,6 @@ def get_photo_path(instance, filename):
     return upload_path
 
 
-def get_effect_path(instance, filename):
-    """Define the destination upload path for a saved effect."""
-    upload_path = "effects/{}".format(filename)
-    return upload_path
-
-
 def generate_uid():
     """Generate a unique id using a custom salt, alphabet and min length."""
     salt = settings.SECRET_KEY
