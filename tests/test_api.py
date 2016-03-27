@@ -132,7 +132,7 @@ class UserPhotoTestCase(APITestCase):
             '/api/edit_photo/?id={}'.format(self.created_image.id))
         self.assertContains(rv, "effects/test.png", status_code=200)
 
-    def test_invalid_editing_of_photo(self):
+    def test_invalid_editing_of_photo_returns_400(self):
         """Test invalid data (bad request) should be handled appropriately."""
         data = {
             'id': 5000000,
@@ -143,7 +143,7 @@ class UserPhotoTestCase(APITestCase):
         rv = self.client.put('/api/edit_photo/', data=data)
         self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
 
-        # test invalid image effect
+        # test invalid image effect: return a 400 bad request if invalid
         self.name = 'test.png'
         self.image = File(open('static/test.jpg', 'rb'))
         self.created_image = Photo(
@@ -158,6 +158,26 @@ class UserPhotoTestCase(APITestCase):
             'image': self.created_image.image,
             'name': "the new picture",
             'image_effect': "http://localhost:8000/noimage.jee"
+        }
+        rv = self.client.put('/api/edit_photo/', data=data)
+        self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_photo_name_during_photo_renaming_returns_400(self):
+        """Test for invalid name on a photo rename request."""
+        self.name = 'test.png'
+        self.image = File(open('static/test.jpg', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        response = self.client.get(reverse('editor:photos'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # invalid data
+        data = {
+            'id': self.created_image.id,
+            'name': StringIO.StringIO(),  # this is not a valid name
+            'image_effect': ""
         }
         rv = self.client.put('/api/edit_photo/', data=data)
         self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
