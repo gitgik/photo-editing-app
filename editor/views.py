@@ -147,32 +147,33 @@ class PhotoDetailView(APIView):
 
     def put(self, request):
         """Edit the image."""
-        try:
-            photo = Photo.objects.get(id=request.data['id'])
-        except ObjectDoesNotExist as e:
-            return Response(e.message, status.HTTP_400_BAD_REQUEST)
+        if not request.data['image_effect']:
+            try:
+                photo = Photo.objects.get(id=request.data['id'])
+            except ObjectDoesNotExist as e:
+                return Response(e.message, status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                photo = Photo.objects.get(id=request.data['id'])
+                request.data['image'] = photo.image
+                image_url = request.data['image_effect']
+                image_name = image_url.split('/')[-1]
+                image_path = image_url.split(':8000/')[-1]
+                effect_path = "static/media/photos/{}{}/effects/".format(
+                    request.user.username, request.user.id)
+                # create the directory for saving effects
+                if not os.path.isdir(effect_path):
+                    os.makedirs(effect_path)
 
-        try:
-            photo = Photo.objects.get(id=request.data['id'])
-            request.data['image'] = photo.image
-            image_url = request.data['image_effect']
-            image_name = image_url.split('/')[-1]
-            image_path = image_url.split(':8000/')[-1]
-            effect_path = "static/media/photos/{}{}/effects/".format(
-                request.user.username, request.user.id)
-            # create the directory for saving effects
-            if not os.path.isdir(effect_path):
-                os.makedirs(effect_path)
-
-            image = Image.open(image_path)
-            image.save(effect_path + image_name)
-            # replace the custom effect path with the one sent from the client
-            if (request.user.username in image_path):
-                request.data['image_effect'] = ''
-            else:
-                request.data['image_effect'] = effect_path + image_name
-        except:
-            """Gracefully pass when editing the name of an image."""
+                image = Image.open(image_path)
+                image.save(effect_path + image_name)
+                # replace the custom effect path with the one from the client
+                if (request.user.username in image_path):
+                    request.data['image_effect'] = ''
+                else:
+                    request.data['image_effect'] = effect_path + image_name
+            except IOError as e:
+                return Response(e.message, status.HTTP_400_BAD_REQUEST)
 
         serializer = PhotoSerializer(
             photo, data=request.data,
@@ -197,6 +198,6 @@ class PhotoDetailView(APIView):
             effect_path += str(photo.image_effect)
             os.remove(media_path)
             os.remove(effect_path)
-        except:
+        except OSError:
             print "Could not remove image files from server"
         return Response(status=status.HTTP_204_NO_CONTENT)

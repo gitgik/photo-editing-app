@@ -107,7 +107,8 @@ class UserPhotoTestCase(APITestCase):
         data = {
             'id': self.created_image.id,
             'image': self.created_image.image,
-            'name': 'the new picture'
+            'image_effect': "",
+            'name': 'the new picture',
         }
         rv = self.client.put('/api/edit_photo/', data=data)
         self.assertEqual(rv.status_code, status.HTTP_200_OK)
@@ -122,7 +123,8 @@ class UserPhotoTestCase(APITestCase):
         data = {
             'id': 5000000,
             'image': 'http://localhost:8000/noimage.jee',
-            'name': 'the new picture'
+            'name': 'the new picture',
+            'image_effect': ""
         }
         rv = self.client.put('/api/edit_photo/', data=data)
         self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
