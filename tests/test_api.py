@@ -118,6 +118,20 @@ class UserPhotoTestCase(APITestCase):
             '/api/edit_photo/?id={}'.format(self.created_image.id))
         self.assertContains(rv, data['name'], status_code=200)
 
+        # Test saving the image effect for a given photo.
+        data = {
+            'id': self.created_image.id,
+            'image': self.created_image.image,
+            'image_effect': "http://localhost:8000/" + self.image_url,
+            'name': 'the new picture',
+        }
+        rv = self.client.put('/api/edit_photo/', data=data)
+        self.assertEqual(rv.status_code, status.HTTP_200_OK)
+        # test actual data of edited photo
+        rv = self.client.get(
+            '/api/edit_photo/?id={}'.format(self.created_image.id))
+        self.assertContains(rv, "effects/test.png", status_code=200)
+
     def test_invalid_editing_of_photo(self):
         """Test invalid data (bad request) should be handled appropriately."""
         data = {
@@ -125,6 +139,25 @@ class UserPhotoTestCase(APITestCase):
             'image': 'http://localhost:8000/noimage.jee',
             'name': 'the new picture',
             'image_effect': ""
+        }
+        rv = self.client.put('/api/edit_photo/', data=data)
+        self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # test invalid image effect
+        self.name = 'test.png'
+        self.image = File(open('static/test.jpg', 'rb'))
+        self.created_image = Photo(
+            image=self.image,
+            name=self.name, user=self.user)
+        self.created_image.save()
+        response = self.client.get(reverse('editor:photos'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = {
+            'id': self.created_image.id,
+            'image': self.created_image.image,
+            'name': "the new picture",
+            'image_effect': "http://localhost:8000/noimage.jee"
         }
         rv = self.client.put('/api/edit_photo/', data=data)
         self.assertEqual(rv.status_code, status.HTTP_400_BAD_REQUEST)
