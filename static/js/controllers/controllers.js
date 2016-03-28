@@ -254,7 +254,8 @@ angular.module('picto.controllers', ['ngMaterial'])
         // get the new photo name, append it's extension before sending.
         var data = {
             id: photo.id,
-            name: $scope.render.rename + "." + $localStorage.imageExt
+            name: $scope.render.rename + "." + $localStorage.imageExt,
+            image_effect: ""
         }
         PhotoRestService.ModifyImage.editImage(data, function (response) {
             Toast.show('Photo renamed to ' + $scope.render.rename);
@@ -262,6 +263,8 @@ angular.module('picto.controllers', ['ngMaterial'])
             delete $scope.render.disablePhotoSelection;
             delete $rootScope.disablePhotoID;
             $scope.$emit('updatePhotos');
+        }, function(error) {
+            Toast.show('That didn\'t work. Check your internet connection.');
         });
     };
 
@@ -289,7 +292,7 @@ angular.module('picto.controllers', ['ngMaterial'])
                     Toast.show('Photo shared on Facebook');
                 }
             }, function(error) {
-                Toast.show('Your photo could not be shared. Please try again')
+                Toast.show('Photo not shared. Please check your connectivity')
             });
         }
     };

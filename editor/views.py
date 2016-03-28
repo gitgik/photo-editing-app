@@ -147,9 +147,10 @@ class PhotoDetailView(APIView):
 
     def put(self, request):
         """Edit the image."""
-        if not request.data['image_effect']:
+        if request.data['image_effect'] == "":
             try:
                 photo = Photo.objects.get(id=request.data['id'])
+                request.data['image'] = photo.image
             except ObjectDoesNotExist as e:
                 return Response(e.message, status.HTTP_400_BAD_REQUEST)
         else:
@@ -183,6 +184,7 @@ class PhotoDetailView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
+            print serializer.errors
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
