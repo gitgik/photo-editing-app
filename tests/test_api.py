@@ -270,6 +270,12 @@ class ImageEffectsTestCase(APITestCase):
             image=self.image,
             name=self.name, user=self.user)
         self.created_image.save()
+
+        # try deletion of no-existent filters returns 204 no content
+        data = {'id': 1000, 'image_url': ''}
+        response = self.client.post(reverse('editor:remove_effects'), data)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
         data = {
             'imageID': self.created_image.id
         }

@@ -101,14 +101,16 @@ def remove_effects(request):
     if request.method == 'POST':
         temp_url = 'static/media/temp/{}/'.format(request.data['id'])
         exception_photo = request.data['image_url']
-        file_list = os.listdir(temp_url)
-        persist = exception_photo.split('/')[-1]
-
-        for file_name in file_list:
-            if persist in file_name:
-                continue
-            os.remove(temp_url + file_name)
-        return Response(status=status.HTTP_200_OK)
+        try:
+            file_list = os.listdir(temp_url)
+            persist = exception_photo.split('/')[-1]
+            for file_name in file_list:
+                if persist in file_name:
+                    continue
+                os.remove(temp_url + file_name)
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PhotoListView(generics.ListCreateAPIView):
