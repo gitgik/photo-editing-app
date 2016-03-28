@@ -1,6 +1,7 @@
 """Test cases for picto api."""
 
 import StringIO
+from Crypto import Random
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -174,9 +175,11 @@ class UserPhotoTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # invalid data
+        random_things = Random.new()
+        invalid_name = random_things.read(600)
         data = {
             'id': self.created_image.id,
-            'name': StringIO.StringIO(),  # this is not a valid name
+            'name': invalid_name,  # this is not a valid name
             'image_effect': ""
         }
         rv = self.client.put('/api/edit_photo/', data=data)
