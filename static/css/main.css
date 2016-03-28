@@ -165,12 +165,12 @@
     overflow: hidden;
     width: 59px;
     height: 49px;
-    left: -4em;
+    left: -5.5em;
     padding: 11px 15px 11px 13px;
-    -moz-transition: transform 400ms;
-    -webkit-transition: transform 400ms;
-    -o-transition: transform 400ms;
-    transition: transform 400ms;
+    -moz-transition: transform 200ms;
+    -webkit-transition: transform 200ms;
+    -o-transition: transform 200ms;
+    transition: transform 200ms;
 }
 
 .thumbnail-list {

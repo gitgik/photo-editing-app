@@ -43,7 +43,7 @@
             </md-subheader>
             <md-list>
                 <md-list-item ng-disabled="effects.init" ng-if="user.photos" ng-repeat="photo in user.photos | filter:search.who | orderBy:'-date_modified'" ng-click="close(photo.id); selectImage(photo); showFilters(photo);" class="thumbnail-list">
-                    <img onload="this.style.transform='translateX(4em)';" alt="{{ photo.name }}" ng-src="{{ photo.image_effect ? photo.image_effect:photo.image }}" class="thumbnail" />
+                    <img onload="this.style.transform='translateX(5.5em)';" alt="{{ photo.name }}" ng-src="{{ photo.image_effect ? photo.image_effect:photo.image }}" class="thumbnail" />
                     <h3 class="photo-caption">{{ photo.name }}</h3>
                     <span class="photo-time">{{photo.date_modified | amCalendar}}</span>
                     <md-menu md-offset="0 -7" class="expand-more">
