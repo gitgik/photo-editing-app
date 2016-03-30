@@ -167,7 +167,6 @@ class PhotoDetailView(APIView):
                 # create the directory for saving effects
                 if not os.path.isdir(effect_path):
                     os.makedirs(effect_path)
-
                 image = Image.open(image_path)
                 image.save(effect_path + image_name)
                 # replace the custom effect path with the one from the client
