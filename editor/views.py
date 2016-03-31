@@ -1,6 +1,5 @@
 """Define the editor views."""
 import os
-# import base64
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
