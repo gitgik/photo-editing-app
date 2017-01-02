@@ -2,6 +2,11 @@
 angular.module('picto.controllers', ['ngMaterial'])
 .controller('AuthController', ['$rootScope', '$scope', '$state', '$localStorage', 'Restangular', 'Facebook',
     function AuthController($rootScope, $scope, $state, $localStorage, Restangular, Facebook) {
+
+        /**
+         * This function handles the login of a user
+         *
+         */
         $scope.login = function () {
             $scope.user = {};
             Facebook.login().then(function(response) {
@@ -113,6 +118,10 @@ angular.module('picto.controllers', ['ngMaterial'])
         $rootScope.effects.init =false;
     });
 
+    /**
+     * This function uploads the photo using a file upload promise
+     *
+     */
     $scope.uploadPhoto = function (file) {
         var photo = Upload.rename(file, 'PHOTO_' + Date.now().toString() +
             file.name.substr(file.name.lastIndexOf('.'), file.name.length));
@@ -135,6 +144,11 @@ angular.module('picto.controllers', ['ngMaterial'])
         });
     };
 
+    /**
+     * This function saves a photo after editing is done.
+     * @param  {base64 data uri} photo   [photo in raw format]
+     * @param  {number} photoID [The unique photo identifier]
+     */
     $scope.savePhoto = function(photo, photoID) {
         // delete the old filters to create room for new ones
         var data = {
@@ -176,6 +190,10 @@ angular.module('picto.controllers', ['ngMaterial'])
         });
     };
 
+    /**
+     * This function selects an image to be edited, from the upload list
+     * @param  {dataURI} photo
+     */
     $scope.selectImage = function (photo) {
         delete $rootScope.doneLoadingFilters;
         if ($rootScope.disablePhotoID == photo.id) {
