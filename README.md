@@ -21,7 +21,7 @@ Live version available [here](https://picto.herokuapp.com/)
     ```
 * Git clone this repo to your PC
     ```
-        $ git clone https://github.com/andela-ggikera/photo-editing-app.git
+        $ git clone https://github.com/gitgik/photo-editing-app.git
     ```
 
 
