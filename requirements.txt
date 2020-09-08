@@ -12,7 +12,7 @@ djangorestframework==3.9.1
 enum34==1.1.2
 fake-factory==0.5.7
 funcsigs==0.4
-gunicorn==19.4.5
+gunicorn==19.5.0
 hashids==1.1.0
 httplib2==0.18.0
 idna==2.0
