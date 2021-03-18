@@ -24,7 +24,7 @@ oauth2==1.9.0.post1
 oauthlib==1.0.3
 pbr==1.8.1
 Pillow==3.1.1
-psycopg2==2.6.1
+psycopg2==2.7.1
 pyasn1==0.1.9
 pycparser==2.14
 pycrypto==2.6.1
