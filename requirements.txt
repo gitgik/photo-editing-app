@@ -8,7 +8,7 @@ Django==1.11.29
 django-bower==5.1.0
 django-extra-fields==0.6
 django-filter==0.12.0
-djangorestframework==3.9.1
+djangorestframework==3.11.2
 enum34==1.1.2
 fake-factory==0.5.7
 funcsigs==0.4
